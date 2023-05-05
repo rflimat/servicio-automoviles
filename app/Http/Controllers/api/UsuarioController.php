@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash; // para el token
 
 class UsuarioController extends Controller
 {
-    public function Registrar(Request $request){
+    public function registrar(Request $request){
         $request->validate([
             'username' => 'required'
         ]);
@@ -24,15 +24,15 @@ class UsuarioController extends Controller
         return $usuario; // para prueba
     }
 
-    public function Listar(){
+    public function listar(){
         return User::all();
     }
 
-    public function Obtener(string $id){
+    public function obtener(string $id){
         return User::findOrFail($id);
     }
 
-    public function Actualizar(Request $request, string $id){ // cambiar
+    public function actualizar(Request $request, string $id){ // cambiar
         $usuario = User::findOrFail($id);
         $usuario->username = $request->username;
         $usuario->email = $request->email;
@@ -42,7 +42,7 @@ class UsuarioController extends Controller
         return $usuario;
     }
 
-    public function Eliminar(string $id){
+    public function eliminar(string $id){
         User::destroy($id);
     }
 }
