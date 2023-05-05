@@ -25,19 +25,19 @@ Route::post('/autenticar',[AutenticacionController::class,'login']);
 
 Route::middleware('auth:sanctum')->group( function(){
     Route::controller(AutenticacionController::class)->group(function() {
-        Route::get('/miusuario','perfil');
+        //Route::get('/miusuario','perfil');
         Route::post('/salir','logout');
     });
     Route::controller(UsuarioController::class)->group( function() {
         Route::post('/usuario','registrar');
-        Route::get('/usuario','listar');
+        Route::get('/usuarios','listar');
         Route::get('/usuario/{id}','obtener');
         Route::put('/usuario/{id}','actualizar');
         Route::delete('/usuario/{id}','eliminar');
     });
     Route::controller(ProductoController::class)->group( function() {
         Route::post('/producto','registrar');
-        Route::get('/producto','listar');
+        Route::get('/productos','listar');
         Route::get('/producto/{idProducto}','obtener');
         Route::put('/producto/{idProducto}','actualizar');
         Route::delete('/producto/{idProducto}','eliminar');
