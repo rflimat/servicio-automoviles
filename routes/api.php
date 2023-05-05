@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\AutenticacionController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\UsuarioController;
 
@@ -20,17 +21,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(UsuarioController::class)->group( function() {
-    Route::post('/usuario','registrar');
-    Route::get('/usuario','listar');
-    Route::get('/usuario/{id}','obtener');
-    Route::put('/usuario/{id}','actualizar');
-    Route::delete('/usuario/{id}','eliminar');
+Route::post('/autenticar',[AutenticacionController::class,'login']);
+
+Route::middleware('auth:sanctum')->group( function(){
+    Route::controller(AutenticacionController::class)->group(function() {
+        Route::get('/miusuario','perfil');
+        Route::post('/salir','logout');
+    });
+    Route::controller(UsuarioController::class)->group( function() {
+        Route::post('/usuario','registrar');
+        Route::get('/usuario','listar');
+        Route::get('/usuario/{id}','obtener');
+        Route::put('/usuario/{id}','actualizar');
+        Route::delete('/usuario/{id}','eliminar');
+    });
+    Route::controller(ProductoController::class)->group( function() {
+        Route::post('/producto','registrar');
+        Route::get('/producto','listar');
+        Route::get('/producto/{idProducto}','obtener');
+        Route::put('/producto/{idProducto}','actualizar');
+        Route::delete('/producto/{idProducto}','eliminar');
+    });
 });
-Route::controller(ProductoController::class)->group( function() {
-    Route::post('/producto','registrar');
-    Route::get('/producto','listar');
-    Route::get('/producto/{idProducto}','obtener');
-    Route::put('/producto/{idProducto}','actualizar');
-    Route::delete('/producto/{idProducto}','eliminar');
-});
+
+
