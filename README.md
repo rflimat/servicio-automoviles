@@ -19,27 +19,33 @@ Clone the repository
 ```
 
 ### Laravel by Composer
-1. Run this command on your cmd or terminal
+Run this command on your cmd or terminal
 ```composer
 composer install
 ```
-2. Copy `.env.example` file to `.env` on the root folder. You can type copy `.env.example .env` if using command prompt Windows or `cp .env.example .env` if using terminal, Linux o MacOS
-3. Run this command for sets the APP_KEy
+
+Copy `.env.example` file to `.env` on the root folder. You can type copy `.env.example .env` if using command prompt Windows or `cp .env.example .env` if using terminal, Linux o MacOS
+
+Run this command for sets the APP_KEy
 ```bash 
-    php artisan key:generate 
+php artisan key:generate 
 ```
-4. Run the migrations to the database
+
+Run the migrations to the database
 ```bash 
-    php artisan migrate
+php artisan migrate
 ```
-5. Run the development server
+
+Run the development server
 ```bash 
-    php artisan serve
+php artisan serve
 ```
-6. Go to `http://localhost:8000/`
+
+Go to `http://localhost:8000/`
 
 ### Vite + React.js	
 #### Yarn
+Run this command on your cmd or terminal
 ```yarn
 yarn install
 ```

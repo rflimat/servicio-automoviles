@@ -88,7 +88,7 @@ const postJwtRegister = (url, data) => {
 };
 
 // Login Method
-const postJwtLogin = data => post("http://127.0.0.1:8000/api/autenticar", data);
+const postJwtLogin = data => post("http://127.0.0.1:8000/api/login", data);
 
 // postForgetPwd
 const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data);

@@ -8,8 +8,8 @@ const successSwal = (element, action) =>
     },
     buttonsStyling: false,
   }).fire({
-    title: "Successful!",
-    text: `${element.at(0).toUpperCase()}${element.substring(1)} ${action} successfully`,
+    title: "Correcto!",
+    text: `${element.at(0).toUpperCase()}${element.substring(1)} ${action} correctamente`,
     icon: "success",
     confirmButtonText: "Ok",
   });
@@ -35,13 +35,13 @@ const addSwal = (element) =>
     },
     buttonsStyling: false,
   }).fire({
-    title: `Add ${element}`,
-    text: `Are you sure to add ${element}?`,
+    title: `Registrar ${element}`,
+    text: `¿Esta seguro de registrar ${element}?`,
     icon: "question",
     showCancelButton: true,
     showCloseButton: true,
-    confirmButtonText: "Save",
-    cancelButtonText: "Cancel",
+    confirmButtonText: "Guardar",
+    cancelButtonText: "Cancelar",
     reverseButtons: true,
   });
 
@@ -53,13 +53,13 @@ const editSwal = (element) =>
     },
     buttonsStyling: false,
   }).fire({
-    title: `Update ${element}`,
-    text: `Are you sure to update ${element}?`,
+    title: `Actualizar ${element}`,
+    text: `¿Esta seguro de actualizar ${element}?`,
     icon: "question",
     showCancelButton: true,
     showCloseButton: true,
-    confirmButtonText: "Save",
-    cancelButtonText: "Cancel",
+    confirmButtonText: "Guardar",
+    cancelButtonText: "Cancelar",
     reverseButtons: true,
   });
 
@@ -71,12 +71,12 @@ const deleteSwal = (element) =>
     },
     buttonsStyling: false,
   }).fire({
-    title: `Delete ${element}`,
-    text: `Are you sure to delete ${element}?`,
+    title: `Eliminar ${element}`,
+    text: `¿Esta seguro de eliminar ${element}?`,
     icon: "error",
     showCancelButton: true,
-    confirmButtonText: "Delete",
-    cancelButtonText: "Cancel",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar",
     reverseButtons: true,
   });
 

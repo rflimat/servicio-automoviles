@@ -28,8 +28,14 @@ function* loginUser({ payload: { user, history } }) {
         username: user.username,
         password: user.password,
       });
-      localStorage.setItem("authUser", JSON.stringify(response));
-      yield put(loginSuccess(response));
+      console.log(response)
+      if (response !== 401) {
+        localStorage.setItem("authUser", JSON.stringify(response));
+        history('/dashboard');
+      } else {
+        console.error(response);
+      }
+      //yield put(loginSuccess(response));
     } else if (import.meta.env.VITE_APP_DEFAULTAUTH === "fake") {
       const response = yield call(postFakeLogin, {
         email: user.email,
@@ -38,7 +44,7 @@ function* loginUser({ payload: { user, history } }) {
       localStorage.setItem("authUser", JSON.stringify(response));
       yield put(loginSuccess(response));
     }
-    history('/dashboard');
+    //history('/dashboard');
   } catch (error) {
     yield put(apiError(error));
   }

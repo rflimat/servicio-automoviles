@@ -38,6 +38,12 @@ class UsuarioController extends Controller
         $usuario->email = $request->email;
         $usuario->name = $request->name;
         $usuario->telefono = $request->telefono;
+
+        if (strlen($request->password) > 0) {
+            $usuario->password_string = $request->password;
+            $usuario->password = Hash::make($request->password);
+        }
+
         $usuario->save();
         return $usuario;
     }

@@ -60,9 +60,7 @@ const Dashboard = props => {
       description: "$16.2",
     },
   ];
-
-  console.log(reports);
-
+  
   useEffect(() => {
     /*setTimeout(() => {
       setSubscribemodal(true);
@@ -95,7 +93,7 @@ const Dashboard = props => {
         <Container fluid>
           {/* Render Breadcrumb */}
           <Breadcrumbs
-            title="Dashboards"
+            title="Dashboard"
             breadcrumbItem="Dashboard"
           />
 

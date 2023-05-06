@@ -52,7 +52,7 @@ const Add = () => {
         if (result.isConfirmed) {
           post(`http://127.0.0.1:8000/api/usuario`, element)
             .then((res) => {
-              successSwal("usuario", "added").then(() => {
+              successSwal("usuario", "agregado").then(() => {
                 navigate("/usuarios");
               });
             })

@@ -70,7 +70,7 @@ const Edit = () => {
           if (result.isConfirmed) {
             put(`http://127.0.0.1:8000/api/usuario/${id}`, element)
               .then((res) => {
-                successSwal("usuario", "updated").then(() => {
+                successSwal("usuario", "actualizado").then(() => {
                   navigate("/usuarios");
                 });
               })
