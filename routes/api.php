@@ -21,12 +21,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/autenticar',[AutenticacionController::class,'login']);
+Route::post('/login',[AutenticacionController::class,'login']);
 
 Route::middleware('auth:sanctum')->group( function(){
     Route::controller(AutenticacionController::class)->group(function() {
         //Route::get('/miusuario','perfil');
-        Route::post('/salir','logout');
+        Route::post('/logout','logout');
     });
     Route::controller(UsuarioController::class)->group( function() {
         Route::post('/usuario','registrar');
