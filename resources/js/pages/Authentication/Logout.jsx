@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import withRouter from "../../components/Common/withRouter";
-import { logoutUser } from "../../store/actions";
-
-//redux
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { postJwtLogout } from "../../helpers/fakebackend_helper";
 
 const Logout = () => {
-  const history = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(logoutUser(history));
-  }, [dispatch, history]);
+    postJwtLogout({}).then(() => {
+    localStorage.removeItem("authUser");
+    navigate('/login');
+    });
+  }, []);
 
   return <></>;
 };

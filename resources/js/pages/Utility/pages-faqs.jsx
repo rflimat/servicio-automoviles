@@ -21,7 +21,7 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 const PagesFaqs = () => {
 
   //meta title
-  document.title = "FAQs | Skote - Vite React Admin & Dashboard Template";
+  document.title = "FAQs | Servicios Electricos Laser";
   
   const [activeTab, setactiveTab] = useState("1");
 

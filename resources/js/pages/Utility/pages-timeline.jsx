@@ -41,7 +41,7 @@ const PagesTimeline = () => {
   ];
 
   //meta title
-  document.title = "Timeline | Skote - Vite React Admin & Dashboard Template";
+  document.title = "Timeline | Servicios Electricos Laser";
 
   return (
     <React.Fragment>

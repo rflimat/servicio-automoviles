@@ -13,7 +13,7 @@ import logolight from "../../assets/images/logo-light.png";
 const PagesMaintenance = () => {
 
     //meta title
-    document.title = "Maintenance | Skote - Vite React Admin & Dashboard Template";
+    document.title = "Maintenance | Servicios Electricos Laser";
 
   return (
     <React.Fragment>

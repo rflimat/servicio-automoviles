@@ -29,8 +29,6 @@ import { get, put } from "../../helpers/api_helper.jsx";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 
 import avatar from "../../assets/images/profile.png";
-// actions
-import { editProfile, resetProfileFlag } from "../../store/actions";
 
 const UserProfile = (props) => {
 
@@ -61,8 +59,8 @@ const UserProfile = (props) => {
   }, []);
 
   const { error, success } = useSelector(state => ({
-    error: state.Profile.error,
-    success: state.Profile.success,
+    error: state,
+    success: state,
   }));
 
   /*useEffect(() => {

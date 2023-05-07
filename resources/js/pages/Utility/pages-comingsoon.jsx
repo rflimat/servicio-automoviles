@@ -36,7 +36,7 @@ const PagesComingsoon = () => {
   }
 
     //meta title
-    document.title = "Coming Soon | Skote - Vite React Admin & Dashboard Template";
+    document.title = "Coming Soon | Servicios Electricos Laser";
 
   return (
     <React.Fragment>

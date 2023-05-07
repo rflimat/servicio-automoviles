@@ -15,7 +15,7 @@ The web application for "Servicio Electrico Laser", which is a company dedicated
 
 Clone the repository
 ```bash 
-    git clone https://github.com/rflimat/servicio-automoviles
+git clone https://github.com/rflimat/servicio-automoviles
 ```
 
 ### Laravel by Composer

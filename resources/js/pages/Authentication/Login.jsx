@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import withRouter from "../../components/Common/withRouter";
 
-//redux
-import { useSelector, useDispatch } from "react-redux";
+import {
+  postJwtLogin,
+} from "../../helpers/fakebackend_helper.jsx";
 
 // Formik validation
 import * as Yup from "yup";
@@ -23,17 +24,16 @@ import {
   Label,
 } from "reactstrap";
 
-// actions
-import { loginUser } from "../../store/actions";
-
 // import images
 import profile from "../../assets/images/profile-img.png";
 import logo from "../../assets/images/logo.svg";
 
 const Login = (props) => {
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
   //meta title
   document.title = "Login | Servicios Electricos Laser";
-  const dispatch = useDispatch();
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -44,17 +44,23 @@ const Login = (props) => {
       password: "admin123" || "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("Please Enter Your Username"),
-      password: Yup.string().required("Please Enter Your Password"),
+      username: Yup.string().required("Ingrese su username"),
+      password: Yup.string().required("Ingrese su contraseña"),
     }),
-    onSubmit: (values) => {
-      dispatch(loginUser(values, props.router.navigate));
+    onSubmit: async (values) => {
+      const response = await postJwtLogin({
+        username: values.username,
+        password: values.password,
+      })
+      if (typeof response == "object") {
+        localStorage.setItem("authUser", JSON.stringify(response));
+        navigate('/dashboard');
+      } else {
+        setError("Usuario o contraseñas incorrectas");
+        console.error(response);
+      }
     },
   });
-
-  const { error } = useSelector((state) => ({
-    error: state.Login.error,
-  }));
 
   return (
     <React.Fragment>

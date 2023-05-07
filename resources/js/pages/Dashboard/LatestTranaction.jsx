@@ -8,7 +8,6 @@ import {
   Card,
   CardBody,
 } from "reactstrap";
-//import { getOrders as onGetOrders } from "../../store/actions"
 
 //import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/EcommerceOrdersModal";
 

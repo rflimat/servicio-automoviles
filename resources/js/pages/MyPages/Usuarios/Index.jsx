@@ -89,7 +89,7 @@ const Index = () => {
 
     //meta title
     document.title =
-        "Data Tables | Skote - Vite React Admin & Dashboard Template";
+        "Data Tables | Servicios Electricos Laser";
 
     return (
         <div className="page-content">
