@@ -78,16 +78,20 @@ const Edit = () => {
                 errorSwal(err);
               });
           }
-        })
+        });
       },
     });
+
+    //meta title
+    document.title = "Actualizar Usuario | Servicios Electricos Laser";
+
     return (
       <React.Fragment>
         <div className="page-content">
           <Container fluid={true}>
             <Breadcrumbs
               title="Usuarios"
-              breadcrumbItem="Registrar Usuario"
+              breadcrumbItem="Actualizar Usuario"
             />
   
             <Form
@@ -148,7 +152,7 @@ const Edit = () => {
                 <Input
                   name="telefono"
                   placeholder="Ingrese numero de telefono"
-                  type="telefono"
+                  type="tel"
                   onChange={validationType.handleChange}
                   onBlur={validationType.handleBlur}
                   value={validationType.values.telefono || ""}
@@ -239,7 +243,7 @@ const Edit = () => {
                 <Button type="submit" color="primary">
                   Guardar
                 </Button>{" "}
-                <Button type="reset" color="secondary">
+                <Button type="reset" color="secondary" onClick={() => navigate("/usuarios")}>
                   Cancelar
                 </Button>
               </div>

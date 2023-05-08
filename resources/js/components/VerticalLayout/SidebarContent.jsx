@@ -154,16 +154,16 @@ const SidebarContent = (props) => {
             <li className="menu-title">Modulos</li>
 
             <li>
-              <Link to="/#" className="has-arrow">
+              <Link to="/usuarios">
                 <i className="bx bx-user"></i>
                 <span>Usuarios</span>
               </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="/usuarios">Listar</Link>
-                  <Link to="/usuarios/add">Registrar</Link>
-                </li>
-              </ul>
+            </li>
+            <li>
+              <Link to="/proveedores">
+                <i className="bx bx-building-house"></i>
+                <span>Proveedores</span>
+              </Link>
             </li>
           </ul>
         </div>

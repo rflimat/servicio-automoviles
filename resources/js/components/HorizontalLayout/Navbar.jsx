@@ -116,7 +116,6 @@ const Navbar = (props) => {
                   >
                     <i className="bx bx-home-circle me-2"></i>
                     Dashboard {props.menuOpen}
-                    <div className="arrow-down"></div>
                   </Link>
                 </li>
 
@@ -136,13 +135,6 @@ const Navbar = (props) => {
                     <Link to="/usuarios" className="dropdown-item">
                       Usuarios
                     </Link>
-                    <div
-                      className={classname("dropdown-menu", { show: dashboard })}
-                    >
-                      <Link to="/usuarios/add" className="dropdown-item">
-                        Registrar
-                      </Link>
-                    </div>
                   </div>
                 </li>
               </ul>

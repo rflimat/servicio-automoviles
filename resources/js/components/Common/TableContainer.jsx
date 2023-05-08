@@ -25,8 +25,8 @@ function GlobalFilter({
   }, 200);
 
   return (
-    <Col sm={4}>
-      <div className="search-box me-2 mb-2 d-inline-block">
+    <Col xs={6} md={4}>
+      <div className="search-box me-2 my-2 my-md-0 d-inline-block">
         <div className="position-relative">
           <label htmlFor="search-bar-0" className="search-label">
             <span id="search-bar-0-label" className="sr-only">
@@ -96,7 +96,7 @@ const TableContainer = ({
     useExpanded,
     usePagination
   );
-  
+
   const [search, setsearch] = useState(false);
 
   const generateSortingIndicator = (column) => {
@@ -114,7 +114,7 @@ const TableContainer = ({
   return (
     <Fragment>
       <Row className="mb-2">
-        <Col lg={2} md={customPageSizeOptions ? 2 : 1}>
+        <Col md={2}>
           <select
             className="form-select"
             value={pageSize}
@@ -135,12 +135,12 @@ const TableContainer = ({
           />
         )}
         {isAddOptions && (
-          <Col sm="6">
-            <div className="text-sm-end">
+          <Col xs={6}>
+            <div className="text-end">
               <Button
                 type="button"
                 color="success"
-                className="btn-rounded mb-2 me-2"
+                className="btn-rounded my-2 my-md-0 me-2"
                 onClick={handleAddClick}
               >
                 <i className="mdi mdi-plus me-1" />

@@ -5,9 +5,6 @@ import PropTypes from "prop-types";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import TableContainer from "../../../components/Common/TableContainer";
 
-
-import { deleteSwal, errorSwal, successSwal } from "../../../components/Swal";
-
 import {
     Button,
 } from "reactstrap";
@@ -15,15 +12,15 @@ import {
 import { del, get, post, put } from "../../../helpers/api_helper.jsx";
 
 const Index = () => {
-    const [usuarios, setUsuarios] = useState([]);
+    const [proveedores, setProveedores] = useState([]);
     const navigate = useNavigate();
 
-    const getData = async () => {
-        const data = await get("http://127.0.0.1:8000/api/usuarios");
-        setUsuarios(data);
-    }
-
     useEffect(() => {
+        const getData = async () => {
+            const data = [];
+            //const data = await get("http://127.0.0.1:8000/api/proveedores");
+            setProveedores(data);
+        }
         getData();
     }, []);
 
@@ -33,20 +30,20 @@ const Index = () => {
                 Header: "N°",
             },
             {
-                Header: "Name",
-                accessor: "name",
+                Header: "TipoDocumento",
+                accessor: "tipoDocumento",
             },
             {
-                Header: "Username",
-                accessor: "username",
+                Header: "Documento",
+                accessor: "documento",
             },
             {
-                Header: "Email",
-                accessor: "email",
+                Header: "Nombre",
+                accessor: "nombre",
             },
             {
-                Header: "Telefono",
-                accessor: "telefono",
+                Header: "Dirección",
+                accessor: "direccion",
             },
             {
                 Header: "Acciones",
@@ -61,7 +58,7 @@ const Index = () => {
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    navigate(`/usuarios/edit/${id}`);
+                                    navigate(`/proveedor/edit/${id}`);
                                 }}
                             >
                                 Editar
@@ -72,11 +69,11 @@ const Index = () => {
                                 className="btn-sm btn-rounded ms-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    deleteSwal("usuario").then((result) => {
+                                    deleteSwal("proveedor").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`http://127.0.0.1:8000/api/usuario/${id}`)
+                                            del(`http://127.0.0.1:8000/api/proveedor/${id}`)
                                                 .then((res) => {
-                                                    successSwal("usuario", "eliminado").then(() => {
+                                                    successSwal("proveedor", "eliminado").then(() => {
                                                         getData();
                                                     });
                                                 })
@@ -98,21 +95,21 @@ const Index = () => {
     );
 
     //meta title
-    document.title = "Usuarios | Servicios Electricos Laser";
+    document.title = "Proveedores | Servicios Electricos Laser";
 
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Usuarios" breadcrumbItem="Listar Usuarios" />
+                <Breadcrumbs title="Proveedores" breadcrumbItem="Listar Proveedores" />
                 <TableContainer
                     columns={columns}
-                    data={usuarios}
+                    data={proveedores}
                     isGlobalFilter={true}
                     isAddOptions={true}
                     customPageSize={10}
                     addText="Nuevo"
                     handleAddClick={() => {
-                        navigate('/usuarios/add');
+                        navigate('/proveedores/add');
                     }}
                     className="custom-header-css"
                 />

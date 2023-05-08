@@ -16,9 +16,13 @@ import PagesMaintenance from "../pages/Utility/pages-maintenance";
 import PagesComingsoon from "../pages/Utility/pages-comingsoon";
 import Pages404 from "../pages/Utility/pages-404";
 import Pages500 from "../pages/Utility/pages-500";
-import Add from "../pages/MyPages/Usuarios/Add";
-import Index from "../pages/MyPages/Usuarios/Index";
-import Edit from "../pages/MyPages/Usuarios/Edit";
+
+import Usuarios from "../pages/MyPages/Usuarios/Index";
+import UsuariosAdd from "../pages/MyPages/Usuarios/Add";
+import UsuariosEdit from "../pages/MyPages/Usuarios/Edit";
+
+import Proveedores from "../pages/MyPages/Proveedores/Index";
+import ProveedoresAdd from "../pages/MyPages/Proveedores/Add";
 
 const authProtectedRoutes = [
   // Dashboard
@@ -28,9 +32,13 @@ const authProtectedRoutes = [
   { path: "/profile", component: <UserProfile /> },
 
   // Usuarios
-  { path: "/usuarios", component: <Index /> },
-  { path: "/usuarios/add", component: <Add /> },
-  { path: "/usuarios/edit/:id", component: <Edit /> },
+  { path: "/usuarios", component: <Usuarios /> },
+  { path: "/usuarios/add", component: <UsuariosAdd /> },
+  { path: "/usuarios/edit/:id", component: <UsuariosEdit /> },
+
+  // Proveedores
+  { path: "/proveedores", component: <Proveedores/> },
+  { path: "/proveedores/add", component: <ProveedoresAdd/> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

@@ -104,7 +104,7 @@
   }
   
   .page-content {
-      padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.75) $footer-height calc(#{$grid-gutter-width} * 0.75);
+      padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.75) calc($footer-height + 20px) calc(#{$grid-gutter-width} * 0.75);
   }
   
   .header-item {
@@ -279,7 +279,7 @@
       }
       .page-content {
           margin-top: $header-height;
-          padding: calc(55px + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.5) $footer-height calc(#{$grid-gutter-width} * 0.5);
+          padding: calc(55px + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.5) calc($footer-height + 20px) calc(#{$grid-gutter-width} * 0.5);
       }    
   }
   

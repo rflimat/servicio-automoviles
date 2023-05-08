@@ -228,7 +228,7 @@ const UserProfile = (props) => {
                     <Input
                       name="telefono"
                       placeholder="Ingrese numero de telefono"
-                      type="telefono"
+                      type="tel"
                       onChange={validationType.handleChange}
                       onBlur={validationType.handleBlur}
                       value={validationType.values.telefono || ""}

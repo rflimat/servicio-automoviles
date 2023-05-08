@@ -21,18 +21,18 @@ const Sidebar = (props) => {
           <Link to="/" className="logo logo-dark" style={{textDecoration: "none"}}>
             <span className="logo-sm">
               {/*<img src={logo} alt="" height="22" />*/}
-              <h4 className="text-white my-4">Servicios Electricos Laser</h4>
+              <h4 className="text-white my-4">SM</h4>
             </span>
             <span className="logo-lg">
               {/*<img src={logoDark} alt="" height="17" />*/}
-              <h4 className="text-white my-4">Servicios Electricos Laser</h4>
+              <h4 className="text-white my-4">SEL</h4>
             </span>
           </Link>
 
           <Link to="/" className="logo logo-light" style={{textDecoration: "none"}}>
             <span className="logo-sm">
               {/*<img src={logoLightSvg} alt="" height="22" />*/}
-              <h4 className="text-white my-4">Servicios Electricos Laser</h4>
+              <h4 className="text-white my-4">SEL</h4>
             </span>
             <span className="logo-lg">
               {/*<img src={logoLightPng} alt="" height="19" />*/}
