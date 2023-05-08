@@ -160,6 +160,12 @@ const SidebarContent = (props) => {
               </Link>
             </li>
             <li>
+              <Link to="/productos">
+                <i className="bx bx-package"></i>
+                <span>Productos</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/proveedores">
                 <i className="bx bx-building-house"></i>
                 <span>Proveedores</span>

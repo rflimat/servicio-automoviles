@@ -36,11 +36,11 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::delete('/usuario/{id}','eliminar');
     });
     Route::controller(ProductoController::class)->group( function() {
-        Route::post('/producto','registrar');
+        Route::post('/productos','registrar');
         Route::get('/productos','listar');
-        Route::get('/producto/{idProducto}','obtener');
-        Route::put('/producto/{idProducto}','actualizar');
-        Route::delete('/producto/{idProducto}','eliminar');
+        Route::get('/productos/{idProducto}','obtener');
+        Route::put('/productos/{idProducto}','actualizar');
+        Route::delete('/productos/{idProducto}','eliminar');
     });
 });
 

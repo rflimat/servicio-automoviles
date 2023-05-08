@@ -24,6 +24,10 @@ import UsuariosEdit from "../pages/MyPages/Usuarios/Edit";
 import Proveedores from "../pages/MyPages/Proveedores/Index";
 import ProveedoresAdd from "../pages/MyPages/Proveedores/Add";
 
+import Productos from "../pages/MyPages/Productos/Index";
+import ProductosAdd from "../pages/MyPages/Productos/Add";
+import ProductosEdit from "../pages/MyPages/Productos/Edit";
+
 const authProtectedRoutes = [
   // Dashboard
   { path: "/dashboard", component: <Dashboard /> },,
@@ -35,6 +39,11 @@ const authProtectedRoutes = [
   { path: "/usuarios", component: <Usuarios /> },
   { path: "/usuarios/add", component: <UsuariosAdd /> },
   { path: "/usuarios/edit/:id", component: <UsuariosEdit /> },
+  
+  //Productos
+  { path: "/productos", component: <Productos /> },
+  { path: "/productos/add", component: <ProductosAdd /> },
+  { path: "/productos/edit/:id", component: <ProductosEdit /> },
 
   // Proveedores
   { path: "/proveedores", component: <Proveedores/> },
