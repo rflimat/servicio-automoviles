@@ -17,8 +17,8 @@ class ProveedoresController extends Controller
     {
         $proveedor = new Proveedor();
         $proveedor->nombre = $request->nombre;
-        $proveedor->RUC = $request->RUC;
-        $proveedor->direccion = $request->direccion;
+        $proveedor->tipoDocumento = $request->tipoDocumento;
+        $proveedor->numeroDocumento = $request->numeroDocumento;
         $proveedor->celular = $request->celular;
         
         $proveedor->save();
@@ -32,8 +32,8 @@ class ProveedoresController extends Controller
     {
         $proveedor = Proveedor::findOrFail($id);
         $proveedor->nombre = $request->nombre;
-        $proveedor->RUC = $request->RUC;
-        $proveedor->direccion = $request->direccion;
+        $proveedor->tipoDocumento = $request->tipoDocumento;
+        $proveedor->numeroDocumento = $request->numeroDocumento;
         $proveedor->celular = $request->celular;
 
         $proveedor->save();
