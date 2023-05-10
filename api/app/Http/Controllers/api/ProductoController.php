@@ -28,6 +28,8 @@ class ProductoController extends Controller
         $producto->precio_venta = $request->precio_venta;
         $producto->cantidad = $request->cantidad;
         $producto->unidad_medida = $request->unidad_medida;
+        $producto->marca = $request->marca;
+        $producto->descripcion = $request->descripcion;
         $producto->save();
     }
 
@@ -51,6 +53,8 @@ class ProductoController extends Controller
         $producto->precio_venta = $request->precio_venta;
         $producto->cantidad = $request->cantidad;
         $producto->unidad_medida = $request->unidad_medida;
+        $producto->marca = $request->marca;
+        $producto->descripcion = $request->descripcion;
         $producto->save();
     }
 

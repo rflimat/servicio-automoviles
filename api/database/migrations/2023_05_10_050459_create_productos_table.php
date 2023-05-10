@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('precio_venta');
             $table->integer('cantidad');
             $table->string('unidad_medida')->nullable();
+            $table->string('marca');  //  ultima actualizacion bd
+            $table->string('descripcion'); // ultima actualizacion
             $table->timestamps();
         });
     }
