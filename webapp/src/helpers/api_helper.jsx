@@ -1,9 +1,5 @@
 import axios from "axios";
-import accessToken from "./jwt-token-access/accessToken";
-
-//pass new generated access token here
-const token = accessToken;
-
+import authHeader from "./jwt-token-access/auth-token-header";
 //apply base url for axios
 const API_URL = "http://127.0.0.1:8000/api";
 
@@ -11,33 +7,35 @@ const axiosApi = axios.create({
   baseURL: API_URL,
 });
 
-axiosApi.defaults.headers.common["Authorization"] = token;
-
 axiosApi.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject(error)
 );
 
 export async function get(url, config = {}) {
+  const token = authHeader();
   return await axiosApi
-    .get(url, { ...config })
+    .get(url, { ...config, headers: token })
     .then((response) => response.data);
 }
 
 export async function post(url, data, config = {}) {
+  const token = authHeader();
   return axiosApi
-    .post(url, { ...data }, { ...config })
+    .post(url, { ...data }, { ...config, headers: token })
     .then((response) => response.data);
 }
 
 export async function put(url, data, config = {}) {
+  const token = authHeader();
   return axiosApi
-    .put(url, { ...data }, { ...config })
+    .put(url, { ...data }, { ...config, headers: token })
     .then((response) => response.data);
 }
 
 export async function del(url, config = {}) {
+  const token = authHeader();
   return await axiosApi
-    .delete(url, { ...config })
+    .delete(url, { ...config, headers: token })
     .then((response) => response.data);
 }
