@@ -25,14 +25,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login',[AutenticacionController::class,'login']);
 
-Route::post('/usuarios',[UsuarioController::class,'registrar']);
+
 Route::middleware('auth:sanctum')->group( function(){
     Route::controller(AutenticacionController::class)->group(function() {
         //Route::get('/miusuario','perfil');
         Route::post('/logout','logout');
     });
     Route::controller(UsuarioController::class)->group( function() {
-        //Route::post('/usuarios','registrar');
+        Route::post('/usuarios','registrar');
         Route::get('/usuarios','listar');
         Route::get('/usuarios/{id}','obtener');
         Route::put('/usuarios/{id}','actualizar');
