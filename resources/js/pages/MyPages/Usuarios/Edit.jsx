@@ -31,7 +31,7 @@ const Edit = () => {
 
     useEffect(() => {
         const getById = async () => {
-            const data = await get(`http://127.0.0.1:8000/api/usuario/${id}`);
+            const data = await get(`http://127.0.0.1:8000/api/usuarios/${id}`);
             setElement(data);
         }
         getById();
@@ -56,7 +56,7 @@ const Edit = () => {
           .max(255)
           .required("Email is required"),
         telefono: Yup.string().required("El valor es requerido"),
-        password: Yup.string().min(8, "Debe tener como mínimo 8 caracteres").required("El valor es requerido"),
+        password: Yup.string().min(8, "Debe tener como mínimo 8 caracteres"),
         password1: Yup.string().min(8, "Debe tener como mínimo 8 caracteres").when("password", {
           is: (val) => (val && val.length > 0 ? true : false),
           then: Yup.string().oneOf(
@@ -68,7 +68,7 @@ const Edit = () => {
       onSubmit: (element) => {
         editSwal("usuario").then((result) => {
           if (result.isConfirmed) {
-            put(`http://127.0.0.1:8000/api/usuario/${id}`, element)
+            put(`http://127.0.0.1:8000/api/usuarios/${id}`, element)
               .then((res) => {
                 successSwal("usuario", "actualizado").then(() => {
                   navigate("/usuarios");

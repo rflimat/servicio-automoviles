@@ -23,6 +23,7 @@ import UsuariosEdit from "../pages/MyPages/Usuarios/Edit";
 
 import Proveedores from "../pages/MyPages/Proveedores/Index";
 import ProveedoresAdd from "../pages/MyPages/Proveedores/Add";
+import ProveedoresEdit from "../pages/MyPages/Proveedores/Edit";
 
 import Productos from "../pages/MyPages/Productos/Index";
 import ProductosAdd from "../pages/MyPages/Productos/Add";
@@ -48,6 +49,7 @@ const authProtectedRoutes = [
   // Proveedores
   { path: "/proveedores", component: <Proveedores/> },
   { path: "/proveedores/add", component: <ProveedoresAdd/> },
+  { path: "/proveedores/edit/:id", component: <ProveedoresEdit/> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

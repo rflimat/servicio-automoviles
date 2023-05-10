@@ -74,7 +74,7 @@ const Index = () => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("usuario").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`http://127.0.0.1:8000/api/usuario/${id}`)
+                                            del(`http://127.0.0.1:8000/api/usuarios/${id}`)
                                                 .then((res) => {
                                                     successSwal("usuario", "eliminado").then(() => {
                                                         getData();

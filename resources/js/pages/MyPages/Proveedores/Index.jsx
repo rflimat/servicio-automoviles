@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import TableContainer from "../../../components/Common/TableContainer";
+import { deleteSwal, errorSwal, successSwal } from "../../../components/Swal";
 
 import {
     Button,
@@ -14,13 +15,13 @@ import { del, get, post, put } from "../../../helpers/api_helper.jsx";
 const Index = () => {
     const [proveedores, setProveedores] = useState([]);
     const navigate = useNavigate();
+    
+    const getData = async () => {
+        const data = await get("http://127.0.0.1:8000/api/proveedores");
+        setProveedores(data);
+    }
 
     useEffect(() => {
-        const getData = async () => {
-            const data = [];
-            //const data = await get("http://127.0.0.1:8000/api/proveedores");
-            setProveedores(data);
-        }
         getData();
     }, []);
 
@@ -30,20 +31,16 @@ const Index = () => {
                 Header: "N°",
             },
             {
-                Header: "TipoDocumento",
+                Header: "Tipo Documento",
                 accessor: "tipoDocumento",
             },
             {
-                Header: "Documento",
-                accessor: "documento",
+                Header: "Numero Documento",
+                accessor: "numeroDocumento",
             },
             {
                 Header: "Nombre",
                 accessor: "nombre",
-            },
-            {
-                Header: "Dirección",
-                accessor: "direccion",
             },
             {
                 Header: "Acciones",
@@ -58,7 +55,7 @@ const Index = () => {
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    navigate(`/proveedor/edit/${id}`);
+                                    navigate(`/proveedores/edit/${id}`);
                                 }}
                             >
                                 Editar
@@ -71,7 +68,7 @@ const Index = () => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("proveedor").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`http://127.0.0.1:8000/api/proveedor/${id}`)
+                                            del(`http://127.0.0.1:8000/api/proveedores/${id}`)
                                                 .then((res) => {
                                                     successSwal("proveedor", "eliminado").then(() => {
                                                         getData();

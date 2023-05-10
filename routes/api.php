@@ -3,7 +3,7 @@
 use App\Http\Controllers\api\AutenticacionController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\UsuarioController;
-use App\Http\Controllers\proveedores\Proveedorescontroller;
+use App\Http\Controllers\api\Proveedorescontroller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,9 +21,9 @@ Route::middleware('auth:sanctum')->group( function(){
     Route::controller(UsuarioController::class)->group( function() {
         Route::post('/usuario','registrar');
         Route::get('/usuarios','listar');
-        Route::get('/usuario/{id}','obtener');
-        Route::put('/usuario/{id}','actualizar');
-        Route::delete('/usuario/{id}','eliminar');
+        Route::get('/usuarios/{id}','obtener');
+        Route::put('/usuarios/{id}','actualizar');
+        Route::delete('/usuarios/{id}','eliminar');
     });
     Route::controller(ProductoController::class)->group( function() {
         Route::post('/productos','registrar');

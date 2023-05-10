@@ -31,11 +31,8 @@ import Breadcrumb from "../../components/Common/Breadcrumb";
 import avatar from "../../assets/images/profile.png";
 
 const UserProfile = (props) => {
-
   //meta title
-  document.title = "Perfil | Skote - React Admin & Dashboard Template";
-
-  const dispatch = useDispatch();
+  document.title = "Perfil | Servicios Electricos Laser.";
 
   const [element, setElement] = useState({
     name: "",
@@ -52,37 +49,11 @@ const UserProfile = (props) => {
 
   useEffect(() => {
     const getById = async () => {
-      const data = await get(`http://127.0.0.1:8000/api/usuario/${id}`);
+      const data = await get(`http://127.0.0.1:8000/api/usuarios/${id}`);
       setElement(data);
     }
     getById();
   }, []);
-
-  const { error, success } = useSelector(state => ({
-    error: state,
-    success: state,
-  }));
-
-  /*useEffect(() => {
-    if (localStorage.getItem("authUser")) {
-      const obj = JSON.parse(localStorage.getItem("authUser"));
-      if (import.meta.env.VITE_APP_DEFAULTAUTH === "firebase") {
-        setname(obj.displayName);
-        setemail(obj.email);
-        setidx(obj.uid);
-      } else if (
-        import.meta.env.VITE_APP_DEFAULTAUTH === "fake" ||
-        import.meta.env.VITE_APP_DEFAULTAUTH === "jwt"
-      ) {
-        setname(obj.username);
-        setemail(obj.email);
-        setidx(obj.uid);
-      }
-      setTimeout(() => {
-        dispatch(resetProfileFlag());
-      }, 3000);
-    }
-  }, [dispatch, success]);*/
 
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
@@ -115,11 +86,9 @@ const UserProfile = (props) => {
     onSubmit: (element) => {
       editSwal("usuario").then((result) => {
         if (result.isConfirmed) {
-          put(`http://127.0.0.1:8000/api/usuario/${id}`, element)
+          put(`http://127.0.0.1:8000/api/usuarios/${id}`, element)
             .then((res) => {
-              successSwal("Perfil de usuario", "actualizado").then(() => {
-                navigate("/usuarios");
-              });
+              successSwal("Perfil de usuario", "actualizado");
             })
             .catch((err) => {
               errorSwal(err);
@@ -138,9 +107,6 @@ const UserProfile = (props) => {
 
           <Row>
             <Col lg="12">
-              {error && error ? <Alert color="danger">{error}</Alert> : null}
-              {success ? <Alert color="success">{success}</Alert> : null}
-
               <Card>
                 <CardBody>
                   <div className="d-flex">
@@ -153,7 +119,7 @@ const UserProfile = (props) => {
                     </div>
                     <div className="flex-grow-1 align-self-center">
                       <div className="text-muted">
-                        <h5>{name}</h5>
+                        <h5>{element.name}</h5>
                         <p className="mb-1">{element.email}</p>
                         <p className="mb-0">Id no: #{element.id}</p>
                       </div>

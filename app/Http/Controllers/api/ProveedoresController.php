@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\proveedores;
+namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Proveedores;
@@ -17,8 +17,8 @@ class Proveedorescontroller extends Controller
     {
         $proveedor = new Proveedores();
         $proveedor->nombre = $request->nombre;
-        $proveedor->RUC = $request->RUC;
-        $proveedor->direccion = $request->direccion;
+        $proveedor->tipoDocumento = $request->tipoDocumento;
+        $proveedor->numeroDocumento = $request->numeroDocumento;
         $proveedor->celular = $request->celular;
         
         $proveedor->save();
@@ -32,15 +32,15 @@ class Proveedorescontroller extends Controller
     {
         $proveedor = Proveedores::findOrFail($id);
         $proveedor->nombre = $request->nombre;
-        $proveedor->RUC = $request->RUC;
-        $proveedor->direccion = $request->direccion;
+        $proveedor->tipoDocumento = $request->tipoDocumento;
+        $proveedor->numeroDocumento = $request->numeroDocumento;
         $proveedor->celular = $request->celular;
 
         $proveedor->save();
     }
     public function destroy(string $id)
     {
-        $proveedor = proveedores::destroy($id);
+        $proveedor = Proveedores::destroy($id);
         return $proveedor;
     }
 }

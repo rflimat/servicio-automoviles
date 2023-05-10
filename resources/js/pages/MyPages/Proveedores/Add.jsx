@@ -17,42 +17,46 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
 import { post } from "../../../helpers/api_helper";
 
-const Add = () => {
-  const [tipoDocumento, setTipoDocumento] = useState(null); 
-  const [numeroDocumento, setNumeroDocumento] = useState("");
-
-  const navigate = useNavigate();
-
-  const handleTipoDocumento = (tipoDocumento) => {
-    setTipoDocumento(tipoDocumento.value);
+const CustomSelect = ({onChange, options, value, placeholder, className}) => {
+  const defaultValue = (options, value) => {
+    return options ? options.find(option => option.value === value) : "";
   }
 
-  /*const handleNumeroDocumento = (e) => {
-    e.target.value.length <= 8 && setNumeroDocumento(e.target.value);
-    validationType.handleChange(e);
-  }*/
+  return (
+    <>
+      <Select 
+        value={defaultValue(options, value)}
+        onChange={value => onChange(value)}
+        options={options}
+        placeholder={placeholder}
+        className={className}
+      />
+    </>
+  )
+}
+
+const Add = () => {
+  const navigate = useNavigate();
 
   const validationType = useFormik({
-    enableReinitialize: false, // Use this flag when initial values needs to be changed
+    enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
       nombre: "",
-      tipoDocumento: tipoDocumento,
-      numeroDocumento: numeroDocumento,
-      direccion: "",
-      telefono: "",
+      tipoDocumento: "",
+      numeroDocumento: "",
+      celular: "",
     },
     validationSchema: Yup.object().shape({
       nombre: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
       tipoDocumento: Yup.string().required("El valor es requerido ser seleccionado"),
-      numeroDocumento: Yup.string().length(8, "Debe tener 8 caracteres"),
-      direccion: Yup.string(),
-      telefono: Yup.string().required("El valor es requerido"),
+      numeroDocumento: Yup.string().matches(/^[0-9]+$/, "Solo numeros")
+        .required("El valor es requerido"),
+      celular: Yup.string().required("El valor es requerido"),
     }),
     onSubmit: (element) => {
-      console.log(element);
-      /*addSwal("proveedor").then((result) => {
+      addSwal("proveedor").then((result) => {
         if (result.isConfirmed) {
-          post(`http://127.0.0.1:8000/api/proveedor`, element)
+          post(`http://127.0.0.1:8000/api/proveedores`, element)
             .then((res) => {
               successSwal("proveedor", "agregado").then(() => {
                 navigate("/proveedores");
@@ -62,12 +66,12 @@ const Add = () => {
               errorSwal(err);
             });
         }
-      });*/
+      });
     },
   });
 
   //meta title
-  document.title = "Registrar Proveedores | Servicios Electricos Laser";
+  document.title = "Registrar Proveedor | Servicios Electricos Laser";
 
   return (
     <React.Fragment>
@@ -110,9 +114,9 @@ const Add = () => {
             </div>
             <div className="mb-3">
                 <Label>Tipo de documento</Label>
-                <Select
-                    value={tipoDocumento}
-                    onChange={handleTipoDocumento}
+                <CustomSelect
+                    value={validationType.values.tipoDocumento}
+                    onChange={element => validationType.setFieldValue("tipoDocumento", element.value)}
                     options={[
                         { label: "DNI", value: "DNI" },
                         { label: "RUC", value: "RUC" },
@@ -122,13 +126,19 @@ const Add = () => {
                     placeholder="Seleccione tipo de documento"
                     className="select2-selection"
                 />
+                {validationType.touched.tipoDocumento &&
+                  validationType.errors.tipoDocumento ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.tipoDocumento}
+                  </FormFeedback>
+                ) : null}
             </div>
             <div className="mb-3">
               <Label className="form-label">Numero de documento</Label>
               <Input
                 name="numeroDocumento"
                 placeholder="Ingrese numero de documento"
-                type="string"
+                type="text"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
                 value={validationType.values.numeroDocumento || ""}
@@ -147,48 +157,25 @@ const Add = () => {
               ) : null}
             </div>
             <div className="mb-3">
-              <Label className="form-label">Dirección</Label>
+              <Label className="form-label">Numero de contacto</Label>
               <Input
-                name="direccion"
-                placeholder="Ingrese numero de direccion"
+                name="celular"
+                placeholder="Ingrese numero de contacto"
                 type="tel"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.direccion || ""}
+                value={validationType.values.celular || ""}
                 invalid={
-                  validationType.touched.direccion &&
-                    validationType.errors.direccion
+                  validationType.touched.celular &&
+                    validationType.errors.celular
                     ? true
                     : false
                 }
               />
-              {validationType.touched.direccion &&
-                validationType.errors.direccion ? (
+              {validationType.touched.celular &&
+                validationType.errors.celular ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.direccion}
-                </FormFeedback>
-              ) : null}
-            </div>
-            <div className="mb-3">
-              <Label className="form-label">Numero de telefono</Label>
-              <Input
-                name="telefono"
-                placeholder="Ingrese numero de telefono"
-                type="tel"
-                onChange={validationType.handleChange}
-                onBlur={validationType.handleBlur}
-                value={validationType.values.telefono || ""}
-                invalid={
-                  validationType.touched.telefono &&
-                    validationType.errors.telefono
-                    ? true
-                    : false
-                }
-              />
-              {validationType.touched.telefono &&
-                validationType.errors.telefono ? (
-                <FormFeedback type="invalid">
-                  {validationType.errors.telefono}
+                  {validationType.errors.celular}
                 </FormFeedback>
               ) : null}
             </div>
