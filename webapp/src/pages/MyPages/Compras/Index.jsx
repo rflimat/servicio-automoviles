@@ -14,12 +14,12 @@ import {
 import { del, get, post, put } from "../../../helpers/api_helper.jsx";
 
 const Index = () => {
-    const [productos, setProductos] = useState([]);
+    const [compras, setCompras] = useState([]);
     const navigate = useNavigate();
 
     const getData = async () => {
         const data = await get("http://127.0.0.1:8000/api/productos");
-        setProductos(data);
+        setCompras(data);
     }
 
     useEffect(() => {
@@ -115,7 +115,7 @@ const Index = () => {
                 {/* <Table columns={columns} data={data} /> */}
                 <TableContainer
                     columns={columns}
-                    data={Compras}
+                    data={compras}
                     isGlobalFilter={true}
                     isAddOptions={true}
                     customPageSize={10}
