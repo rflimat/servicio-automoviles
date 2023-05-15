@@ -22,18 +22,15 @@ const Add = () => {
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
+        estado: "",
         codigo: "",
-        nombre: "",
-        marca: "",
-        precio_venta: "",
-        cantidad: "",
-        unidad_medida: "",
-        descripcion: "",
+        observacion: "",
+        fecha: "",
+        feccha: "",
+        proveedor: "",
     },
     validationSchema: Yup.object().shape({
         codigo: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-        nombre: Yup.string().min(3, "Debe tener como mínimo 3 caracteres")
-        .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
         marca: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
         precio_venta: Yup.string().min(1, "Debe tener como mínimo 1 caracter").required("El valor es requerido"),
         cantidad: Yup.string().required("El valor es requerido"),

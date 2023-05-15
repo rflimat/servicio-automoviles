@@ -17,7 +17,7 @@ import { editSwal, errorSwal, successSwal } from "../../../components/Swal";
 import { get, put } from "../../../helpers/api_helper";
 
 
-const Edit = () => {
+const View = () => {
     const [element, setElement] = useState({
         codigo: "",
         nombre: "",
@@ -49,31 +49,7 @@ const Edit = () => {
             unidad_medida: element.unidad_medida,
             descripcion: element.descripcion
         },
-        validationSchema: Yup.object().shape({
-          codigo: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-          nombre: Yup.string().min(3, "Debe tener como mínimo 3 caracteres")
-          .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
-          marca: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-          precio_venta: Yup.string().min(1, "Debe tener como mínimo 1 caracter").required("El valor es requerido"),
-          cantidad: Yup.string().required("El valor es requerido"),
-          unidad_medida: Yup.string().min(2, "Debe tener como mínimo 8 caracteres").required("El valor es requerido"),
-          descripcion: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-        }),
-        onSubmit: (element) => {
-          editSwal("productos").then((result) => {
-            if (result.isConfirmed) {
-              put(`http://127.0.0.1:8000/api/productos/${id}`, element)
-                .then((res) => {
-                  successSwal("producto", "actualizado").then(() => {
-                    navigate("/productos");
-                  });
-                })
-                .catch((err) => {
-                  errorSwal(err);
-                });
-            }
-          })
-        },
+        
       });
       return (
         <React.Fragment>
@@ -81,15 +57,11 @@ const Edit = () => {
           <Container fluid={true}>
             <Breadcrumbs
               title="Productos"
-              breadcrumbItem="Editar Productos"
+              breadcrumbItem="Ver Productos"
             />
 
             <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                validationType.handleSubmit();
-                return false;
-              }}
+              
             >
               <div className="mb-3">
                 <Label className="form-label">Codigo</Label>
@@ -106,6 +78,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.codigo &&
                   validationType.errors.codigo ? (
@@ -129,6 +102,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.nombre &&
                   validationType.errors.nombre ? (
@@ -152,6 +126,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.marca &&
                   validationType.errors.marca ? (
@@ -175,6 +150,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.precio_venta &&
                   validationType.errors.precio_venta ? (
@@ -198,6 +174,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.cantidad &&
                   validationType.errors.cantidad ? (
@@ -221,6 +198,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.unidad_medida &&
                   validationType.errors.unidad_medida ? (
@@ -244,6 +222,7 @@ const Edit = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.descripcion &&
                   validationType.errors.descripcion ? (
@@ -253,8 +232,10 @@ const Edit = () => {
                 ) : null}
               </div>
               <div className="d-flex flex-wrap gap-2">
-                <Button type="submit" color="primary">
-                  Guardar
+                <Button type="button" color="primary" onClick={() => {                                 
+                                    navigate(`/productos/edit/${id}`);
+                                }}>
+                  Editar  
                 </Button>{" "}
                 <Button type="reset" color="secondary" onClick={() => navigate("/productos")}>
                   Cancelar
@@ -267,4 +248,4 @@ const Edit = () => {
     );
   };
 
-export default Edit
+export default View

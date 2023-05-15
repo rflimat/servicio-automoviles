@@ -28,6 +28,11 @@ import ProveedoresEdit from "../pages/MyPages/Proveedores/Edit";
 import Productos from "../pages/MyPages/Productos/Index";
 import ProductosAdd from "../pages/MyPages/Productos/Add";
 import ProductosEdit from "../pages/MyPages/Productos/Edit";
+import ProductosView from "../pages/MyPages/Productos/View";
+
+import Compras from "../pages/MyPages/Compras/Index";
+import ComprasAdd from "../pages/MyPages/Compras/Add";
+import ComprasEdit from "../pages/MyPages/Compras/Edit";
 
 const authProtectedRoutes = [
   // Dashboard
@@ -45,11 +50,17 @@ const authProtectedRoutes = [
   { path: "/productos", component: <Productos /> },
   { path: "/productos/add", component: <ProductosAdd /> },
   { path: "/productos/edit/:id", component: <ProductosEdit /> },
+  { path: "/productos/view/:id", component: <ProductosView /> },
 
   // Proveedores
   { path: "/proveedores", component: <Proveedores/> },
   { path: "/proveedores/add", component: <ProveedoresAdd/> },
   { path: "/proveedores/edit/:id", component: <ProveedoresEdit/> },
+
+  // Compras
+  { path: "/compras", component: <Compras/> },
+  { path: "/compras/add", component: <ComprasAdd/> },
+  { path: "/compras/edit/:id", component: <ComprasEdit/> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

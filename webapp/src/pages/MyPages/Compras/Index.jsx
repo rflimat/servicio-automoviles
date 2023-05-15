@@ -32,30 +32,29 @@ const Index = () => {
                 Header: "N°",
             },
             {
+                Header: "Estado",
+                accessor: "estado",
+            },
+            {
                 Header: "Codigo",
                 accessor: "codigo",
             },
             {
-                Header: "Nombre de Producto",
-                accessor: "nombre",
+                Header: "Observacion",
+                accessor: "observacion",
             },
             {
-                Header: "Marca",
-                accessor: "marca",
+                Header: "Fecha Registro",
+                accessor: "fecha",
             },
             {
-                Header: "Precio Venta",
-                accessor: "precio_venta",
+                Header: "Fecha de Recepcion",
+                accessor: "feccha",
             },
             {
-                Header: "Cantidad",
-                accessor: "cantidad",
-            },           
-            {
-                Header: "Unidad de Medida",
-                accessor: "unidad_medida",
-            },
-            
+                Header: "Proveedor",
+                accessor: "proveedor",
+            },                
             {
                 Header: "Acciones",
                 disableFilters: true,
@@ -65,23 +64,11 @@ const Index = () => {
                         <>
                             <Button
                                 type="button"
-                                color="success"
-                                className="btn-sm btn-rounded me-1"
-                                
-                                onClick={() => {
-                                    const id = cellProps.row.original.id;
-                                    navigate(`/productos/view/${id}`);
-                                }}
-                            >
-                                <i className="far fa-eye"></i> 
-                            </Button>
-                            <Button
-                                type="button"
                                 color="info"
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    navigate(`/productos/edit/${id}`);
+                                    navigate(`/compras/edit/${id}`);
                                 }}
                             >
                                <i className='bx bxs-pencil' ></i>
@@ -92,11 +79,11 @@ const Index = () => {
                                 className="btn-sm btn-rounded ms-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    deleteSwal("productos").then((result) => {
+                                    deleteSwal("compras").then((result) => {
                                         if (result.isConfirmed) {
                                             del(`http://127.0.0.1:8000/api/productos/${id}`)
                                                 .then((res) => {
-                                                    successSwal("producto", "eliminado").then(() => {
+                                                    successSwal("compra", "eliminado").then(() => {
                                                         getData();
                                                     });
                                                 })
@@ -119,22 +106,22 @@ const Index = () => {
 
     //meta title
     document.title =
-        "Productos | Servicios Electricos Laser";
+        "Compras | Servicios Electricos Laser";
 
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Productos" breadcrumbItem="Productos" />
+                <Breadcrumbs title="Compras" breadcrumbItem="Compras" />
                 {/* <Table columns={columns} data={data} /> */}
                 <TableContainer
                     columns={columns}
-                    data={productos}
+                    data={Compras}
                     isGlobalFilter={true}
                     isAddOptions={true}
                     customPageSize={10}
                     addText="Nuevo"
                     handleAddClick={() => {
-                        navigate('/productos/add');
+                        navigate('/compras/add');
                     }}
                     className="custom-header-css"
                 />
