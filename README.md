@@ -50,6 +50,8 @@ Run this command on your cmd or terminal
 yarn install
 ```
 
+Copy `.env.example` file to `.env.local` on the root folder for development environment, in the case for production environment, copy `.env.example` file to `.env.production`.
+
 #### Development environment
 ```npm
 npm run dev
