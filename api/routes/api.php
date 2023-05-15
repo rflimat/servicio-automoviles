@@ -1,23 +1,15 @@
 <?php
 
 use App\Http\Controllers\api\AutenticacionController;
+use App\Http\Controllers\Api\ComprasController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
 use App\Http\Controllers\api\UsuarioController;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -52,4 +44,12 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::delete('/proveedores/{id}', 'destroy');
     });
     
+});
+
+Route::controller(ComprasController::class)->group(function (){
+    Route::get('/compra', 'index');
+    Route::post('/compra', 'store');
+    Route::get('/compra/{id}', 'show');
+    Route::put('/compra/{id}', 'update');
+    Route::delete('/compra/{id}', 'destroy');
 });
