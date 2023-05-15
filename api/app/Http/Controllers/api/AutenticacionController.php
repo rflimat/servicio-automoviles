@@ -31,8 +31,8 @@ class AutenticacionController extends Controller
         ], Response::HTTP_OK);
     }
     public function logout(){
-        $user = Auth::user();
-        $user->tokens()->delete(); // elimina todas las tokens del usuario
+        //$user = Auth::user();
+        //$user->tokens()->delete(); // elimina todas las tokens del usuario
         $cookie = Cookie::forget('cookie_token');
         return response(Response::HTTP_OK)->withCookie($cookie);
     }
