@@ -32,7 +32,7 @@ const View = () => {
 
     useEffect(() => {
         const getById = async () => {
-            const data = await get(`http://127.0.0.1:8000/api/productos/${id}`);
+            const data = await get(`${import.meta.env.VITE_API_URL}/productos/${id}`);
             setElement(data);
         }
         getById();

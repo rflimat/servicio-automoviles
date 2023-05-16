@@ -21,6 +21,7 @@ const CustomSelect = ({
         options={options}
         placeholder={placeholder}
         className={className}
+        isSearchable={false}
       />
     </>
   );

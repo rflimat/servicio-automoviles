@@ -17,7 +17,7 @@ const Index = () => {
     const navigate = useNavigate();
     
     const getData = async () => {
-        const data = await get("http://127.0.0.1:8000/api/proveedores");
+        const data = await get(`${import.meta.env.VITE_API_URL}/proveedores`);
         setProveedores(data);
     }
 
@@ -68,7 +68,7 @@ const Index = () => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("proveedor").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`http://127.0.0.1:8000/api/proveedores/${id}`)
+                                            del(`${import.meta.env.VITE_API_URL}/proveedores/${id}`)
                                                 .then((res) => {
                                                     successSwal("proveedor", "eliminado").then(() => {
                                                         getData();
