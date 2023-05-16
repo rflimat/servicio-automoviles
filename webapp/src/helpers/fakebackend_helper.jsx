@@ -14,10 +14,10 @@ const isUserAuthenticated = () => {
 };*/
 
 // Login Method
-const postJwtLogin = data => post("http://127.0.0.1:8000/api/login", data);
+const postJwtLogin = data => post(`${import.meta.env.VITE_API_URL}/login`, data);
 
 // Login Method
-const postJwtLogout = data => post("http://127.0.0.1:8000/api/logout", data);
+const postJwtLogout = data => post(`${import.meta.env.VITE_API_URL}/logout`, data);
 
 // get dashboard charts data
 export const getWeeklyData = () => get("/weekly-data");

@@ -31,7 +31,7 @@ const Edit = () => {
 
     useEffect(() => {
         const getById = async () => {
-            const data = await get(`http://127.0.0.1:8000/api/usuarios/${id}`);
+            const data = await get(`${import.meta.env.VITE_API_URL}/usuarios/${id}`);
             setElement(data);
         }
         getById();
@@ -68,7 +68,7 @@ const Edit = () => {
       onSubmit: (element) => {
         editSwal("usuario").then((result) => {
           if (result.isConfirmed) {
-            put(`http://127.0.0.1:8000/api/usuarios/${id}`, element)
+            put(`${import.meta.env.VITE_API_URL}/usuarios/${id}`, element)
               .then((res) => {
                 successSwal("usuario", "actualizado").then(() => {
                   navigate("/usuarios");

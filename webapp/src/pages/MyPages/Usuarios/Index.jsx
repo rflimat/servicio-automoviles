@@ -19,7 +19,7 @@ const Index = () => {
     const navigate = useNavigate();
 
     const getData = async () => {
-        const data = await get("http://127.0.0.1:8000/api/usuarios");
+        const data = await get(`${import.meta.env.VITE_API_URL}/usuarios`);
         setUsuarios(data);
     }
 
@@ -74,7 +74,7 @@ const Index = () => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("usuario").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`http://127.0.0.1:8000/api/usuarios/${id}`)
+                                            del(`${import.meta.env.VITE_API_URL}/usuarios/${id}`)
                                                 .then((res) => {
                                                     successSwal("usuario", "eliminado").then(() => {
                                                         getData();

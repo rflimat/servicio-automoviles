@@ -53,7 +53,7 @@ const Add = () => {
     onSubmit: (element) => {
       addSwal("proveedor").then((result) => {
         if (result.isConfirmed) {
-          post(`http://127.0.0.1:8000/api/proveedores`, element)
+          post(`${import.meta.env.VITE_API_URL}/proveedores`, element)
             .then((res) => {
               successSwal("proveedor", "agregado").then(() => {
                 navigate("/proveedores");
