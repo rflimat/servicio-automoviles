@@ -22,6 +22,9 @@ class ProductoController extends Controller
      */
     public function registrar(Request $request)
     {
+        $request->validate([
+            'codigo' => 'unique:App\Models\Producto'
+        ]);
         $producto = new Producto();
         $producto->codigo = $request->codigo;
         $producto->nombre = $request->nombre;
