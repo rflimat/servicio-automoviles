@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Compra extends Model
+class detalle_compra extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'costo',
-        'estado',
-        'fecha_recepcion',
-        'eliminado',
-        'fecha_compra',
-        'proveedor_id',
-        'observacion'
+        'cantidad',
+        'compra_id',
+        'producto_id',
+        'precio',
+        'descripcion',
+        'importe'
     ];
 }

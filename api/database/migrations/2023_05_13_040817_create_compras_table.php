@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -10,13 +11,53 @@ return new class extends Migration
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->string('costo');
-            $table->boolean('estado');
+            $table->dateTime('fecha_compra');
+            $table->dateTime('fecha_recepcion');
+            $table->decimal('costo_compra', 10, 2);
+            $table->tinyInteger('estado');
+            $table->tinyInteger('eliminado');
+            $table->text('observacion');
+            $table->unsignedBigInteger('proveedor_id');
             $table->timestamps();
         });
+
+        Schema::create('detalle_compra', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('producto_id');
+            $table->unsignedBigInteger('compra_id');
+            $table->integer('cantidad');
+            $table->text('descripcion');
+            $table->decimal('precio', 10, 2);
+            $table->decimal('importe', 10, 2);
+        });
+
+        DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_compra');
+        DB::unprepared(' 
+            CREATE TRIGGER actualizar_stock_compra BEFORE INSERT ON detalle_compra FOR EACH ROW 
+            BEGIN 
+                UPDATE productos SET cantidad=cantidad+NEW.cantidad WHERE id=NEW.producto_id;
+            END;
+        ');
+
+        DB::unprepared('DROP TRIGGER IF EXISTS cancelar_compra');
+        DB::unprepared(' 
+            CREATE TRIGGER cancelar_compra AFTER UPDATE ON compras FOR EACH ROW 
+            BEGIN 
+                IF NEW.estado=0 THEN
+                    UPDATE detalle_producto pe
+                    INNER JOIN productos p ON pe.producto_id=p.id
+                    SET cantidad=cantidad-pe.cantidad WHERE id=NEW.id;
+                END IF;
+            END;
+        ');
     }
+
+
     public function down(): void
     {
         Schema::dropIfExists('compras');
+        Schema::dropIfExists('detalle_compra');
+        DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_compra');
+        DB::unprepared('DROP TRIGGER IF EXISTS cancelar_compra');
     }
 };
