@@ -16,6 +16,7 @@ class Producto extends Model
         'cantidad',
         'unidad_medida',
         'marca',
-        'descripcion'
+        'descripcion',
+        'estado'
     ];
 }

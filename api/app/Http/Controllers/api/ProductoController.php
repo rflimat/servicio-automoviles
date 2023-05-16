@@ -30,6 +30,7 @@ class ProductoController extends Controller
         $producto->unidad_medida = $request->unidad_medida;
         $producto->marca = $request->marca;
         $producto->descripcion = $request->descripcion;
+        $producto->estado = 1;
         $producto->save();
     }
 
@@ -63,6 +64,8 @@ class ProductoController extends Controller
      */
     public function eliminar(string $idProducto)
     {
-        Producto::destroy($idProducto);
+        $producto = Producto::findOrFail($idProducto);
+        $producto->Estado = 0;
+        //Producto::destroy($idProducto);
     }
 }

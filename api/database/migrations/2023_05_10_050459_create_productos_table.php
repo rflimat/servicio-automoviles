@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('codigo');
             $table->string('nombre');
-            $table->integer('precio_venta');
+            $table->double('precio_venta');
             $table->integer('cantidad');
             $table->string('unidad_medida')->nullable();
             $table->string('marca');  //  ultima actualizacion bd
             $table->string('descripcion'); // ultima actualizacion
+            $table->integer('estado')->nullable();
             $table->timestamps();
         });
     }
