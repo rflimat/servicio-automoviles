@@ -11,6 +11,7 @@ import {
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import DateTimeInput from "../../../components/Common/DateTimeInput";
 
 import { format } from 'date-fns'
 import CustomSelect from "../../../components/Common/CustomSelect";
@@ -32,8 +33,10 @@ const Add = () => {
   const [productos, setProductos] = useState([]);
   const [productoTemp, setProductoTemp] = useState({});
   const [cantidad, setCantidad] = useState(1);
-  const [precioProducto, setPrecioProducto] = useState();
+  const [precioProducto, setPrecioProducto] = useState("0.00");
   const [productosCompra, setProductosCompra] = useState([]);
+  const [proveedorId, setProveedorId] = useState(0);
+  const [estado, setEstado] = useState(0);
   const navigate = useNavigate();
 
   const getProveedores = async () => {
@@ -79,9 +82,19 @@ const Add = () => {
       producto.importe = cantidad * precioProducto;
       setProductosCompra([...productosCompra, producto]);
       setCantidad(1);
+      setPrecioProducto("0.00");
     } else {
-      errorSwal({message: "Producto ya agregado"});
+      errorSwal({ message: "Producto ya agregado" });
     }
+  };
+
+  const handleChangeProducto = (index, name, newName) => {
+    const newProductos = [...productosCompra]; // Obtén una copia del array
+    const attributeProducto = {}
+    attributeProducto[`${name}`] = newName;
+    newProductos[index] = { ...newProductos[index], ...attributeProducto }; // Modifica el elemento específico dentro de la copia
+    newProductos[index].importe = Number(newProductos[index].cantidad) * Number(newProductos[index].precio);
+    setProductosCompra(newProductos); // Actualiza el estado con la copia modificada del array
   };
 
   const eliminarProducto = (id) => {
@@ -95,18 +108,13 @@ const Add = () => {
     getProductos();
   }, []);
 
-  /*setInterval(() => {
-    validationType.values.datetimeCompra = format(new Date(), "yyyy-MM-dd hh:mm:ss");
-    validationType.values.datetimeRecepcion = format(new Date(), "yyyy-MM-dd hh:mm:ss");
-  }, 1000);*/
-
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
-      estado: 0,
-      datetimeCompra: format(new Date(), "yyyy-MM-dd hh:mm"),
-      datetimeRecepcion: format(new Date(), "yyyy-MM-dd hh:mm"),
-      proveedorId: 0,
+      estado: estado,
+      datetimeCompra: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
+      datetimeRecepcion: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
+      proveedorId: proveedorId,
     },
     validationSchema: Yup.object().shape({
 
@@ -116,12 +124,12 @@ const Add = () => {
         fecha_compra: element.datetimeCompra,
         fecha_recepcion: element.datetimeRecepcion,
         costo_compra: productosCompra.reduce((total, producto) => total + producto.importe, 0),
+        estado: element.estado,
         proveedor_id: element.proveedorId,
         productosCompra
       }
       addSwal("compras").then((result) => {
         if (result.isConfirmed) {
-          console.log(compra);
           post(`${import.meta.env.VITE_API_URL}/compras`, compra)
             .then((res) => {
               successSwal("compra", "agregado").then(() => {
@@ -158,7 +166,7 @@ const Add = () => {
                 <CustomSelect
                   value={validationType.values.proveedorId}
                   options={proveedores}
-                  onChange={(element) => validationType.setFieldValue("proveedorId", element.value)}
+                  onChange={(element) => setProveedorId(element.value)}
                   placeholder="Seleccione Proveedor"
                   className="select2-selection"
                   isSearchable={true}
@@ -172,20 +180,7 @@ const Add = () => {
               </div>
               <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de compra</Label>
-                <Input
-                  name="datetimeCompra"
-                  type="datetime-local"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.datetimeCompra || ""}
-                  invalid={
-                    validationType.touched.datetimeCompra &&
-                      validationType.errors.datetimeCompra
-                      ? true
-                      : false
-                  }
-                  readOnly
-                />
+                <DateTimeInput name="datetimeCompra" value={validationType.values.datetimeCompra} onDateTimeChange={validationType.handleChange} />
                 {validationType.touched.datetimeCompra &&
                   validationType.errors.datetimeCompra ? (
                   <FormFeedback type="invalid">
@@ -195,20 +190,7 @@ const Add = () => {
               </div>
               <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de recepcion</Label>
-                <Input
-                  name="datetimeRecepcion"
-                  type="datetime-local"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.datetimeRecepcion || ""}
-                  invalid={
-                    validationType.touched.datetimeRecepcion &&
-                      validationType.errors.datetimeRecepcion
-                      ? true
-                      : false
-                  }
-                  readOnly
-                />
+                <DateTimeInput name="datetimeRecepcion" value={validationType.values.datetimeRecepcion} onDateTimeChange={validationType.handleChange} />
                 {validationType.touched.datetimeRecepcion &&
                   validationType.errors.datetimeRecepcion ? (
                   <FormFeedback type="invalid">
@@ -221,9 +203,8 @@ const Add = () => {
             <div className="mb-3">
               <Label>Estado</Label>
               <CustomSelect
-                defaultValue={{ label: "Registrado", value: 0 }}
                 value={validationType.values.estado}
-                onChange={element => validationType.setFieldValue("estado", element.value)}
+                onChange={element => setEstado(element.value)}
                 options={[
                   { label: "Registrado", value: "0" },
                   { label: "Recepcionado", value: "1" },
@@ -287,88 +268,83 @@ const Add = () => {
               </div>
             </div>
 
-            <table className="table table-bordered text-center table-hover">
-              <thead className="table-success">
-                <tr>
-                  <th>N°</th>
-                  <th className="col-3">Nombre</th>
-                  <th className="col-3">Observacion</th>
-                  <th className="col-1">Cantidad</th>
-                  <th className="col-2">Precio</th>
-                  <th className="col-2">Importe</th>
-                  <th>Accion</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productosCompra.map((producto, index) => (
-                  <tr key={index + 1}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {producto.nombre}
-                    </td>
-                    <td>
-                      <Input
-                        name="observacion"
-                        type="text"
-                        value={producto.observacion}
-                        onChange={(e) => producto.observacion = e.target.value}
-                        style={{...tdStyles}}
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        name="cantidad"
-                        type="text"
-                        value={producto.cantidad}
-                        onChange={(e) => producto.cantidad = e.target.value}
-                        style={{...tdStyles, textAlign: "center"}}
-                      />
-                    </td>
-                    <td>
-                      <div style={{display: "flex", alignItems: "center"}}>
-                        S/.
+            <div className="table-responsive">
+              <table className="table table-bordered text-center table-hover">
+                <thead className="table-success">
+                  <tr>
+                    <th>N°</th>
+                    <th className="col-3">Nombre</th>
+                    <th className="col-3">Observacion</th>
+                    <th className="col-1">Cantidad</th>
+                    <th className="col-2">Precio</th>
+                    <th className="col-2">Importe</th>
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productosCompra.map((producto, index) => (
+                    <tr key={index + 1}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {producto.nombre}
+                      </td>
+                      <td>
                         <Input
-                          name="precio"
+                          name="observacion"
                           type="text"
-                          value={producto.precio}
-                          onChange={(e) => producto.precio = e.target.value}
-                          style={tdStyles}
+                          value={producto.observacion}
+                          onChange={(e) => handleChangeProducto(index, "observacion", e.target.value)}
+                          style={{ ...tdStyles }}
                         />
-                      </div>
-                    </td>
-                    <td>
-                      <div style={{display: "flex", alignItems: "center"}}>
-                        S/.
+                      </td>
+                      <td>
                         <Input
-                          name="importe"
+                          name="cantidad"
                           type="text"
-                          value={producto.importe}
-                          onChange={(e) => producto.importe = e.target.value}
-                          style={tdStyles}
+                          value={producto.cantidad}
+                          onChange={(e) => handleChangeProducto(index, "cantidad", e.target.value)}
+                          style={{ ...tdStyles, textAlign: "center" }}
                         />
-                      </div>
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          eliminarProducto(producto.index);
-                        }}
-                        className="btn btn-danger"
-                      >
-                        <i className='bx bx-trash'></i>
-                      </button>
+                      </td>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          S/.
+                          <Input
+                            name="precio"
+                            type="text"
+                            value={producto.precio}
+                            onChange={(e) => handleChangeProducto(index, "precio", e.target.value)}
+                            style={tdStyles}
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          S/.{producto.importe.toFixed(2)}
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            eliminarProducto(producto.index);
+                          }}
+                          className="btn btn-danger"
+                        >
+                          <i className='bx bx-trash'></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan={5}>Costo total de la compra:</td>
+                    <td colSpan={1} style={{ textAlign: "left" }}>
+                      S/.{productosCompra.reduce((total, producto) => total + producto.importe, 0).toFixed(2)}
                     </td>
                   </tr>
-                ))}
-                <tr>
-                  <td colSpan={5}>Costo total de la compra:</td>
-                  <td colSpan={1} style={{textAlign: "left"}}>
-                    S/.{productosCompra.reduce((total, producto) => total + producto.importe, 0).toFixed(2)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
 
             <div className="d-flex flex-wrap gap-2">
               <Button type="submit" color="primary">

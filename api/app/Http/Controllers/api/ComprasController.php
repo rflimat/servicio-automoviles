@@ -16,7 +16,7 @@ class ComprasController extends Controller
         return Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'proveedor_id', 'proveedores.nombre as nombreProveedor')
         ->selectRaw('IF(estado >= 1, "Recepcionado", "Registrado") AS estado')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
-        ->where('estado', 1)
+        ->where('eliminado', 0)
         ->orderBy('fecha_compra')
         ->get();
     }
@@ -34,7 +34,7 @@ class ComprasController extends Controller
         $compra->fecha_recepcion = $request->fecha_recepcion;
         $compra->costo_compra = $request->costo_compra;
         $compra->proveedor_id = $request->proveedor_id;
-        $compra->estado = 1;
+        $compra->estado = $request->estado;
         $compra->eliminado = 0;
         $compra->save();
 
@@ -57,7 +57,6 @@ class ComprasController extends Controller
         $compra = Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'proveedor_id', 'proveedores.nombre as nombreProveedor')
         ->selectRaw('IF(estado >= 1, "Recepcionado", "Registrado") AS estado')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
-        ->where('estado', 1)
         ->where('compras.id', $id)
         ->first();
         $compra->productosCompra = DetalleCompra::select('productos.id', 'productos.nombre', 'detalle_compras.cantidad', 'productos.unidad_medida', 'detalle_compras.precio', 'detalle_compras.importe')
@@ -73,6 +72,7 @@ class ComprasController extends Controller
     $compra->fecha_compra = $request->fecha_compra;
     $compra->fecha_recepcion = $request->fecha_recepcion;
     $compra->costo_compra = $request->costo_compra;
+    $compra->estado = $request->estado;
     $compra->save();
 
   

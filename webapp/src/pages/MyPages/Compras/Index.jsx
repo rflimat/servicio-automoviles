@@ -86,7 +86,7 @@ const Index = () => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("compras").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`${import.meta.env.VITE_API_URL}/productos/${id}`)
+                                            del(`${import.meta.env.VITE_API_URL}/compras/${id}`)
                                                 .then((res) => {
                                                     successSwal("compra", "eliminado").then(() => {
                                                         getData();

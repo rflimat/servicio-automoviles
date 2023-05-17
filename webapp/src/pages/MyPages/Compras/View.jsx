@@ -31,10 +31,9 @@ const View = () => {
   const [element, setElement] = useState({
     fecha_compra: "",
     fecha_recepcion: "",
-    costo_compra: "",
+    costo_compra: 0,
     nombre: "",
     productosCompra: [],
-    costo_compra: 0
   });
 
   const navigate = useNavigate();
@@ -47,11 +46,6 @@ const View = () => {
     }
     getById();
   }, []);
-
-  /*setInterval(() => {
-    validationType.values.datetimeCompra = format(new Date(), "yyyy-MM-dd hh:mm:ss");
-    validationType.values.datetimeRecepcion = format(new Date(), "yyyy-MM-dd hh:mm:ss");
-  }, 1000);*/
 
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
@@ -111,8 +105,6 @@ const View = () => {
                 <Input
                   value={validationType.values.proveedor}
                   placeholder="Seleccione Proveedor"
-                  className="select2-selection"
-                  isSearchable={true}
                   readOnly
                 />
                 {validationType.touched.proveedor &&
@@ -192,6 +184,7 @@ const View = () => {
               ) : null}
             </div>
 
+            <div className="table-responsive">
             <table className="table table-bordered text-center table-hover">
               <thead className="table-success">
                 <tr>
@@ -233,6 +226,7 @@ const View = () => {
                 </tr>
               </tbody>
             </table>
+            </div>
 
             <div className="d-flex flex-wrap gap-2">
             <Button type="button" color="primary" onClick={() => {                                 
