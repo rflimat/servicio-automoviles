@@ -16,7 +16,7 @@ class ComprasController extends Controller
         return Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'estado', 'proveedor_id')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
         ->where('estado', 1)
-        ->orderBy('fecha_pedido')
+        ->orderBy('fecha_compra')
         ->get();
     }
 
