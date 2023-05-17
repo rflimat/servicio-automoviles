@@ -16,7 +16,6 @@ import { format } from 'date-fns'
 import CustomSelect from "../../../components/Common/CustomSelect";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import TableContainer from "../../../components/Common/TableContainer";
 import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
 import { get, post } from "../../../helpers/api_helper";
 
@@ -33,7 +32,7 @@ const Add = () => {
   const [productos, setProductos] = useState([]);
   const [productoTemp, setProductoTemp] = useState({});
   const [cantidad, setCantidad] = useState(1);
-  const [precio, setPrecio] = useState();
+  const [precioProducto, setPrecioProducto] = useState();
   const [productosCompra, setProductosCompra] = useState([]);
   const navigate = useNavigate();
 
@@ -54,7 +53,7 @@ const Add = () => {
     let optionsProductos = data.map((element) => {
       let { id, codigo, nombre } = element;
       return {
-        element: element,
+        element: {nombre},
         label: `${codigo} => ${nombre}`,
         value: id
       }
@@ -73,8 +72,8 @@ const Add = () => {
       producto.index = productosCompra.length + 1;
       producto.observacion = "";
       producto.cantidad = cantidad;
-      producto.precio = precio;
-      producto.importe = cantidad * precio;
+      producto.precio = precioProducto;
+      producto.importe = cantidad * precioProducto;
       setProductosCompra([...productosCompra, producto]);
       setCantidad(1);
     } else {
@@ -119,7 +118,8 @@ const Add = () => {
       }
       addSwal("compras").then((result) => {
         if (result.isConfirmed) {
-          post(`${import.meta.env.VITE_API_URL}/compras`, compra)
+          console.log(compra);
+          /*post(`${import.meta.env.VITE_API_URL}/compras`, compra)
             .then((res) => {
               successSwal("compra", "agregado").then(() => {
                 navigate("/productos");
@@ -127,7 +127,7 @@ const Add = () => {
             })
             .catch((err) => {
               errorSwal(err);
-            });
+            });*/
         }
       })
     },
@@ -181,6 +181,7 @@ const Add = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.datetimeCompra &&
                   validationType.errors.datetimeCompra ? (
@@ -203,6 +204,7 @@ const Add = () => {
                       ? true
                       : false
                   }
+                  readOnly
                 />
                 {validationType.touched.datetimeRecepcion &&
                   validationType.errors.datetimeRecepcion ? (
@@ -264,8 +266,8 @@ const Add = () => {
                       className="form-control"
                       aria-describedby="helpId"
                       placeholder="Precio de producto"
-                      value={precio}
-                      onChange={(e) => setPrecio(e.target.value)}
+                      value={precioProducto}
+                      onChange={(e) => setPrecioProducto(e.target.value)}
                       required
                     />
                   </div>
@@ -305,7 +307,8 @@ const Add = () => {
                       <Input
                         name="observacion"
                         type="text"
-                        defaultValue={producto.observacion}
+                        value={producto.observacion}
+                        onChange={(e) => producto.observacion = e.target.value}
                         style={{...tdStyles}}
                       />
                     </td>
@@ -313,7 +316,8 @@ const Add = () => {
                       <Input
                         name="cantidad"
                         type="text"
-                        defaultValue={producto.cantidad}
+                        value={producto.cantidad}
+                        onChange={(e) => producto.cantidad = e.target.value}
                         style={{...tdStyles, textAlign: "center"}}
                       />
                     </td>
@@ -321,9 +325,10 @@ const Add = () => {
                       <div style={{display: "flex", alignItems: "center"}}>
                         S/.
                         <Input
-                          name="precio_venta"
+                          name="precio"
                           type="text"
-                          defaultValue={producto.precio}
+                          value={producto.precio}
+                          onChange={(e) => producto.precio = e.target.value}
                           style={tdStyles}
                         />
                       </div>
@@ -334,7 +339,8 @@ const Add = () => {
                         <Input
                           name="importe"
                           type="text"
-                          defaultValue={producto.importe}
+                          value={producto.importe}
+                          onChange={(e) => producto.importe = e.target.value}
                           style={tdStyles}
                         />
                       </div>

@@ -40,8 +40,8 @@ const Login = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      username: "admin" || "",
-      password: "admin123" || "",
+      username: "",
+      password: "",
     },
     validationSchema: Yup.object({
       username: Yup.string().required("Ingrese su username"),
@@ -118,7 +118,7 @@ const Login = (props) => {
                         <Input
                           name="username"
                           className="form-control"
-                          placeholder="Enter username"
+                          placeholder="Ingrese usuario"
                           type="text"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
@@ -137,12 +137,12 @@ const Login = (props) => {
                       </div>
 
                       <div className="mb-3">
-                        <Label className="form-label">Password</Label>
+                        <Label className="form-label">Contraseña</Label>
                         <Input
                           name="password"
                           value={validation.values.password || ""}
                           type="password"
-                          placeholder="Enter Password"
+                          placeholder="Ingrese contraseña"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           invalid={
