@@ -13,7 +13,7 @@ class ComprasController extends Controller
 
     public function index(Request $request)
     {
-        return Compra::select('compras.id', 'fecha_pedido', 'fecha_recepcion','observacion','costo_compra', 'estado', 'proveedor_id')
+        return Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'estado', 'proveedor_id')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
         ->where('estado', 1)
         ->orderBy('fecha_pedido')
@@ -53,7 +53,7 @@ class ComprasController extends Controller
 
     public function show($id)
     {
-        $compra = Compra::select('compras.id', 'fecha_pedido', 'fecha_recepcion', 'costo_compra', 'estado', 'proveedor_id')
+        $compra = Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'estado', 'proveedor_id')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
         ->where('estado', 1)
         ->where('compras.id', $id)
@@ -100,7 +100,4 @@ class ComprasController extends Controller
         $compra->save();
         return 1;
     }
-
-
-
 }

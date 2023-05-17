@@ -125,7 +125,7 @@ const Add = () => {
           post(`${import.meta.env.VITE_API_URL}/compras`, compra)
             .then((res) => {
               successSwal("compra", "agregado").then(() => {
-                navigate("/productos");
+                navigate("/compras");
               });
             })
             .catch((err) => {
