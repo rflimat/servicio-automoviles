@@ -59,7 +59,7 @@ class ComprasController extends Controller
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
         ->where('compras.id', $id)
         ->first();
-        $compra->productosCompra = DetalleCompra::select('productos.id', 'productos.nombre', 'detalle_compras.cantidad', 'productos.unidad_medida', 'detalle_compras.precio', 'detalle_compras.importe')
+        $compra->productosCompra = DetalleCompra::select('productos.id', 'productos.nombre', 'detalle_compras.descripcion as observacion', 'detalle_compras.cantidad', 'productos.unidad_medida', 'detalle_compras.precio', 'detalle_compras.importe')
             ->join('productos', 'detalle_compras.producto_id', '=', 'productos.id')
             ->where('compra_id', $id)->get();
         return $compra;

@@ -38,6 +38,14 @@ return new class extends Migration
             END;
         ');
 
+        DB::unprepared('DROP TRIGGER IF EXISTS cambiar_stock_compra');
+        DB::unprepared(' 
+            CREATE TRIGGER cambiar_stock_compra AFTER UPDATE ON detalle_compras FOR EACH ROW 
+            BEGIN 
+                UPDATE productos SET cantidad=cantidad-OLD.cantidad+NEW.cantidad WHERE id=NEW.producto_id;
+            END;
+        ');
+
         DB::unprepared('DROP TRIGGER IF EXISTS cancelar_compra');
         DB::unprepared(' 
             CREATE TRIGGER cancelar_compra AFTER UPDATE ON compras FOR EACH ROW 
@@ -57,6 +65,7 @@ return new class extends Migration
         Schema::dropIfExists('compras');
         Schema::dropIfExists('detalle_compras');
         DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_compra');
+        DB::unprepared('DROP TRIGGER IF EXISTS cambiar_stock_compra');
         DB::unprepared('DROP TRIGGER IF EXISTS cancelar_compra');
     }
 };
