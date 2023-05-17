@@ -53,7 +53,10 @@ const Add = () => {
     let optionsProductos = data.map((element) => {
       let { id, codigo, nombre } = element;
       return {
-        element: {nombre},
+        element: {
+          id,
+          nombre
+        },
         label: `${codigo} => ${nombre}`,
         value: id
       }
@@ -119,7 +122,7 @@ const Add = () => {
       addSwal("compras").then((result) => {
         if (result.isConfirmed) {
           console.log(compra);
-          /*post(`${import.meta.env.VITE_API_URL}/compras`, compra)
+          post(`${import.meta.env.VITE_API_URL}/compras`, compra)
             .then((res) => {
               successSwal("compra", "agregado").then(() => {
                 navigate("/productos");
@@ -127,7 +130,7 @@ const Add = () => {
             })
             .catch((err) => {
               errorSwal(err);
-            });*/
+            });
         }
       })
     },

@@ -43,7 +43,7 @@ class ComprasController extends Controller
             $detallecompra->producto_id = $producto['id'];
             $detallecompra->descripcion = $producto['observacion'];
             $detallecompra->cantidad = $producto['cantidad'];
-            $detallecompra->precio = $producto['precio_venta'];
+            $detallecompra->precio = $producto['precio'];
             $detallecompra->importe = $producto['importe'];
             $detallecompra->save();
         }
