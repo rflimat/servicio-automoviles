@@ -173,7 +173,7 @@ const SidebarContent = (props) => {
             </li>
             <li>
               <Link to="/compras">
-                <i className="far fa-envelope-open-text"></i>
+              <i className='bx bx-cart' ></i>
                 <span>Compras</span>
               </Link>
             </li>
