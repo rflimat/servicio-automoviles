@@ -38,14 +38,14 @@ const Add = () => {
           name: 'numeroDocumento',
           skipAbsent: true,
           test(value, ctx) {
-            let tipoDocumento = validationType.values.tipoDocumento;
+            let tipoDocumento = ctx.parent.tipoDocumento;
             if (tipoDocumento === "DNI" && value.length !== 8) {
               return ctx.createError({ message: 'Numero de DNI no valido' })
             }
             if (tipoDocumento === "RUC" && value.length !== 11) {
               return ctx.createError({ message: 'Numero de RUC no valido' })
             }
-            return true
+            return true;
           }
         }),
       celular: Yup.string().required("El valor es requerido"),
@@ -112,7 +112,7 @@ const Add = () => {
             <div className="mb-3">
               <Label>Tipo de documento</Label>
               <CustomSelect
-                defaultValue={{ label: "RUC", value: "RUC" }}
+                defaultValue={{ label: "Seleccione", value: "Seleccione" }}
                 value={validationType.values.tipoDocumento}
                 onChange={element => validationType.setFieldValue("tipoDocumento", element.value)}
                 options={[

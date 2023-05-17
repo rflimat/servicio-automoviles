@@ -16,17 +16,16 @@ return new class extends Migration
             $table->decimal('costo_compra', 10, 2);
             $table->tinyInteger('estado');
             $table->tinyInteger('eliminado');
-            $table->text('observacion');
             $table->unsignedBigInteger('proveedor_id');
             $table->timestamps();
         });
 
-        Schema::create('detalle_compra', function (Blueprint $table) {
+        Schema::create('detalle_compras', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('producto_id');
             $table->unsignedBigInteger('compra_id');
             $table->integer('cantidad');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
             $table->decimal('importe', 10, 2);
         });

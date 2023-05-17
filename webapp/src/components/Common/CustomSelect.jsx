@@ -7,6 +7,8 @@ const CustomSelect = ({
   value,
   placeholder,
   className,
+  isSearchable = false,
+  styles = {}
 }) => {
   const listValues = (options, value) => {
     return options ? options.find((option) => option.value === value) : "";
@@ -21,7 +23,13 @@ const CustomSelect = ({
         options={options}
         placeholder={placeholder}
         className={className}
-        isSearchable={false}
+        isSearchable={isSearchable}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            ...styles,
+          }),
+        }}
       />
     </>
   );

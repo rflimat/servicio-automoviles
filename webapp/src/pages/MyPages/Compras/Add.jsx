@@ -21,10 +21,19 @@ import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
 import { get, post } from "../../../helpers/api_helper";
 
 const Add = () => {
+  const tdStyles = {
+    background: "inherit",
+    width: "100%",
+    border: 0,
+    padding: 0,
+    outline: "none"
+  };
+
   const [proveedores, setProveedores] = useState([]);
   const [productos, setProductos] = useState([]);
   const [productoTemp, setProductoTemp] = useState({});
   const [cantidad, setCantidad] = useState(1);
+  const [precio, setPrecio] = useState();
   const [productosCompra, setProductosCompra] = useState([]);
   const navigate = useNavigate();
 
@@ -60,15 +69,22 @@ const Add = () => {
   const addProducto = (e) => {
     e.preventDefault();
     let producto = productoTemp;
-    producto.cantidad = cantidad;
-    producto.importe = cantidad * productoTemp.precio_venta;
-    setProductosCompra([...productosCompra, producto]);
-    setCantidad(1);
+    if (!productosCompra.find((element) => element.id == producto.id)) {
+      producto.index = productosCompra.length + 1;
+      producto.observacion = "";
+      producto.cantidad = cantidad;
+      producto.precio = precio;
+      producto.importe = cantidad * precio;
+      setProductosCompra([...productosCompra, producto]);
+      setCantidad(1);
+    } else {
+      errorSwal({message: "Producto ya agregado"});
+    }
   };
 
   const eliminarProducto = (id) => {
     setProductosCompra((current) =>
-      current.filter((producto) => producto.id != id)
+      current.filter((producto) => producto.index != id)
     );
   };
 
@@ -77,7 +93,10 @@ const Add = () => {
     getProductos();
   }, []);
 
-
+  /*setInterval(() => {
+    validationType.values.datetimeCompra = format(new Date(), "yyyy-MM-dd hh:mm:ss");
+    validationType.values.datetimeRecepcion = format(new Date(), "yyyy-MM-dd hh:mm:ss");
+  }, 1000);*/
 
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
@@ -91,16 +110,16 @@ const Add = () => {
 
     }),
     onSubmit: (element) => {
-      //console.log(element);
-      //console.log(productosCompra);
       const compra = {
-        ...element,
+        fecha_compra: element.datetimeCompra,
+        fecha_recepcion: element.datetimeRecepcion,
+        costo_compra: productosCompra.reduce((total, producto) => total + producto.importe, 0),
+        proveedor_id: element.proveedorId,
         productosCompra
       }
       addSwal("compras").then((result) => {
         if (result.isConfirmed) {
-          console.log(compra);
-          /*post(`${import.meta.env.VITE_API_URL}/compras`, element)
+          post(`${import.meta.env.VITE_API_URL}/compras`, compra)
             .then((res) => {
               successSwal("compra", "agregado").then(() => {
                 navigate("/productos");
@@ -108,16 +127,11 @@ const Add = () => {
             })
             .catch((err) => {
               errorSwal(err);
-            });*/
+            });
         }
       })
     },
   });
-
-  setInterval(() => {
-    validationType.values.datetimeCompra = format(new Date(), "yyyy-MM-dd hh:mm:ss");
-    validationType.values.datetimeRecepcion = format(new Date(), "yyyy-MM-dd hh:mm:ss");
-  }, 1000);
 
   return (
     <React.Fragment>
@@ -136,7 +150,7 @@ const Add = () => {
             }}
           >
             <div className="row">
-              <div className="mb-3 col-6">
+              <div className="mb-3 col-12 col-md-6">
                 <Label>Proveedor</Label>
                 <CustomSelect
                   value={validationType.values.proveedorId}
@@ -144,15 +158,16 @@ const Add = () => {
                   onChange={(element) => validationType.setFieldValue("proveedorId", element.value)}
                   placeholder="Seleccione Proveedor"
                   className="select2-selection"
+                  isSearchable={true}
                 />
-                {validationType.touched.proveedor &&
-                  validationType.errors.proveedor ? (
+                {validationType.touched.proveedorId &&
+                  validationType.errors.proveedorId ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.proveedor}
+                    {validationType.errors.proveedorId}
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-3">
+              <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de compra</Label>
                 <Input
                   name="datetimeCompra"
@@ -174,7 +189,7 @@ const Add = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-3">
+              <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de recepcion</Label>
                 <Input
                   name="datetimeRecepcion"
@@ -207,7 +222,6 @@ const Add = () => {
                 options={[
                   { label: "Registrado", value: "0" },
                   { label: "Recepcionado", value: "1" },
-                  
                 ]}
                 placeholder="Seleccione estado"
                 className="select2-selection"
@@ -221,31 +235,49 @@ const Add = () => {
             </div>
 
             <div className="card my-3">
-              <div className="card-header">Agregar producto</div>
+              <div className="card-header bg-light">Agregar producto</div>
               <div className="card-body">
-                <div id="add-product" className="mb-3 input-group">
-                  <CustomSelect
-                    options={productos}
-                    onChange={(element) => getProducto(element)}
-                    placeholder="Seleccione Producto"
-                    className="select2-selection"
-                  />
-                  <input
-                    type="number"
-                    className="form-control"
-                    aria-describedby="helpId"
-                    placeholder="Cantidad de producto"
-                    value={cantidad}
-                    onChange={(e) => setCantidad(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-primary px-2 px-sm-5"
-                    onClick={(e) => addProducto(e)}
-                  >
-                    Agregar
-                  </button>
+                <div id="add-product" className="row mb-3">
+                  <div className="col-12 col-md-6 px-0 ps-0 ps-md-2 ps-lg-3">
+                    <CustomSelect
+                      options={productos}
+                      onChange={(element) => getProducto(element)}
+                      placeholder="Seleccione Producto"
+                      className="select2-selection"
+                      isSearchable={true}
+                    />
+                  </div>
+                  <div className="col-12 col-md-2 mt-2 mt-md-0 px-0">
+                    <input
+                      type="number"
+                      className="form-control"
+                      aria-describedby="helpId"
+                      placeholder="Cantidad de producto"
+                      value={cantidad}
+                      onChange={(e) => setCantidad(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-12 col-md-2 mt-2 mt-md-0 px-0">
+                    <input
+                      type="text"
+                      className="form-control"
+                      aria-describedby="helpId"
+                      placeholder="Precio de producto"
+                      value={precio}
+                      onChange={(e) => setPrecio(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="col-12 col-md-2 mt-2 mt-md-0 px-0 px-md-2">
+                    <button
+                      type="button"
+                      className="btn btn-primary w-100 w-md-auto px-0 px-md-2"
+                      onClick={(e) => addProducto(e)}
+                    >
+                      Agregar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -253,40 +285,76 @@ const Add = () => {
             <table className="table table-bordered text-center table-hover">
               <thead className="table-success">
                 <tr>
-                  <th className="col-1">N°</th>
+                  <th>N°</th>
                   <th className="col-3">Nombre</th>
                   <th className="col-3">Observacion</th>
-                  <th className="col-2">Cantidad</th>
+                  <th className="col-1">Cantidad</th>
                   <th className="col-2">Precio</th>
                   <th className="col-2">Importe</th>
-                  <th className="col-1">Accion</th>
+                  <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
                 {productosCompra.map((producto, index) => (
                   <tr key={index + 1}>
                     <td>{index + 1}</td>
-                    <td>{producto.nombre}</td>
-                    <td>{"Observacion"}</td>
-                    <td>{producto.cantidad}</td>
-                    <td>S/.{producto.precio_venta}</td>
-                    <td>S/.{producto.importe.toFixed(2)}</td>
+                    <td>
+                      {producto.nombre}
+                    </td>
+                    <td>
+                      <Input
+                        name="observacion"
+                        type="text"
+                        defaultValue={producto.observacion}
+                        style={{...tdStyles}}
+                      />
+                    </td>
+                    <td>
+                      <Input
+                        name="cantidad"
+                        type="text"
+                        defaultValue={producto.cantidad}
+                        style={{...tdStyles, textAlign: "center"}}
+                      />
+                    </td>
+                    <td>
+                      <div style={{display: "flex", alignItems: "center"}}>
+                        S/.
+                        <Input
+                          name="precio_venta"
+                          type="text"
+                          defaultValue={producto.precio}
+                          style={tdStyles}
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <div style={{display: "flex", alignItems: "center"}}>
+                        S/.
+                        <Input
+                          name="importe"
+                          type="text"
+                          defaultValue={producto.importe}
+                          style={tdStyles}
+                        />
+                      </div>
+                    </td>
                     <td>
                       <button
                         type="button"
                         onClick={() => {
-                          eliminarProducto(producto.id);
+                          eliminarProducto(producto.index);
                         }}
-                        className="btn btn-danger w-100"
+                        className="btn btn-danger"
                       >
-                        Eliminar
+                        <i className='bx bx-trash'></i>
                       </button>
                     </td>
                   </tr>
                 ))}
                 <tr>
-                  <td colSpan={6}>Costo total de la compra:</td>
-                  <td>
+                  <td colSpan={5}>Costo total de la compra:</td>
+                  <td colSpan={1} style={{textAlign: "left"}}>
                     S/.{productosCompra.reduce((total, producto) => total + producto.importe, 0).toFixed(2)}
                   </td>
                 </tr>

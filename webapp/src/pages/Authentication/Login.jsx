@@ -64,11 +64,11 @@ const Login = (props) => {
 
   return (
     <React.Fragment>
-      <div className="home-btn d-none d-sm-block">
+      {/*<div className="home-btn d-none d-sm-block">
         <Link to="/" className="text-dark">
           <i className="bx bx-home h2" />
         </Link>
-      </div>
+      </div>*/}
       <div className="account-pages my-5 pt-sm-5">
         <Container>
           <Row className="justify-content-center">
@@ -192,7 +192,7 @@ const Login = (props) => {
                     © {new Date().getFullYear()} Servicios Electricos Laser.
                     Diseñado with{" "}
                     <i className="mdi mdi-heart text-danger" /> by Themesbrand</span>
-                  <span style={{ display: "block" }}>Desarrollado por <a target="_blank" rel="noreferrer" href="https://rflimat.com">Raul Lima</a> & Development team</span>
+                  <span style={{ display: "block" }}>Desarrollado por Systec</span>
                 </p>
               </div>
             </Col>

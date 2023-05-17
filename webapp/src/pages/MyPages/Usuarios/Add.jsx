@@ -50,7 +50,7 @@ const Add = () => {
     onSubmit: (element) => {
       addSwal("usuario").then((result) => {
         if (result.isConfirmed) {
-          post(`${import.meta.env.VITE_API_URL}/usuario`, element)
+          post(`${import.meta.env.VITE_API_URL}/usuarios`, element)
             .then((res) => {
               successSwal("usuario", "agregado").then(() => {
                 navigate("/usuarios");

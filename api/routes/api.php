@@ -44,13 +44,13 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::put('/proveedores/{id}', 'update');
         Route::delete('/proveedores/{id}', 'destroy');
     });
-    
-});
 
-Route::controller(ComprasController::class)->group(function (){
-    Route::get('/compra', 'index');
-    Route::post('/compra', 'store');
-    Route::get('/compra/{id}', 'show');
-    Route::put('/compra/{id}', 'update');
-    Route::delete('/compra/{id}', 'destroy');
+    Route::controller(ComprasController::class)->group(function (){
+        Route::get('/compras', 'index');
+        Route::post('/compras', 'store');
+        Route::get('/compras/{id}', 'show');
+        Route::put('/compras/{id}', 'update');
+        Route::delete('/compras/{id}', 'destroy');
+    });
+    
 });

@@ -64,7 +64,7 @@ const Index = () => {
                                     navigate(`/usuarios/edit/${id}`);
                                 }}
                             >
-                                Editar
+                                <i className='bx bxs-pencil' ></i>
                             </Button>
                             <Button
                                 type="button"
@@ -87,7 +87,7 @@ const Index = () => {
                                     });
                                 }}
                             >
-                                Eliminar
+                                <i className='bx bx-trash'></i>
                             </Button>
                         </div>
                     );

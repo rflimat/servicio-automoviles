@@ -129,7 +129,6 @@ const Edit = () => {
             <div className="mb-3">
               <Label>Tipo de documento</Label>
               <CustomSelect
-                defaultValue={{ label: "RUC", value: "RUC" }}
                 value={validationType.values.tipoDocumento}
                 onChange={element => validationType.setFieldValue("tipoDocumento", element.value)}
                 options={[

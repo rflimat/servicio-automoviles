@@ -34,12 +34,14 @@ class ComprasController extends Controller
         $compra->costo_compra = $request->costo_compra;
         $compra->proveedor_id = $request->proveedor_id;
         $compra->estado = 1;
+        $compra->eliminado = 0;
         $compra->save();
 
-        foreach($request->producto as $producto) {
+        foreach($request->productosCompra as $producto) {
             $detallecompra = new DetalleCompra();
             $detallecompra->compra_id = $compra->id;
             $detallecompra->producto_id = $producto['id'];
+            $detallecompra->descripcion = $producto['observacion'];
             $detallecompra->cantidad = $producto['cantidad'];
             $detallecompra->precio = $producto['precio_venta'];
             $detallecompra->importe = $producto['importe'];
@@ -73,7 +75,7 @@ class ComprasController extends Controller
     $compra->save();
 
   
-    foreach ($request->productos as $producto) {
+    foreach ($request->productosCompra as $producto) {
         $detallecompra = DetalleCompra::where('compra_id', $id)
             ->where('producto_id', $producto['id'])
             ->first();
@@ -94,7 +96,7 @@ class ComprasController extends Controller
     public function destroy($id)
     {
         $compra = Compra::findOrFail($id);
-        $compra->estado = 0;
+        $compra->eliminado = 1;
         $compra->save();
         return 1;
     }

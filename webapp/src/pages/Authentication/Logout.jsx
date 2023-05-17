@@ -11,6 +11,9 @@ const Logout = () => {
     postJwtLogout({}).then(() => {
     localStorage.removeItem("authUser");
     navigate('/login');
+    }).catch(() => {
+      localStorage.removeItem("authUser");
+      navigate('/login');
     });
   }, []);
 
