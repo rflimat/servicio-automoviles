@@ -35,6 +35,15 @@ import ComprasAdd from "../pages/MyPages/Compras/Add";
 import ComprasEdit from "../pages/MyPages/Compras/Edit";
 import ComprasView from "../pages/MyPages/Compras/View";
 
+import Clientes from "../pages/MyPages/Clientes/Index";
+import ClientesAdd from "../pages/MyPages/Clientes/Add";
+import ClientesEdit from "../pages/MyPages/Clientes/Edit";
+
+import Vehiculos from "../pages/MyPages/Vehiculos/Index";
+import VehiculosAdd from "../pages/MyPages/Vehiculos/Add";
+import VehiculosEdit from "../pages/MyPages/Vehiculos/Edit";
+import VehiculosView from "../pages/MyPages/Vehiculos/View";
+
 const authProtectedRoutes = [
   // Dashboard
   { path: "/dashboard", component: <Dashboard /> },,
@@ -63,6 +72,17 @@ const authProtectedRoutes = [
   { path: "/compras/add", component: <ComprasAdd/> },
   { path: "/compras/edit/:id", component: <ComprasEdit/> },
   { path: "/compras/view/:id", component: <ComprasView /> },
+
+  // Clientes
+  { path: "/clientes", component: <Clientes/> },
+  { path: "/clientes/add", component: <ClientesAdd/> },
+  { path: "/clientes/edit/:id", component: <ClientesEdit/> },
+
+  // Vehiculos
+  { path: "/vehiculos", component: <Vehiculos /> },
+  { path: "/vehiculos/add", component: <VehiculosAdd /> },
+  { path: "/vehiculos/edit/:id", component: <VehiculosEdit /> },
+  { path: "/vehiculos/view/:id", component: <VehiculosView /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

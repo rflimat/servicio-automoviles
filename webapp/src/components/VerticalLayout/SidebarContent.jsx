@@ -177,6 +177,18 @@ const SidebarContent = (props) => {
                 <span>Compras</span>
               </Link>
             </li>
+            <li>
+              <Link to="/clientes">
+              <i className="far fa-users"></i>
+                <span>Clientes</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/vehiculos">
+              <i className='bx bx-car' ></i>
+                <span>Vehiculos</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </SimpleBar>
