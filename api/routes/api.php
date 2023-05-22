@@ -55,11 +55,11 @@ Route::middleware('auth:sanctum')->group( function(){
     });
 
     Route::controller(ClienteController::class)->group(function (){
-        Route::get('/cliente', 'index');
-        Route::post('/cliente', 'store');
-        Route::get('/cliente/{id}', 'show');
-        Route::put('/cliente/{id}', 'update');
-        Route::delete('/cliente/{id}', 'destroy');
+        Route::get('/clientes', 'index');
+        Route::post('/clientes', 'store');
+        Route::get('/clientes/{id}', 'show');
+        Route::put('/clientes/{id}', 'update');
+        Route::delete('/clientes/{id}', 'destroy');
     });
-    
+
 });
