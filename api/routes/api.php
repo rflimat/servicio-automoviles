@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AutenticacionController;
+use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\ComprasController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
@@ -51,6 +52,14 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::get('/compras/{id}', 'show');
         Route::put('/compras/{id}', 'update');
         Route::delete('/compras/{id}', 'destroy');
+    });
+
+    Route::controller(ClienteController::class)->group(function (){
+        Route::get('/cliente', 'index');
+        Route::post('/cliente', 'store');
+        Route::get('/cliente/{id}', 'show');
+        Route::put('/cliente/{id}', 'update');
+        Route::delete('/cliente/{id}', 'destroy');
     });
     
 });
