@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ComprasController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
 use App\Http\Controllers\api\UsuarioController;
+use App\Http\Controllers\Api\VehiculosController;
 
 
 use Illuminate\Http\Request;
@@ -60,6 +61,14 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::get('/clientes/{id}', 'show');
         Route::put('/clientes/{id}', 'update');
         Route::delete('/clientes/{id}', 'destroy');
+    });
+
+    Route::controller(VehiculosController::class)->group(function (){
+        Route::get('/vehiculos', 'index');
+        Route::post('/vehiculos', 'store');
+        Route::get('/vehiculos/{id}', 'show');
+        Route::put('/vehiculos/{id}', 'update');
+        Route::delete('/vehiculos/{id}', 'destroy');
     });
 
 });
