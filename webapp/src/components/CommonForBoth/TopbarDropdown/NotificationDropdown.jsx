@@ -26,7 +26,7 @@ const NotificationDropdown = props => {
           id="page-header-notifications-dropdown"
         >
           <i className="bx bx-bell bx-tada" />
-          <span className="badge bg-danger rounded-pill">3</span>
+          <span className="badge bg-danger rounded-pill">0</span>
         </DropdownToggle>
 
         <DropdownMenu className="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end">
@@ -45,7 +45,7 @@ const NotificationDropdown = props => {
           </div>
 
           <SimpleBar style={{ height: "230px" }}>
-            <Link to="" className="text-reset notification-item">
+            {/*<Link to="" className="text-reset notification-item">
               <div className="d-flex">
                 <div className="avatar-xs me-3">
                   <span className="avatar-title bg-primary rounded-circle font-size-16">
@@ -135,7 +135,7 @@ const NotificationDropdown = props => {
                   </div>
                 </div>
               </div>
-            </Link>
+            </Link>*/}
           </SimpleBar>
           <div className="p-2 border-top d-grid">
             <Link

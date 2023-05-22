@@ -54,7 +54,8 @@ const Login = (props) => {
       })
       if (typeof response == "object") {
         localStorage.setItem("authUser", JSON.stringify(response));
-        navigate('/dashboard');
+        //navigate('/dashboard');
+        navigate('/productos');
       } else {
         setError("Usuario o contraseñas incorrectas");
         console.error(response);
@@ -190,8 +191,7 @@ const Login = (props) => {
                 <p>
                   <span style={{ display: "block" }}>
                     © {new Date().getFullYear()} Servicios Electricos Laser.
-                    Diseñado with{" "}
-                    <i className="mdi mdi-heart text-danger" /> by Themesbrand</span>
+                  </span>
                   <span style={{ display: "block" }}>Desarrollado por Systec</span>
                 </p>
               </div>

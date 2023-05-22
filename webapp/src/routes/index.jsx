@@ -37,7 +37,7 @@ import ComprasView from "../pages/MyPages/Compras/View";
 
 const authProtectedRoutes = [
   // Dashboard
-  { path: "/dashboard", component: <Dashboard /> },,
+  { path: "/", component: (<></>) },
 
   // Profile
   { path: "/profile", component: <UserProfile /> },

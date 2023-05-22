@@ -254,41 +254,20 @@ const Header = props => {
                   <Row className="no-gutters">
                     <Col>
                       <Link className="dropdown-icon-item" to="#">
-                        <img src={github} alt="Github" />
-                        <span>GitHub</span>
+                        <i className="bx bx-package" style={{fontSize: 24}}></i>
+                        <span>Productos</span>
                       </Link>
                     </Col>
                     <Col>
                       <Link className="dropdown-icon-item" to="#">
-                        <img src={bitbucket} alt="bitbucket" />
-                        <span>Bitbucket</span>
+                        <i className="bx bx-building-house" style={{fontSize: 24}}></i>
+                        <span>Proveedores</span>
                       </Link>
                     </Col>
                     <Col>
                       <Link className="dropdown-icon-item" to="#">
-                        <img src={dribbble} alt="dribbble" />
-                        <span>Dribbble</span>
-                      </Link>
-                    </Col>
-                  </Row>
-
-                  <Row className="no-gutters">
-                    <Col>
-                      <Link className="dropdown-icon-item" to="#">
-                        <img src={dropbox} alt="dropbox" />
-                        <span>Dropbox</span>
-                      </Link>
-                    </Col>
-                    <Col>
-                      <Link className="dropdown-icon-item" to="#">
-                        <img src={mail_chimp} alt="mail_chimp" />
-                        <span>Mail Chimp</span>
-                      </Link>
-                    </Col>
-                    <Col>
-                      <Link className="dropdown-icon-item" to="#">
-                        <img src={slack} alt="slack" />
-                        <span>Slack</span>
+                        <i className="bx bx-cart" style={{fontSize: 24}}></i>
+                        <span>Compras</span>
                       </Link>
                     </Col>
                   </Row>
@@ -312,7 +291,7 @@ const Header = props => {
             <NotificationDropdown />
             <ProfileMenu />
             
-            <div
+            {<div
                onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar);
               }}
@@ -324,7 +303,7 @@ const Header = props => {
               >
                 <i className="bx bx-cog bx-spin" />
               </button>
-            </div>
+            </div>}
           </div>
         </div>
       </header>

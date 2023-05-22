@@ -40,7 +40,7 @@ function GlobalFilter({
               id="search-bar-0"
               type="text"
               className="form-control"
-              placeholder={`${count} records...`}
+              placeholder={`${count} resultados...`}
               value={value || ""}
             />
           </label>
@@ -122,7 +122,7 @@ const TableContainer = ({
           >
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
-                Show {pageSize}
+                Ver {pageSize}
               </option>
             ))}
           </select>
@@ -211,7 +211,7 @@ const TableContainer = ({
           </div>
         </Col>
         <Col className="col-md-auto d-none d-md-block">
-          Page{" "}
+          Pagina{" "}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>
