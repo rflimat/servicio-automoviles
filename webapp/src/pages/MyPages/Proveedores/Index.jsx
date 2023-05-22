@@ -97,7 +97,7 @@ const Index = () => {
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Proveedores" breadcrumbItem="Listar Proveedores" />
+                <Breadcrumbs title="Proveedores" breadcrumbItem="Proveedores" />
                 <TableContainer
                     columns={columns}
                     data={proveedores}

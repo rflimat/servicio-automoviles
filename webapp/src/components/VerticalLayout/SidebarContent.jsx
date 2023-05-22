@@ -143,22 +143,22 @@ const SidebarContent = (props) => {
       <SimpleBar className="h-100" ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            <li className="menu-title">Menu </li>
+            {/*<li className="menu-title">Menu </li>
             <li>
               <Link to="/dashboard">
                 <i className="bx bx-home-circle"></i>
                 <span>Dashboard</span>
               </Link>
-            </li>
+            </li>*/}
 
             <li className="menu-title">Modulos</li>
 
-            <li>
+            {/*<li>
               <Link to="/usuarios">
                 <i className="bx bx-user"></i>
                 <span>Usuarios</span>
               </Link>
-            </li>
+            </li>*/}
             <li>
               <Link to="/productos">
                 <i className="bx bx-package"></i>

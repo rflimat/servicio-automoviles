@@ -81,7 +81,7 @@ const Index = () => {
                             <Button
                                 type="button"
                                 color="danger"
-                                className="btn-sm btn-rounded ms-1"
+                                className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("compras").then((result) => {
