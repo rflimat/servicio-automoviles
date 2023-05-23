@@ -24,7 +24,8 @@ class VentaController extends Controller
     }
 
     public function listar(){
-        return Venta::all();
+        $venta = Venta::where('estado', 1)->get();
+        return $venta;
     }
 
     public function obtener(string $id){
