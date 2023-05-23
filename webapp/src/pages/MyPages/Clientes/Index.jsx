@@ -33,19 +33,23 @@ const Index = () => {
             },
             {
                 Header: "Nombres",
-                accessor: "nombres",
+                accessor: "Nombres",
             },
             {
                 Header: "Apellidos",
-                accessor: "apellidos",
+                accessor: "Apellidos",
             },
             {
                 Header: "Telefono",
-                accessor: "telefono",
+                accessor: "celular",
             },
             {
-                Header: "DNI / RUC",
-                accessor: "dni_ruc",
+                Header: "Tipo Documento",
+                accessor: "tipo_Documento",
+            },
+            {
+                Header: "Numero Documento",
+                accessor: "Nro_documento",
             },
             {
                 Header: "Correo Electronico",

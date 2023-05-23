@@ -8,6 +8,8 @@ import {
   FormFeedback,
   Form,
 } from "reactstrap";
+import CustomSelect from "../../../components/Common/CustomSelect";
+
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -22,18 +24,34 @@ const Add = () => {
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
-        nombres: "",
-        apellidos: "",
-        telefono: "",
-        dni_ruc: "",
+        Nombres: "",
+        Apellidos: "",
+        celular: "",
+        tipo_Documento: "",
+        Nro_documento: "",
         correo: "",
     },
     validationSchema: Yup.object().shape({
-        nombres: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-        apellidos: Yup.string().min(3, "Debe tener como mínimo 3 caracteres")
+        Nombres: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
+        Apellidos: Yup.string().min(3, "Debe tener como mínimo 3 caracteres")
         .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
-        telefono: Yup.string().required("El valor es requerido"),
-        dni_ruc: Yup.string().min(8, "Debe tener como mínimo 8 caracteres").required("El valor es requerido"),
+        celular: Yup.string().required("El valor es requerido"),
+        tipo_Documento: Yup.string().required("El valor es requerido"),
+        Nro_documento: Yup.string().matches(/^[0-9]+$/, "Solo numeros")
+        .required("El valor es requerido").test({
+          name: 'Nro_documento',
+          skipAbsent: true,
+          test(value, ctx) {
+            let tipo_Documento = ctx.parent.tipo_Documento;
+            if (tipo_Documento === "DNI" && value.length !== 8) {
+              return ctx.createError({ message: 'Numero de DNI no valido' })
+            }
+            if (tipo_Documento === "RUC" && value.length !== 11) {
+              return ctx.createError({ message: 'Numero de RUC no valido' })
+            }
+            return true;
+          }
+        }),
         correo: Yup.string().email("Debe ser un correo valido").required("El valor es requerido"),
     }),
     onSubmit: (element) => {
@@ -71,92 +89,112 @@ const Add = () => {
             <div className="mb-3">
               <Label className="form-label">Nombres</Label>
               <Input
-                name="nombres"
+                name="Nombres"
                 placeholder="Ingrese nombre del cliente"
                 type="text"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.nombres || ""}
+                value={validationType.values.Nombres || ""}
                 invalid={
-                  validationType.touched.nombres &&
-                    validationType.errors.nombres
+                  validationType.touched.Nombres &&
+                    validationType.errors.Nombres
                     ? true
                     : false
                 }
               />
-              {validationType.touched.nombres &&
-                validationType.errors.nombres ? (
+              {validationType.touched.Nombres &&
+                validationType.errors.Nombres ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.nombres}
+                  {validationType.errors.Nombres}
                 </FormFeedback>
               ) : null}
             </div>
             <div className="mb-3">
               <Label className="form-label">Apellidos</Label>
               <Input
-                name="apellidos"
-                placeholder="Ingrese apellidos"
+                name="Apellidos"
+                placeholder="Ingrese Apellidos"
                 type="text"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.apellidos || ""}
+                value={validationType.values.Apellidos || ""}
                 invalid={
-                  validationType.touched.apellidos &&
-                    validationType.errors.apellidos
+                  validationType.touched.Apellidos &&
+                    validationType.errors.Apellidos
                     ? true
                     : false
                 }
               />
-              {validationType.touched.apellidos &&
-                validationType.errors.apellidos ? (
+              {validationType.touched.Apellidos &&
+                validationType.errors.Apellidos ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.apellidos}
+                  {validationType.errors.Apellidos}
                 </FormFeedback>
               ) : null}
             </div>
             <div className="mb-3">
               <Label className="form-label">Telefono</Label>
               <Input
-                name="telefono"
-                placeholder="Ingrese telefono"
+                name="celular"
+                placeholder="Ingrese celular"
                 type="number"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.telefono || ""}
+                value={validationType.values.celular || ""}
                 invalid={
-                  validationType.touched.telefono &&
-                    validationType.errors.telefono
+                  validationType.touched.celular &&
+                    validationType.errors.celular
                     ? true
                     : false
                 }
               />
-              {validationType.touched.telefono &&
-                validationType.errors.telefono ? (
+              {validationType.touched.celular &&
+                validationType.errors.celular ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.telefono}
+                  {validationType.errors.celular}
                 </FormFeedback>
               ) : null}
             </div>
             <div className="mb-3">
-              <Label className="form-label">DNI / RUC</Label>
+              <Label>Tipo de documento</Label>
+              <CustomSelect
+                defaultValue={{ label: "Seleccione", value: "Seleccione" }}
+                value={validationType.values.tipo_Documento}
+                onChange={element => validationType.setFieldValue("tipo_Documento", element.value)}
+                options={[
+                  { label: "DNI", value: "DNI" },
+                  { label: "RUC", value: "RUC" },
+                ]}
+                placeholder="Seleccione tipo de documento"
+                className="select2-selection"
+              />
+              {validationType.touched.tipo_Documento &&
+                validationType.errors.tipo_Documento ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.tipo_Documento}
+                </FormFeedback>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <Label className="form-label">Numero de documento</Label>
               <Input
-                name="dni_ruc"
-                placeholder="Ingrese dni_ruc"
+                name="Nro_documento"
+                placeholder="Ingrese numero de documento"
                 type="text"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.dni_ruc || ""}
+                value={validationType.values.Nro_documento || ""}
                 invalid={
-                  validationType.touched.dni_ruc &&
-                    validationType.errors.dni_ruc
+                  validationType.touched.Nro_documento &&
+                    validationType.errors.Nro_documento
                     ? true
                     : false
                 }
               />
-              {validationType.touched.dni_ruc &&
-                validationType.errors.dni_ruc ? (
+              {validationType.touched.Nro_documento &&
+                validationType.errors.Nro_documento ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.dni_ruc}
+                  {validationType.errors.Nro_documento}
                 </FormFeedback>
               ) : null}
             </div>
@@ -165,7 +203,7 @@ const Add = () => {
               <Input
                 name="correo"
                 placeholder="Ingrese correo electrónico válido"
-                type="correo"
+                type="email"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
                 value={validationType.values.correo || ""}
