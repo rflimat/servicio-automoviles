@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('Apellidos');
             $table->integer('celular');
             $table->string('correo');
+            $table->timestamps();
         });
     }
 
