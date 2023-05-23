@@ -7,7 +7,7 @@ use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
 use App\Http\Controllers\api\UsuarioController;
 use App\Http\Controllers\Api\VehiculosController;
-
+use App\Http\Controllers\api\VentaController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -71,4 +71,11 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::delete('/vehiculos/{id}', 'destroy');
     });
 
+    Route::controller(VentaController::class)->group( function() {
+        Route::post('/ventas','registrar');
+        Route::get('/ventas','listar');
+        Route::get('/ventas/{id}','obtener');
+        Route::put('/ventas/{id}','actualizar');
+        Route::delete('/ventas/{id}','eliminar');
+    });
 });
