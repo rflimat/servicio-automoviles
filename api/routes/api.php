@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\ComprasController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
+use App\Http\Controllers\Api\TrabajadorController;
+use App\Http\Controllers\api\TrabajoController;
 use App\Http\Controllers\api\UsuarioController;
 use App\Http\Controllers\Api\VehiculosController;
 use App\Http\Controllers\api\VentaController;
@@ -77,5 +79,13 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::get('/ventas/{id}','obtener');
         Route::put('/ventas/{id}','actualizar');
         Route::delete('/ventas/{id}','eliminar');
+    });
+
+    Route::controller(TrabajadorController::class)->group( function() {
+        Route::get('/trabajadores', 'index');
+        Route::post('/trabajadores', 'store');
+        Route::get('/trabajadores/{id}', 'show');
+        Route::put('/trabajadores/{id}', 'update');
+        Route::delete('/trabajadores/{id}', 'destroy');
     });
 });
