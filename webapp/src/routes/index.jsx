@@ -44,6 +44,11 @@ import VehiculosAdd from "../pages/MyPages/Vehiculos/Add";
 import VehiculosEdit from "../pages/MyPages/Vehiculos/Edit";
 import VehiculosView from "../pages/MyPages/Vehiculos/View";
 
+import Ventas from "../pages/MyPages/Ventas/Index";
+import VentasAdd from "../pages/MyPages/Ventas/Add";
+import VentasEdit from "../pages/MyPages/Ventas/Edit";
+import VentasView from "../pages/MyPages/Ventas/View";
+
 const authProtectedRoutes = [
   // Dashboard
   { path: "/", component: (<></>) },
@@ -83,6 +88,12 @@ const authProtectedRoutes = [
   { path: "/vehiculos/add", component: <VehiculosAdd /> },
   { path: "/vehiculos/edit/:id", component: <VehiculosEdit /> },
   { path: "/vehiculos/view/:id", component: <VehiculosView /> },
+
+  // Compras
+  { path: "/ventas", component: <Ventas/> },
+  { path: "/ventas/add", component: <VentasAdd/> },
+  { path: "/ventas/edit/:id", component: <VentasEdit/> },
+  { path: "/ventas/view/:id", component: <VentasView /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

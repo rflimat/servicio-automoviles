@@ -173,19 +173,25 @@ const SidebarContent = (props) => {
             </li>
             <li>
               <Link to="/compras">
-              <i className='bx bx-cart' ></i>
+                <i className='bx bx-cart' ></i>
                 <span>Compras</span>
               </Link>
             </li>
             <li>
+              <Link to="/ventas">
+                <i className='bx bx-shopping-bag'></i>
+                <span>Ventas</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/clientes">
-              <i className="far fa-users"></i>
+                <i className="far fa-users"></i>
                 <span>Clientes</span>
               </Link>
             </li>
             <li>
               <Link to="/vehiculos">
-              <i className='bx bx-car' ></i>
+                <i className='bx bx-car' ></i>
                 <span>Vehiculos</span>
               </Link>
             </li>
