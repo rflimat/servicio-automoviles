@@ -14,6 +14,7 @@ class Trabajo extends Model
         'fecha_hora_ingreso',
         'fecha_hora_salida',
         'costo',
-        'idComprobante'
+        'idComprobante',
+        'estado'
     ];
 }

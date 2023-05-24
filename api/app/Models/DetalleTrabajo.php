@@ -9,6 +9,7 @@ class DetalleTrabajo extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'idTrabajo',
         'idVehiculo',
         'idCliente',
         'descripcion',

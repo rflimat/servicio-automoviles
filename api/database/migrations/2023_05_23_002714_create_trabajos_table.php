@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('fecha_hora_salida')->nullable();
             $table->double('costo');
             $table->unsignedInteger('idComprobante')->nullable();
+            $table->integer('estado')->nullable();
             $table->timestamps();
         });
 
@@ -32,6 +33,7 @@ return new class extends Migration
 
         Schema::create('detalle_trabajos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('idTrabajo');
             $table->unsignedInteger('idVehiculo');
             $table->unsignedInteger('idCliente');
             $table->longText('descripcion');

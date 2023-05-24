@@ -89,3 +89,7 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::delete('/trabajadores/{id}', 'destroy');
     });
 });
+
+Route::post('/trabajos',[TrabajoController::class,'registrar']);
+Route::get('/trabajos',[TrabajoController::class,'listar']);
+Route::get('/trabajos/{id}',[TrabajoController::class,'obtener']);
