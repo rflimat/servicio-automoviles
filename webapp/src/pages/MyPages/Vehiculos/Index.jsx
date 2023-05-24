@@ -41,7 +41,7 @@ const Index = () => {
             },
             {
                 Header: "Año",
-                accessor: "Anio",
+                accessor: "anio",
             },
             {
                 Header: "Modelo",

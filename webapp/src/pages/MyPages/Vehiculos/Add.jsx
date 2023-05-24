@@ -20,7 +20,7 @@ import { get, post } from "../../../helpers/api_helper";
 
 const Add = () => {
   const [clientes, setClientes] = useState([]);
-  const [clienteId, setClienteId] = useState(0);
+  const [anios, setAnios] = useState([]);
   const navigate = useNavigate();
 
   const getClientes = async () => {
@@ -35,8 +35,20 @@ const Add = () => {
     setClientes(optionsClientes);
   }
 
+  const getAnios = () => {
+    let anios = [];
+    for (let anio = 2023; anio >= 1950; anio--) {
+      anios.push({
+        label: `${anio}`,
+        value: `${anio}`
+      });
+    }
+    setAnios(anios);
+  }
+
   useEffect(() => {
     getClientes();
+    getAnios();
   }, []);
 
   const validationType = useFormik({
@@ -47,7 +59,7 @@ const Add = () => {
         anio: "",
         modelo: "",
         tipo: "",
-        clienteId: "",
+        cliente_id: "",
     },
     
     validationSchema: Yup.object().shape({
@@ -56,10 +68,9 @@ const Add = () => {
         .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
         anio: Yup.string().required("El valor es requerido"),
         modelo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
-        tipo: Yup.string().min(17, "Debe tener como mínimo 17 caracteres").required("El valor es requerido"),
+        tipo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
     }),
     onSubmit: (element) => {
-      
       addSwal("vehiculos").then((result) => {
         if (result.isConfirmed) {
           post(`${import.meta.env.VITE_API_URL}/vehiculos`, element)
@@ -139,24 +150,17 @@ const Add = () => {
             </div>
             <div className="mb-3">
               <Label className="form-label">Año</Label>
-              <Input
-                name="precio_venta"
-                placeholder="Ingrese año"
-                type="number"
-                onChange={validationType.handleChange}
-                onBlur={validationType.handleBlur}
-                value={validationType.values.precio_venta || ""}
-                invalid={
-                  validationType.touched.precio_venta &&
-                    validationType.errors.precio_venta
-                    ? true
-                    : false
-                }
+              <CustomSelect
+                value={validationType.values.anio}
+                options={anios}
+                onChange={element => validationType.setFieldValue("anio", element.value)}
+                placeholder="Seleccione Año"
+                className="select2-selection"
               />
-              {validationType.touched.precio_venta &&
-                validationType.errors.precio_venta ? (
+              {validationType.touched.anio &&
+                validationType.errors.anio ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.precio_venta}
+                  {validationType.errors.anio}
                 </FormFeedback>
               ) : null}
             </div>
@@ -207,24 +211,24 @@ const Add = () => {
               ) : null}
             </div> 
             <div className="row">
-            <Label>Cliente</Label>
-              <div className="mb-3 col-12 col-md-11">
+              <Label>Cliente</Label>
+              <div className="mb-3 col-8 col-sm-10">
                 <CustomSelect
-                  value={validationType.values.clienteId}
+                  value={validationType.values.cliente_id}
                   options={clientes}
-                  onChange={element => validationType.setFieldValue("clienteId", element.value)}
+                  onChange={element => validationType.setFieldValue("cliente_id", element.value)}
                   placeholder="Seleccione Cliente"
                   className="select2-selection"
                   isSearchable={true}
                 />
-                {validationType.touched.clienteId &&
-                  validationType.errors.clienteId ? (
+                {validationType.touched.cliente_id &&
+                  validationType.errors.cliente_id ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.clienteId}
+                    {validationType.errors.cliente_id}
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-1">
+              <div className="mb-3 col-4 col-sm-2">
                 <Button type="button" className="w-100" color="success" onClick={() => navigate("/clientes/add")}>
                   Nuevo
                 </Button>
