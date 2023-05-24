@@ -22,7 +22,9 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        $trabajo->idComprobante = 1; // por ahora
+        if($request->idComprobante){
+            $trabajo->idComprobante = $request->idComprobante;
+        }
         $trabajo->estado = 1;
         $trabajo->save();
 
@@ -74,7 +76,9 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        $trabajo->idComprobante = 1;
+        if($request->idComprobante){
+            $trabajo->idComprobante = $request->idComprobante;
+        }
         $trabajo->save();
         //actualiza datos y los guarda con save
 
