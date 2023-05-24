@@ -185,7 +185,7 @@ const SidebarContent = (props) => {
             </li>
             <li>
               <Link to="/clientes">
-                <i className="far fa-users"></i>
+                <i className='bx bxs-user'></i>
                 <span>Clientes</span>
               </Link>
             </li>

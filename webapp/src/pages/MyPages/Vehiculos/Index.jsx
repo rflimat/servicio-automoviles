@@ -48,8 +48,8 @@ const Index = () => {
                 accessor: "modelo",
             },
             {
-                Header: "N° Chasis",
-                accessor: "chasis",
+                Header: "Tipo",
+                accessor: "tipo_vehiculo",
             },           
             
             {

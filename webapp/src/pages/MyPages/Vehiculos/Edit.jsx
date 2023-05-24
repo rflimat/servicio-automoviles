@@ -8,6 +8,7 @@ import {
   FormFeedback,
   Form,
 } from "reactstrap";
+import CustomSelect from "../../../components/Common/CustomSelect";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -19,13 +20,12 @@ import { get, put } from "../../../helpers/api_helper";
 
 const Edit = () => {
     const [element, setElement] = useState({
-        codigo: "",
-        nombre: "",
+        placa: "",
         marca: "",
-        precio_venta: "",
-        cantidad: "",
-        unidad_medida: "",
-        descripcion: "",
+        anio: "",
+        modelo: "",
+        tipo: "",
+        clienteId: "",
       });
     const navigate = useNavigate();
     const { id } = useParams();
@@ -41,13 +41,13 @@ const Edit = () => {
     const validationType = useFormik({
         enableReinitialize: true, // Use this flag when initial values needs to be changed
         initialValues: {
-            codigo: element.codigo,
+          placa: element.codigo,
             nombre: element.nombre,
             marca: element.marca,
-            precio_venta: element.precio_venta,
-            cantidad: element.cantidad,
-            unidad_medida: element.unidad_medida,
-            descripcion: element.descripcion
+            anio: element.anio,
+            modelo: element.modelo,
+            tipo: element.tipo,
+            clienteId: element.clienteId,
         },
         validationSchema: Yup.object().shape({
           codigo: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
@@ -77,194 +77,172 @@ const Edit = () => {
       });
       return (
         <React.Fragment>
-        <div className="page-content">
-          <Container fluid={true}>
-            <Breadcrumbs
-              title="vehiculos"
-              breadcrumbItem="Editar vehiculos"
-            />
+      <div className="page-content">
+        <Container fluid={true}>
+          <Breadcrumbs
+            title="Vehiculos"
+            breadcrumbItem="Registrar vehiculos"
+          />
 
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                validationType.handleSubmit();
-                return false;
-              }}
-            >
-              <div className="mb-3">
-                <Label className="form-label">Codigo</Label>
-                <Input
-                  name="codigo"
-                  placeholder="Ingrese codigo"
-                  type="text"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.codigo || ""}
-                  invalid={
-                    validationType.touched.codigo &&
-                      validationType.errors.codigo
-                      ? true
-                      : false
-                  }
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              validationType.handleSubmit();
+              return false;
+            }}
+          >
+            <div className="mb-3">
+              <Label className="form-label">Placa del vehiculo</Label>
+              <Input
+                name="placa"
+                placeholder="Ingrese placa del vehiculo"
+                type="text"
+                onChange={validationType.handleChange}
+                onBlur={validationType.handleBlur}
+                value={validationType.values.placa || ""}
+                invalid={
+                  validationType.touched.placa &&
+                    validationType.errors.placa
+                    ? true
+                    : false
+                }
+              />
+              {validationType.touched.placa &&
+                validationType.errors.placa ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.placa}
+                </FormFeedback>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <Label className="form-label">Marca</Label>
+              <Input
+                name="marca"
+                placeholder="Ingrese marca"
+                type="text"
+                onChange={validationType.handleChange}
+                onBlur={validationType.handleBlur}
+                value={validationType.values.marca || ""}
+                invalid={
+                  validationType.touched.marca &&
+                    validationType.errors.marca
+                    ? true
+                    : false
+                }
+              />
+              {validationType.touched.marca &&
+                validationType.errors.marca ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.marca}
+                </FormFeedback>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <Label className="form-label">Año</Label>
+              <Input
+                name="precio_venta"
+                placeholder="Ingrese año"
+                type="number"
+                onChange={validationType.handleChange}
+                onBlur={validationType.handleBlur}
+                value={validationType.values.precio_venta || ""}
+                invalid={
+                  validationType.touched.precio_venta &&
+                    validationType.errors.precio_venta
+                    ? true
+                    : false
+                }
+              />
+              {validationType.touched.precio_venta &&
+                validationType.errors.precio_venta ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.precio_venta}
+                </FormFeedback>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <Label className="form-label">Modelo</Label>
+              <Input
+                name="modelo"
+                placeholder="Ingrese modelo"
+                type="text"
+                onChange={validationType.handleChange}
+                onBlur={validationType.handleBlur}
+                value={validationType.values.modelo || ""}
+                invalid={
+                  validationType.touched.modelo &&
+                    validationType.errors.modelo
+                    ? true
+                    : false
+                }
+              />
+              {validationType.touched.modelo &&
+                validationType.errors.modelo ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.modelo}
+                </FormFeedback>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <Label>Tipo</Label>
+              <Input
+                name="tipo"
+                type="text"
+                placeholder="Ingrese numero de tipo"
+                onChange={validationType.handleChange}
+                onBlur={validationType.handleBlur}
+                value={validationType.values.tipo || ""}
+                invalid={
+                  validationType.touched.tipo &&
+                    validationType.errors.tipo
+                    ? true
+                    : false
+                }
+              />
+              {validationType.touched.tipo &&
+                validationType.errors.tipo ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.tipo}
+                </FormFeedback>
+              ) : null}
+            </div> 
+            <div className="row">
+            <Label>Cliente</Label>
+              <div className="mb-3 col-12 col-md-11">
+                <CustomSelect
+                  value={validationType.values.clienteId}
+                  options={clientes}
+                  onChange={element => validationType.setFieldValue("clienteId", element.value)}
+                  placeholder="Seleccione Cliente"
+                  className="select2-selection"
+                  isSearchable={true}
                 />
-                {validationType.touched.codigo &&
-                  validationType.errors.codigo ? (
+                {validationType.touched.clienteId &&
+                  validationType.errors.clienteId ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.codigo}
+                    {validationType.errors.clienteId}
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3">
-                <Label className="form-label">Nombre del producto</Label>
-                <Input
-                  name="nombre"
-                  placeholder="Ingrese nombre del producto"
-                  type="text"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.nombre || ""}
-                  invalid={
-                    validationType.touched.nombre &&
-                      validationType.errors.nombre
-                      ? true
-                      : false
-                  }
-                />
-                {validationType.touched.nombre &&
-                  validationType.errors.nombre ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.nombre}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Label className="form-label">Marca</Label>
-                <Input
-                  name="marca"
-                  placeholder="Ingrese marca"
-                  type="text"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.marca || ""}
-                  invalid={
-                    validationType.touched.marca &&
-                      validationType.errors.marca
-                      ? true
-                      : false
-                  }
-                />
-                {validationType.touched.marca &&
-                  validationType.errors.marca ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.marca}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Label className="form-label">Precio de Venta</Label>
-                <Input
-                  name="precio_venta"
-                  placeholder="Ingrese precio de venta"
-                  type="number"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.precio_venta || ""}
-                  invalid={
-                    validationType.touched.precio_venta &&
-                      validationType.errors.precio_venta
-                      ? true
-                      : false
-                  }
-                />
-                {validationType.touched.precio_venta &&
-                  validationType.errors.precio_venta ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.precio_venta}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Label className="form-label">Cantidad</Label>
-                <Input
-                  name="cantidad"
-                  placeholder="Ingrese cantidad"
-                  type="number"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.cantidad || ""}
-                  invalid={
-                    validationType.touched.cantidad &&
-                      validationType.errors.cantidad
-                      ? true
-                      : false
-                  }
-                />
-                {validationType.touched.cantidad &&
-                  validationType.errors.cantidad ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.cantidad}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Label>Unidad de Medida</Label>
-                <Input
-                  name="unidad_medida"
-                  type="text"
-                  placeholder="Ingrese unidad de medida"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.unidad_medida || ""}
-                  invalid={
-                    validationType.touched.unidad_medida &&
-                      validationType.errors.unidad_medida
-                      ? true
-                      : false
-                  }
-                />
-                {validationType.touched.unidad_medida &&
-                  validationType.errors.unidad_medida ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.unidad_medida}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Label className="form-label">Descripcion detallada</Label>
-                <Input
-                  name="descripcion"
-                  placeholder="Ingrese descripcion detalalada"
-                  type="textarea"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.descripcion || ""}
-                  invalid={
-                    validationType.touched.descripcion &&
-                      validationType.errors.descripcion
-                      ? true
-                      : false
-                  }
-                />
-                {validationType.touched.descripcion &&
-                  validationType.errors.descripcion ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.descripcion}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div className="d-flex flex-wrap gap-2">
-                <Button type="submit" color="primary">
-                  Guardar
-                </Button>{" "}
-                <Button type="reset" color="secondary" onClick={() => navigate("/vehiculos")}>
-                  Cancelar
+              <div className="mb-3 col-12 col-md-1">
+                <Button type="button" className="w-100" color="success" onClick={() => navigate("/clientes/add")}>
+                  Nuevo
                 </Button>
               </div>
-            </Form>
-          </Container>
-        </div>
-      </React.Fragment>
-    );
-  };
+            </div>          
+            <div className="d-flex flex-wrap gap-2">
+              <Button type="submit" color="primary">
+                Guardar
+              </Button>{" "}
+              <Button type="reset" color="secondary" onClick={() => navigate("/vehiculos")}>
+                Cancelar
+              </Button>
+            </div>
+          </Form>
+        </Container>
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default Edit
