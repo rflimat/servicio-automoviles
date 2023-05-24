@@ -211,7 +211,7 @@ const View = () => {
                 <Label className="form-label">Descripcion detallada</Label>
                 <Input
                   name="descripcion"
-                  placeholder="Ingrese descripcion detalalada"
+                  placeholder="Ingrese descripcion detallada"
                   type="textarea"
                   onChange={validationType.handleChange}
                   onBlur={validationType.handleBlur}
