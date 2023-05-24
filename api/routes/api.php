@@ -88,8 +88,11 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::put('/trabajadores/{id}', 'update');
         Route::delete('/trabajadores/{id}', 'destroy');
     });
+    Route::controller(TrabajoController::class)->group( function() {
+        Route::post('/trabajos','registrar');
+        Route::get('/trabajos','listar');
+        Route::get('/trabajos/{id}','obtener');
+        Route::put('/trabajos/{id}','actualizar');
+        Route::delete('/trabajos/{id}','eliminar');
+    });
 });
-
-Route::post('/trabajos',[TrabajoController::class,'registrar']);
-Route::get('/trabajos',[TrabajoController::class,'listar']);
-Route::get('/trabajos/{id}',[TrabajoController::class,'obtener']);
