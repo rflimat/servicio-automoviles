@@ -62,19 +62,7 @@ const Index = () => {
                 accessor: "id",
                 Cell: cellProps => {
                     return (
-                        <div style={{display: "flex", justifyContent: "center"}}>
-                            <Button
-                                type="button"
-                                color="success"
-                                className="btn-sm btn-rounded me-1"
-                                
-                                onClick={() => {
-                                    const id = cellProps.row.original.id;
-                                    navigate(`/clientes/view/${id}`);
-                                }}
-                            >
-                                <i className="far fa-eye"></i> 
-                            </Button>
+                        <div style={{display: "flex", justifyContent: "center"}}>                        
                             <Button
                                 type="button"
                                 color="info"
@@ -124,7 +112,7 @@ const Index = () => {
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Clientes" breadcrumbItem="Listar clientes" />
+                <Breadcrumbs title="Clientes" breadcrumbItem="Clientes" />
                 {/* <Table columns={columns} data={data} /> */}
                 <TableContainer
                     columns={columns}

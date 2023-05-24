@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -8,16 +8,48 @@ import {
   FormFeedback,
   Form,
 } from "reactstrap";
+import CustomSelect from "../../../components/Common/CustomSelect";
 // Formik validation
+
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
-import { post } from "../../../helpers/api_helper";
+import { get, post } from "../../../helpers/api_helper";
 
 const Add = () => {
+  const [clientes, setClientes] = useState([]);
+  const [anios, setAnios] = useState([]);
   const navigate = useNavigate();
+
+  const getClientes = async () => {
+    const data = await get(`${import.meta.env.VITE_API_URL}/clientes`);
+    let optionsClientes = data.map((element) => {
+      let { id, Nombres, Apellidos } = element;
+      return {
+        label: `${Nombres} ${Apellidos}`,
+        value: id
+      }
+    })
+    setClientes(optionsClientes);
+  }
+
+  const getAnios = () => {
+    let anios = [];
+    for (let anio = 2023; anio >= 1950; anio--) {
+      anios.push({
+        label: `${anio}`,
+        value: `${anio}`
+      });
+    }
+    setAnios(anios);
+  }
+
+  useEffect(() => {
+    getClientes();
+    getAnios();
+  }, []);
 
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
@@ -26,15 +58,17 @@ const Add = () => {
         marca: "",
         anio: "",
         modelo: "",
-        chasis: "",
+        tipo: "",
+        cliente_id: "",
     },
+    
     validationSchema: Yup.object().shape({
         placa: Yup.string().min(6, "Debe tener como mínimo 6 caracteres").required("El valor es requerido"),
         marca: Yup.string().min(3, "Debe tener como mínimo 3 caracteres")
         .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
         anio: Yup.string().required("El valor es requerido"),
         modelo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
-        chasis: Yup.string().min(17, "Debe tener como mínimo 17 caracteres").required("El valor es requerido"),
+        tipo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
     }),
     onSubmit: (element) => {
       addSwal("vehiculos").then((result) => {
@@ -116,24 +150,17 @@ const Add = () => {
             </div>
             <div className="mb-3">
               <Label className="form-label">Año</Label>
-              <Input
-                name="precio_venta"
-                placeholder="Ingrese año"
-                type="number"
-                onChange={validationType.handleChange}
-                onBlur={validationType.handleBlur}
-                value={validationType.values.precio_venta || ""}
-                invalid={
-                  validationType.touched.precio_venta &&
-                    validationType.errors.precio_venta
-                    ? true
-                    : false
-                }
+              <CustomSelect
+                value={validationType.values.anio}
+                options={anios}
+                onChange={element => validationType.setFieldValue("anio", element.value)}
+                placeholder="Seleccione Año"
+                className="select2-selection"
               />
-              {validationType.touched.precio_venta &&
-                validationType.errors.precio_venta ? (
+              {validationType.touched.anio &&
+                validationType.errors.anio ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.precio_venta}
+                  {validationType.errors.anio}
                 </FormFeedback>
               ) : null}
             </div>
@@ -161,28 +188,52 @@ const Add = () => {
               ) : null}
             </div>
             <div className="mb-3">
-              <Label>N° Chasis</Label>
+              <Label>Tipo</Label>
               <Input
-                name="chasis"
+                name="tipo"
                 type="text"
-                placeholder="Ingrese numero de chasis"
+                placeholder="Ingrese numero de tipo"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.chasis || ""}
+                value={validationType.values.tipo || ""}
                 invalid={
-                  validationType.touched.chasis &&
-                    validationType.errors.chasis
+                  validationType.touched.tipo &&
+                    validationType.errors.tipo
                     ? true
                     : false
                 }
               />
-              {validationType.touched.chasis &&
-                validationType.errors.chasis ? (
+              {validationType.touched.tipo &&
+                validationType.errors.tipo ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.chasis}
+                  {validationType.errors.tipo}
                 </FormFeedback>
               ) : null}
-            </div>           
+            </div> 
+            <div className="row">
+              <Label>Cliente</Label>
+              <div className="mb-3 col-8 col-sm-10">
+                <CustomSelect
+                  value={validationType.values.cliente_id}
+                  options={clientes}
+                  onChange={element => validationType.setFieldValue("cliente_id", element.value)}
+                  placeholder="Seleccione Cliente"
+                  className="select2-selection"
+                  isSearchable={true}
+                />
+                {validationType.touched.cliente_id &&
+                  validationType.errors.cliente_id ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.cliente_id}
+                  </FormFeedback>
+                ) : null}
+              </div>
+              <div className="mb-3 col-4 col-sm-2">
+                <Button type="button" className="w-100" color="success" onClick={() => navigate("/clientes/add")}>
+                  Nuevo
+                </Button>
+              </div>
+            </div>          
             <div className="d-flex flex-wrap gap-2">
               <Button type="submit" color="primary">
                 Guardar
