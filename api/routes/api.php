@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\AutenticacionController;
 use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\ComprasController;
+use App\Http\Controllers\api\ComprobanteController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
 use App\Http\Controllers\Api\TrabajadorController;
@@ -95,4 +96,12 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::put('/trabajos/{id}','actualizar');
         Route::delete('/trabajos/{id}','eliminar');
     });
+});
+
+Route::controller(ComprobanteController::class)->group( function() {
+    Route::post('/comprobantes','registrar');
+    Route::get('/comprobantes','listar');
+    Route::get('/comprobantes/{id}','obtener');
+    Route::put('/comprobantes/{id}','actualizar');
+    Route::delete('/comprobantes/{id}','eliminar');
 });

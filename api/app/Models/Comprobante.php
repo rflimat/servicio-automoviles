@@ -12,6 +12,9 @@ class Comprobante extends Model
         'fecha_hora_creacion',
         'fecha_hora_cancelacion',
         'idServicio',
-        'idMetodo_pago'
+        'idMetodo_pago',
+        'estado',
+        'eliminado',
+        'nro_comprobante'
     ];
 }

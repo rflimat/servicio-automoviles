@@ -18,7 +18,9 @@ class VentaController extends Controller
         $venta->idProducto = $request->idProducto;
         $venta->cantidad = $request->cantidad;
         $venta->estado = 1;
-        $venta->idcomprobante = 1; // por ahora
+        if($request->idComprobante){
+            $venta->idComprobante = $request->idComprobante;
+        }
         $venta->save();
         return $venta; // para prueba
     }
@@ -38,7 +40,9 @@ class VentaController extends Controller
         $venta->idProducto = $request->idProducto;
         $venta->cantidad = $request->cantidad;
         $venta->estado = 1;
-        $venta->comprobante = 1; // por ahora
+        if($request->idComprobante){
+            $venta->idComprobante = $request->idComprobante;
+        }
         $venta->save();
         return $venta;
     }

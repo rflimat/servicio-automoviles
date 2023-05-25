@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('comprobantes', function (Blueprint $table) {
             $table->id();
+            $table->string('nro_comprobante'); //asdasda
             $table->datetime('fecha_hora_creacion');
             $table->datetime('fecha_hora_cancelacion')->nullable();
             $table->unsignedInteger('idServicio');
             $table->unsignedInteger('idMetodo_pago');
+            $table->integer('estado');
+            $table->integer('eliminado');
             $table->timestamps();
         });
         Schema::create('tipos_servicio', function (Blueprint $table) {
