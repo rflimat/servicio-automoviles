@@ -96,12 +96,11 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::put('/trabajos/{id}','actualizar');
         Route::delete('/trabajos/{id}','eliminar');
     });
-});
-
-Route::controller(ComprobanteController::class)->group( function() {
-    Route::post('/comprobantes','registrar');
-    Route::get('/comprobantes','listar');
-    Route::get('/comprobantes/{id}','obtener');
-    Route::put('/comprobantes/{id}','actualizar');
-    Route::delete('/comprobantes/{id}','eliminar');
+    Route::controller(ComprobanteController::class)->group( function() {
+        Route::post('/comprobantes','registrar');
+        Route::get('/comprobantes','listar');
+        Route::get('/comprobantes/{id}','obtener');
+        Route::put('/comprobantes/{id}','actualizar');
+        Route::delete('/comprobantes/{id}','eliminar');
+    });
 });
