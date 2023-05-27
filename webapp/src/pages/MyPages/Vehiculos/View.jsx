@@ -36,7 +36,7 @@ const View = () => {
         let { id, Nombres, Apellidos } = element;
         return {
           label: `${Nombres} ${Apellidos}`,
-          value: id
+          value: `${id}`
         }
       })
       setClientes(optionsClientes);
