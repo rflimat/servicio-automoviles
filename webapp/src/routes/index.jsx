@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 
 // // Profile
 import UserProfile from "../pages/Authentication/user-profile";
@@ -54,6 +54,10 @@ import TrabajosAdd from "../pages/MyPages/Trabajos/Add";
 import TrabajosEdit from "../pages/MyPages/Trabajos/Edit";
 import TrabajosView from "../pages/MyPages/Trabajos/View";
 
+import ComprobanteIndex from "../pages/MyPages/Comprobante/Index";
+
+const objUser = JSON.parse(localStorage.getItem("authUser"));
+
 const authProtectedRoutes = [
   // Dashboard
   { path: "/", component: (<></>) },
@@ -62,10 +66,10 @@ const authProtectedRoutes = [
   { path: "/profile", component: <UserProfile /> },
 
   // Usuarios
-  { path: "/usuarios", component: <Usuarios /> },
-  { path: "/usuarios/add", component: <UsuariosAdd /> },
-  { path: "/usuarios/edit/:id", component: <UsuariosEdit /> },
-  
+  { path: "/usuarios", component: (objUser.tipo == "soporte") ? (<Usuarios />) : (<Navigate to='/' />) },
+  { path: "/usuarios/add", component: (objUser.tipo == "soporte") ? (<UsuariosAdd />) : (<Navigate to='/' />) },
+  { path: "/usuarios/edit/:id", component: (objUser.tipo == "soporte") ? (<UsuariosEdit />) : (<Navigate to='/' />) },
+
   //Productos
   { path: "/productos", component: <Productos /> },
   { path: "/productos/add", component: <ProductosAdd /> },
@@ -73,20 +77,20 @@ const authProtectedRoutes = [
   { path: "/productos/view/:id", component: <ProductosView /> },
 
   // Proveedores
-  { path: "/proveedores", component: <Proveedores/> },
-  { path: "/proveedores/add", component: <ProveedoresAdd/> },
-  { path: "/proveedores/edit/:id", component: <ProveedoresEdit/> },
+  { path: "/proveedores", component: <Proveedores /> },
+  { path: "/proveedores/add", component: <ProveedoresAdd /> },
+  { path: "/proveedores/edit/:id", component: <ProveedoresEdit /> },
 
   // Compras
-  { path: "/compras", component: <Compras/> },
-  { path: "/compras/add", component: <ComprasAdd/> },
-  { path: "/compras/edit/:id", component: <ComprasEdit/> },
+  { path: "/compras", component: <Compras /> },
+  { path: "/compras/add", component: <ComprasAdd /> },
+  { path: "/compras/edit/:id", component: <ComprasEdit /> },
   { path: "/compras/view/:id", component: <ComprasView /> },
 
   // Clientes
-  { path: "/clientes", component: <Clientes/> },
-  { path: "/clientes/add", component: <ClientesAdd/> },
-  { path: "/clientes/edit/:id", component: <ClientesEdit/> },
+  { path: "/clientes", component: <Clientes /> },
+  { path: "/clientes/add", component: <ClientesAdd /> },
+  { path: "/clientes/edit/:id", component: <ClientesEdit /> },
 
   // Vehiculos
   { path: "/vehiculos", component: <Vehiculos /> },
@@ -95,16 +99,19 @@ const authProtectedRoutes = [
   { path: "/vehiculos/view/:id", component: <VehiculosView /> },
 
   // Ventas
-  { path: "/ventas", component: <Ventas/> },
-  { path: "/ventas/add", component: <VentasAdd/> },
-  { path: "/ventas/edit/:id", component: <VentasEdit/> },
+  { path: "/ventas", component: <Ventas /> },
+  { path: "/ventas/add", component: <VentasAdd /> },
+  { path: "/ventas/edit/:id", component: <VentasEdit /> },
   { path: "/ventas/view/:id", component: <VentasView /> },
 
   // Trabajos
-  { path: "/trabajos", component: <Trabajos/> },
-  { path: "/trabajos/add", component: <TrabajosAdd/> },
-  { path: "/trabajos/edit/:id", component: <TrabajosEdit/> },
+  { path: "/trabajos", component: <Trabajos /> },
+  { path: "/trabajos/add", component: <TrabajosAdd /> },
+  { path: "/trabajos/edit/:id", component: <TrabajosEdit /> },
   { path: "/trabajos/view/:id", component: <TrabajosView /> },
+
+  // Comprobante
+  { path: "/comprobante/generate", component: <ComprobanteIndex /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

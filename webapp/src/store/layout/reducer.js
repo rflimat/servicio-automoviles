@@ -26,12 +26,12 @@ import {
 
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,
-  layoutModeType: layoutModeTypes.LIGHT,
+  layoutModeType: localStorage.getItem('data-layout-mode'),
   layoutWidth: layoutWidthTypes.FLUID,
   leftSideBarTheme: leftSideBarThemeTypes.DARK,
   leftSideBarThemeImage: leftBarThemeImageTypes.NONE,
   leftSideBarType: leftSidebarTypes.DEFAULT,
-  topbarTheme: topBarThemeTypes.LIGHT,
+  topbarTheme: localStorage.getItem('data-topbar'),
   isPreloader: false,
   showRightSidebar: false,
   isMobile: false,

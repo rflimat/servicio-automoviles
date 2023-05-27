@@ -21,7 +21,10 @@ import {
  * Changes the body attribute
  */
 function changeBodyAttribute(attribute, value) {
-  if (document.body) document.body.setAttribute(attribute, value)
+  if (document.body) {
+    document.body.setAttribute(attribute, value);
+    localStorage.setItem(attribute, value);
+  }
   return true
 }
 
@@ -60,6 +63,7 @@ function* changeLayout({ payload: layout }) {
       yield put(changeTopbarThemeAction("light"))
     }
     yield call(changeBodyAttribute, "data-layout", layout)
+    yield call(changeBodyAttribute, "data-layout-mode", mode);
   } catch (error) {}
 }
 
