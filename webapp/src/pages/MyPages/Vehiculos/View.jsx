@@ -148,7 +148,8 @@ const View = () => {
                 onChange={element => validationType.setFieldValue("anio", element.value)}
                 placeholder="Seleccione Año"
                 className="select2-selection"
-                isDisabled={true}
+                openMenuOnClick={false}
+                menuIsOpen={false}
               />
               {validationType.touched.anio &&
                 validationType.errors.anio ? (
@@ -214,8 +215,9 @@ const View = () => {
                   onChange={element => validationType.setFieldValue("cliente_id", element.value)}
                   placeholder="Seleccione Cliente"
                   className="select2-selection"
-                  isSearchable={true}
-                  isDisabled={true}
+                  isSearchable={false}
+                  menuIsOpen={false}
+                  openMenuOnClick={false}
                 />
                 {validationType.touched.cliente_id &&
                   validationType.errors.cliente_id ? (
