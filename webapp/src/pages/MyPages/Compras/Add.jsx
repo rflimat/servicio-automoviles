@@ -112,8 +112,8 @@ const Add = () => {
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
       estado: estado,
-      datetimeCompra: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
-      datetimeRecepcion: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
+      datetimeCompra: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+      datetimeRecepcion: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       proveedorId: proveedorId,
     },
     validationSchema: Yup.object().shape({
@@ -188,7 +188,8 @@ const Add = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-3">
+              { validationType.values.estado == 1 &&
+              (<div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de recepcion</Label>
                 <DateTimeInput name="datetimeRecepcion" value={validationType.values.datetimeRecepcion} onDateTimeChange={validationType.handleChange} />
                 {validationType.touched.datetimeRecepcion &&
@@ -197,7 +198,7 @@ const Add = () => {
                     {validationType.errors.datetimeRecepcion}
                   </FormFeedback>
                 ) : null}
-              </div>
+              </div>) }
             </div>
 
             <div className="mb-3">

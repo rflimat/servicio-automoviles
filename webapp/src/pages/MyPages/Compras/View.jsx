@@ -137,7 +137,8 @@ const View = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-3">
+              { validationType.values.estado == "Recepcionado" &&
+              (<div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de recepcion</Label>
                 <Input
                   name="datetimeRecepcion"
@@ -159,7 +160,7 @@ const View = () => {
                     {validationType.errors.datetimeRecepcion}
                   </FormFeedback>
                 ) : null}
-              </div>
+              </div>) }
             </div>
 
             <div className="mb-3">

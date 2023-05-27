@@ -75,7 +75,7 @@ const Edit = () => {
     onSubmit: (element) => {
       const compra = {
         fecha_compra: element.datetimeCompra,
-        fecha_recepcion: estadoAnt == "Registrado" && element.estado == 1 ? format(new Date(), "yyyy-MM-dd hh:mm:ss") : element.datetimeRecepcion,
+        fecha_recepcion: estadoAnt == "Registrado" && element.estado == 1 ? format(new Date(), "yyyy-MM-dd HH:mm:ss") : element.datetimeRecepcion,
         estado: element.estado,
         costo_compra: productosCompra.reduce((total, producto) => total + Number(producto.importe), 0),
         productosCompra
@@ -150,7 +150,8 @@ const Edit = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-3">
+              { validationType.values.estado == 1 &&
+              (<div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de recepcion</Label>
                 <DateTimeInput name="datetimeRecepcion" value={validationType.values.datetimeRecepcion} onDateTimeChange={validationType.handleChange} />
                 {validationType.touched.datetimeRecepcion &&
@@ -159,7 +160,7 @@ const Edit = () => {
                     {validationType.errors.datetimeRecepcion}
                   </FormFeedback>
                 ) : null}
-              </div>
+              </div>)}
             </div>
 
             <div className="mb-3">
