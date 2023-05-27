@@ -19,7 +19,7 @@ class VehiculosController extends Controller
     {
         $vehiculo = new Vehiculo();
         $vehiculo->placa = $request->placa;
-        $vehiculo->tipo_vehiculo = $request->tipo;
+        $vehiculo->tipo_vehiculo = $request->tipo_vehiculo;
         $vehiculo->modelo = $request->modelo;
         $vehiculo->marca = $request->marca;
         $vehiculo->anio = $request->anio;

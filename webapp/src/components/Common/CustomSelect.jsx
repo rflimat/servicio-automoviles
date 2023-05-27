@@ -8,6 +8,7 @@ const CustomSelect = ({
   placeholder,
   className,
   isSearchable = false,
+  isDisabled = false, 
   styles = {}
 }) => {
   const listValues = (options, value) => {
@@ -24,6 +25,7 @@ const CustomSelect = ({
         placeholder={placeholder}
         className={className}
         isSearchable={isSearchable}
+        isDisabled={isDisabled}
         styles={{
           control: (baseStyles, state) => ({
             ...baseStyles,

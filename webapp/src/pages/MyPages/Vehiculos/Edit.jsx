@@ -12,7 +12,7 @@ import CustomSelect from "../../../components/Common/CustomSelect";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
+import { format } from 'date-fns';
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { editSwal, errorSwal, successSwal } from "../../../components/Swal";
 import { get, put } from "../../../helpers/api_helper";
@@ -24,11 +24,36 @@ const Edit = () => {
         marca: "",
         anio: "",
         modelo: "",
-        tipo: "",
-        clienteId: "",
+        tipo_vehiculo: "",
+        cliente_id: "",
       });
     const navigate = useNavigate();
+    const [anios, setAnios] = useState([]);
     const { id } = useParams();
+    const [clientes, setClientes] = useState([]);
+    const getClientes = async () => {
+      const data = await get(`${import.meta.env.VITE_API_URL}/clientes`);
+      let optionsClientes = data.map((element) => {
+        let { id, Nombres, Apellidos } = element;
+        return {
+          label: `${Nombres} ${Apellidos}`,
+          value: id
+        }
+      })
+      setClientes(optionsClientes);
+    }  
+
+    const getAnios = () => {
+      let anios = [];
+      let anioAct = format(new Date(), "yyyy");
+      for (let anio = anioAct; anio >= 1950; anio--) {
+        anios.push({
+          label: `${anio}`,
+          value: `${anio}`
+        });
+      }
+      setAnios(anios);
+    }
 
     useEffect(() => {
         const getById = async () => {
@@ -36,28 +61,23 @@ const Edit = () => {
             setElement(data);
         }
         getById();
+        getClientes();
+        getAnios();
     }, []);
 
     const validationType = useFormik({
         enableReinitialize: true, // Use this flag when initial values needs to be changed
         initialValues: {
-          placa: element.codigo,
+            placa: element.placa,
             nombre: element.nombre,
             marca: element.marca,
-            anio: element.anio,
+            anio: `${element.anio}`,
             modelo: element.modelo,
-            tipo: element.tipo,
-            clienteId: element.clienteId,
+            tipo_vehiculo: element.tipo_vehiculo,
+            cliente_id: element.cliente_id,
         },
         validationSchema: Yup.object().shape({
-          codigo: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-          nombre: Yup.string().min(3, "Debe tener como mínimo 3 caracteres")
-          .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
-          marca: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
-          precio_venta: Yup.string().min(1, "Debe tener como mínimo 1 caracter").required("El valor es requerido"),
-          cantidad: Yup.string().required("El valor es requerido"),
-          unidad_medida: Yup.string().min(2, "Debe tener como mínimo 8 caracteres").required("El valor es requerido"),
-          descripcion: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
+
         }),
         onSubmit: (element) => {
           editSwal("vehiculos").then((result) => {
@@ -81,7 +101,7 @@ const Edit = () => {
         <Container fluid={true}>
           <Breadcrumbs
             title="Vehiculos"
-            breadcrumbItem="Registrar vehiculos"
+            breadcrumbItem="Editar vehiculos"
           />
 
           <Form
@@ -139,24 +159,18 @@ const Edit = () => {
             </div>
             <div className="mb-3">
               <Label className="form-label">Año</Label>
-              <Input
-                name="precio_venta"
-                placeholder="Ingrese año"
-                type="number"
-                onChange={validationType.handleChange}
-                onBlur={validationType.handleBlur}
-                value={validationType.values.precio_venta || ""}
-                invalid={
-                  validationType.touched.precio_venta &&
-                    validationType.errors.precio_venta
-                    ? true
-                    : false
-                }
+              <CustomSelect
+                defaultValue={validationType.values.anio}
+                value={validationType.values.anio}
+                options={anios}
+                onChange={element => validationType.setFieldValue("anio", element.value)}
+                placeholder="Seleccione Año"
+                className="select2-selection"
               />
-              {validationType.touched.precio_venta &&
-                validationType.errors.precio_venta ? (
+              {validationType.touched.anio &&
+                validationType.errors.anio ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.precio_venta}
+                  {validationType.errors.anio}
                 </FormFeedback>
               ) : null}
             </div>
@@ -184,25 +198,25 @@ const Edit = () => {
               ) : null}
             </div>
             <div className="mb-3">
-              <Label>Tipo</Label>
+              <Label>tipo_vehiculo</Label>
               <Input
-                name="tipo"
+                name="tipo_vehiculo"
                 type="text"
-                placeholder="Ingrese numero de tipo"
+                placeholder="Ingrese numero de tipo_vehiculo"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.tipo || ""}
+                value={validationType.values.tipo_vehiculo || ""}
                 invalid={
-                  validationType.touched.tipo &&
-                    validationType.errors.tipo
+                  validationType.touched.tipo_vehiculo &&
+                    validationType.errors.tipo_vehiculo
                     ? true
                     : false
                 }
               />
-              {validationType.touched.tipo &&
-                validationType.errors.tipo ? (
+              {validationType.touched.tipo_vehiculo &&
+                validationType.errors.tipo_vehiculo ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.tipo}
+                  {validationType.errors.tipo_vehiculo}
                 </FormFeedback>
               ) : null}
             </div> 
@@ -210,17 +224,18 @@ const Edit = () => {
             <Label>Cliente</Label>
               <div className="mb-3 col-12 col-md-11">
                 <CustomSelect
-                  value={validationType.values.clienteId}
+                  defaultValue={validationType.values.cliente_id}
+                  value={validationType.values.cliente_id}
                   options={clientes}
-                  onChange={element => validationType.setFieldValue("clienteId", element.value)}
+                  onChange={element => validationType.setFieldValue("cliente_id", element.value)}
                   placeholder="Seleccione Cliente"
                   className="select2-selection"
                   isSearchable={true}
                 />
-                {validationType.touched.clienteId &&
-                  validationType.errors.clienteId ? (
+                {validationType.touched.cliente_id &&
+                  validationType.errors.cliente_id ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.clienteId}
+                    {validationType.errors.cliente_id}
                   </FormFeedback>
                 ) : null}
               </div>

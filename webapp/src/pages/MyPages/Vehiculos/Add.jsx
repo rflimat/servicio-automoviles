@@ -14,6 +14,7 @@ import CustomSelect from "../../../components/Common/CustomSelect";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
+import { format } from 'date-fns';
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
 import { get, post } from "../../../helpers/api_helper";
@@ -37,7 +38,8 @@ const Add = () => {
 
   const getAnios = () => {
     let anios = [];
-    for (let anio = 2023; anio >= 1950; anio--) {
+    let anioAct = format(new Date(), "yyyy");
+    for (let anio = anioAct; anio >= 1950; anio--) {
       anios.push({
         label: `${anio}`,
         value: `${anio}`
@@ -58,7 +60,7 @@ const Add = () => {
         marca: "",
         anio: "",
         modelo: "",
-        tipo: "",
+        tipo_vehiculo: "",
         cliente_id: "",
     },
     
@@ -68,7 +70,7 @@ const Add = () => {
         .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
         anio: Yup.string().required("El valor es requerido"),
         modelo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
-        tipo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
+        tipo_vehiculo: Yup.string().min(4, "Debe tener como mínimo 4 caracteres").required("El valor es requerido"),
     }),
     onSubmit: (element) => {
       addSwal("vehiculos").then((result) => {
@@ -190,23 +192,23 @@ const Add = () => {
             <div className="mb-3">
               <Label>Tipo</Label>
               <Input
-                name="tipo"
+                name="tipo_vehiculo"
                 type="text"
-                placeholder="Ingrese numero de tipo"
+                placeholder="Ingrese tipo"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
-                value={validationType.values.tipo || ""}
+                value={validationType.values.tipo_vehiculo || ""}
                 invalid={
-                  validationType.touched.tipo &&
-                    validationType.errors.tipo
+                  validationType.touched.tipo_vehiculo &&
+                    validationType.errors.tipo_vehiculo
                     ? true
                     : false
                 }
               />
-              {validationType.touched.tipo &&
-                validationType.errors.tipo ? (
+              {validationType.touched.tipo_vehiculo &&
+                validationType.errors.tipo_vehiculo ? (
                 <FormFeedback type="invalid">
-                  {validationType.errors.tipo}
+                  {validationType.errors.tipo_vehiculo}
                 </FormFeedback>
               ) : null}
             </div> 

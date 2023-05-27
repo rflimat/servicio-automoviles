@@ -115,12 +115,12 @@ const Index = () => {
 
     //meta title
     document.title =
-        "vehiculos | Servicios Electricos Laser";
+        "Vehiculos | Servicios Electricos Laser";
 
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Vehiculos" breadcrumbItem="Listar vehiculos" />
+                <Breadcrumbs title="Vehiculos" breadcrumbItem="Vehiculos" />
                 {/* <Table columns={columns} data={data} /> */}
                 <TableContainer
                     columns={columns}
