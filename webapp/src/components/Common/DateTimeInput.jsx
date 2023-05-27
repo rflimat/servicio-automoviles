@@ -17,7 +17,7 @@ function DateTimeInput({ name, value = null, onDateTimeChange }) {
     };
   }, [onDateTimeChange]);
 
-  const formattedDateTime = format(currentDateTime, "yyyy-MM-dd hh:mm:ss");
+  const formattedDateTime = format(currentDateTime, "yyyy-MM-dd HH:mm:ss");
 
   // Formatear la fecha y hora actual
   return (

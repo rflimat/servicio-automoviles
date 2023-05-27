@@ -15,6 +15,7 @@ import { useCallback } from "react";
 const SidebarContent = (props) => {
   const ref = useRef();
   const path = useLocation();
+  const objUser = JSON.parse(localStorage.getItem("authUser"));
 
   const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");
@@ -153,12 +154,13 @@ const SidebarContent = (props) => {
 
             <li className="menu-title">Modulos</li>
 
-            {/*<li>
+            
+            {objUser.tipo === "soporte" && (<li>
               <Link to="/usuarios">
                 <i className="bx bx-user"></i>
                 <span>Usuarios</span>
               </Link>
-            </li>*/}
+            </li>)}
             <li>
               <Link to="/productos">
                 <i className="bx bx-package"></i>

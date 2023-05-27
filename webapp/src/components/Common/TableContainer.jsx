@@ -213,7 +213,7 @@ const TableContainer = ({
         <Col className="col-md-auto d-none d-md-block">
           Pagina{" "}
           <strong>
-            {pageIndex + 1} of {pageOptions.length}
+            {pageIndex + 1} de {pageOptions.length}
           </strong>
         </Col>
         <Col className="col-md-auto">
