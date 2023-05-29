@@ -77,7 +77,6 @@ const Edit = () => {
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
-      estado: element.estado == "Registrado" ? "0" : "1",
       datetimeVenta: element.fecha_venta,
       cliente: element.nombreCliente,
     },
@@ -160,40 +159,6 @@ const Edit = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-            </div>
-
-            <div className="mb-3">
-              <Label>Estado</Label>
-
-              {validationType.values.estado == 0 ? (
-                <CustomSelect
-                  defaultValue={{ label: "Registrado", value: "0" }}
-                  value={validationType.values.estado}
-                  onChange={element => validationType.setFieldValue("estado", element.value)}
-                  options={[
-                    { label: "Registrado", value: "0" },
-                    { label: "Recepcionado", value: "1" },
-                  ]}
-                  placeholder="Seleccione estado"
-                  className="select2-selection"
-                />
-
-              ) : (
-
-                <Input
-                  type="text"
-                  value={validationType.values.estado == 1 && "Recepcionado"}
-                  placeholder="Seleccione estado"
-                  readOnly
-                />
-              )}
-
-              {validationType.touched.estado &&
-                validationType.errors.estado ? (
-                <FormFeedback type="invalid">
-                  {validationType.errors.estado}
-                </FormFeedback>
-              ) : null}
             </div>
 
             <div className="table-responsive">

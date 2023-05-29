@@ -113,7 +113,7 @@ const Index = () => {
         <div className="page-content">
             <div className="container-fluid">
                 <Breadcrumbs title="Ventas" breadcrumbItem="Ventas" />
-                {/* <Table columns={columns} data={data} /> */}
+                
                 <TableContainer
                     columns={columns}
                     data={ventas}

@@ -17,7 +17,7 @@ import { format } from 'date-fns'
 import CustomSelect from "../../../components/Common/CustomSelect";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
+import { addSwal, errorSwal, successSwal, customSwal } from "../../../components/Swal";
 import { get, post } from "../../../helpers/api_helper";
 
 const Add = () => {
@@ -35,7 +35,6 @@ const Add = () => {
   const [cantidad, setCantidad] = useState(1);
   const [productosVenta, setProductosVenta] = useState([]);
   const [clienteId, setClienteId] = useState(0);
-  const [estado, setEstado] = useState(0);
   const navigate = useNavigate();
 
   const getClientes = async () => {
@@ -77,13 +76,7 @@ const Add = () => {
     let producto = productoTemp;
     if (!productosVenta.find((element) => element.id == producto.id)) {
       producto.index = productosVenta.length + 1;
-
-      if (cantidad > producto.cantidad) {
-        producto.cantidadAct = producto.cantidad;
-      } else {
-        producto.cantidadAct = cantidad;
-      }
-
+      producto.cantidadAct = cantidad;
       producto.importe = cantidad * Number(producto.precio_venta);
       setProductosVenta([...productosVenta, producto]);
       setCantidad(1);
@@ -91,6 +84,16 @@ const Add = () => {
       errorSwal({ message: "Producto ya agregado" });
     }
   };
+
+  const verifyCantidadProducto = (value) => {
+    let producto = productoTemp;
+    let cantidadAct = value;
+    // Condicion para determinar si la cantidad de productos ingresada es superior a la cantidad existente
+    if (cantidadAct > producto.cantidad) {
+      cantidadAct = producto.cantidad; // Si se cumple la condicion, se asigna la cantidad maxima del producto
+    }
+    setCantidad(cantidadAct);
+  }
 
   const handleChangeProducto = (index, name, newName) => {
     const newProductos = [...productosVenta]; // Obtén una copia del array
@@ -123,8 +126,7 @@ const Add = () => {
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
-      estado: estado,
-      datetimeVenta: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
+      datetimeVenta: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       clienteId: clienteId,
     },
     validationSchema: Yup.object().shape({
@@ -134,21 +136,35 @@ const Add = () => {
       const venta = {
         fecha_venta: element.datetimeVenta,
         costo_venta: productosVenta.reduce((total, producto) => total + producto.importe, 0),
-        estado: element.estado,
         cliente_id: element.clienteId,
         productosVenta
       }
       addSwal("ventas").then((result) => {
         if (result.isConfirmed) {
-          post(`${import.meta.env.VITE_API_URL}/ventas`, venta)
-            .then((res) => {
+          /*post(`${import.meta.env.VITE_API_URL}/ventas`, venta)
+            .then((res) => {*/
               successSwal("venta", "agregado").then(() => {
-                navigate("/ventas");
+                customSwal({
+                  confirmButton: "success",
+                  cancelButton: "secondary",
+                  title: "Generar comprobante para venta",
+                  text: "¿Esta seguro de generar comprobante para venta?",
+                  icon: "question",
+                  textConfirmButton: "Generar",
+                  textCancelButton: "Cancelar"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    let id = 1;
+                    navigate(`/comprobante/generate?tipo=venta&id=${id}`);
+                  } else {
+                    navigate("/ventas");
+                  }
+                })
               });
-            })
+            /*})
             .catch((err) => {
               errorSwal(err);
-            });
+            });*/
         }
       })
     },
@@ -200,26 +216,6 @@ const Add = () => {
               </div>
             </div>
 
-            <div className="mb-3">
-              <Label>Estado</Label>
-              <CustomSelect
-                value={validationType.values.estado}
-                onChange={element => setEstado(element.value)}
-                options={[
-                  { label: "Registrado", value: "0" },
-                  { label: "Recepcionado", value: "1" },
-                ]}
-                placeholder="Seleccione estado"
-                className="select2-selection"
-              />
-              {validationType.touched.estado &&
-                validationType.errors.estado ? (
-                <FormFeedback type="invalid">
-                  {validationType.errors.estado}
-                </FormFeedback>
-              ) : null}
-            </div>
-
             <div className="card my-3">
               <div className="card-header bg-light">Agregar producto</div>
               <div className="card-body">
@@ -240,7 +236,7 @@ const Add = () => {
                       aria-describedby="helpId"
                       placeholder="Cantidad de producto"
                       value={cantidad}
-                      onChange={(e) => setCantidad(e.target.value)}
+                      onChange={(e) => verifyCantidadProducto(e.target.value)}
                       required
                     />
                   </div>

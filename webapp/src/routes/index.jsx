@@ -66,9 +66,9 @@ const authProtectedRoutes = [
   { path: "/profile", component: <UserProfile /> },
 
   // Usuarios
-  { path: "/usuarios", component: (objUser.tipo == "soporte") ? (<Usuarios />) : (<Navigate to='/' />) },
-  { path: "/usuarios/add", component: (objUser.tipo == "soporte") ? (<UsuariosAdd />) : (<Navigate to='/' />) },
-  { path: "/usuarios/edit/:id", component: (objUser.tipo == "soporte") ? (<UsuariosEdit />) : (<Navigate to='/' />) },
+  { path: "/usuarios", component: (objUser && objUser.tipo == "soporte") ? (<Usuarios />) : (<Navigate to='/' />) },
+  { path: "/usuarios/add", component: (objUser && objUser.tipo == "soporte") ? (<UsuariosAdd />) : (<Navigate to='/' />) },
+  { path: "/usuarios/edit/:id", component: (objUser && objUser.tipo == "soporte") ? (<UsuariosEdit />) : (<Navigate to='/' />) },
 
   //Productos
   { path: "/productos", component: <Productos /> },

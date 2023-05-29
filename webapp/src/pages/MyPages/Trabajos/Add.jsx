@@ -20,7 +20,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { addSwal, errorSwal, successSwal } from "../../../components/Swal";
+import { addSwal, errorSwal, successSwal, customSwal } from "../../../components/Swal";
 import { get, post } from "../../../helpers/api_helper";
 import DateTimeInput from "../../../components/Common/DateTimeInput";
 
@@ -93,14 +93,38 @@ const Add = () => {
     onSubmit: (element) => {
       addSwal("trabajo").then((result) => {
         if (result.isConfirmed) {
-          post(`${import.meta.env.VITE_API_URL}/trabajos`, element)
+          /*post(`${import.meta.env.VITE_API_URL}/trabajos`, element)
             .then((res) => {
               successSwal("trabajo", "agregado").then(() => {
-                navigate("/trabajos");
+                addSwal("trabajo con comprobante").then((result) => {
+                  if (result.isConfirmed) {
+                    navigate("/comprobante/generate");
+                  } else {
+                    navigate("/trabajos");
+                  }
+                })
               });
             })
             .catch((err) => {
               errorSwal(err);
+            });*/
+            successSwal("trabajo", "agregado").then(() => {
+              customSwal({
+                confirmButton: "success",
+                cancelButton: "secondary",
+                title: "Generar comprobante para trabajo",
+                text: "¿Esta seguro de generar comprobante para trabajo?",
+                icon: "question",
+                textConfirmButton: "Generar",
+                textCancelButton: "Cancelar"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  let id = 1;
+                  navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
+                } else {
+                  navigate("/trabajos");
+                }
+              })
             });
         }
       });

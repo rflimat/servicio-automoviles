@@ -25,15 +25,28 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  console.log(searchParams.get('tipo'), searchParams.get('id'));
+  const handleChangeMetodo = (option, formikProps) => {
+    let numeroComprobante = "";
+    console.log(option);
+    formikProps.setFieldValue("metodo", option.value);
+    if (option.value === "Boleta") {
+      numeroComprobante = "B-000000001";
+    } else if (option.value === "Factura") {
+      numeroComprobante = "F-000000001";
+    }
+    formikProps.setFieldValue(
+      "nroComprobante",
+      numeroComprobante
+    );
+  }
 
   const validationType = useFormik({
-    enableReinitialize: true, // Use this flag when initial values needs to be changed
+    enableReinitialize: false, // Use this flag when initial values needs to be changed
     initialValues: {
       datetimeCreacion: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-      metodo: "",
+      metodo: null,
       nroComprobante: "",
-      estado: "",
+      estado: null,
     },
     validationSchema: Yup.object().shape({
       metodo: Yup.string().required("El valor es requerido ser seleccionado"),
@@ -89,22 +102,8 @@ const Index = () => {
             <div className="mb-3">
               <Label>Metodo de pago</Label>
               <CustomSelect
-                defaultValue={{ label: "Seleccione", value: "Seleccione" }}
                 value={validationType.values.metodo}
-                onChange={(element) => {
-                  validationType.setFieldValue("metodo", element.value);
-                  if (element.value === "Boleta") {
-                    validationType.setFieldValue(
-                      "nroComprobante",
-                      "B-000000001"
-                    );
-                  } else if (element.value === "Factura") {
-                    validationType.setFieldValue(
-                      "nroComprobante",
-                      "F-000000001"
-                    );
-                  }
-                }}
+                onChange={(option) => handleChangeMetodo(option, validationType)}
                 options={[
                   { label: "Boleta", value: "Boleta" },
                   { label: "Factura", value: "Factura" },
@@ -124,8 +123,6 @@ const Index = () => {
                 name="nroComprobante"
                 placeholder="Ingrese numero de comprobante"
                 type="text"
-                onChange={validationType.handleChange}
-                onBlur={validationType.handleBlur}
                 value={validationType.values.nroComprobante || ""}
                 invalid={
                   validationType.touched.nroComprobante &&
