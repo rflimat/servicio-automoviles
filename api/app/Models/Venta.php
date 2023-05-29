@@ -13,7 +13,8 @@ class Venta extends Model
         'idProducto',
         'cantidad',
         'estado',
-        'idComprobante'
+        'idComprobante',
+        'importe'
     ];
 
 }

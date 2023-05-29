@@ -13,13 +13,17 @@ class VentaController extends Controller
             //'idCliente' => 'required|exists:clientes,id',
             'idProducto' => 'required|exists:productos,id',
         ]);
-        $venta = new Venta();
-        $venta->idCliente = $request->idCliente;
-        $venta->idProducto = $request->idProducto;
-        $venta->cantidad = $request->cantidad;
-        $venta->estado = 1;
-        if($request->idComprobante){
-            $venta->idComprobante = $request->idComprobante;
+        
+        foreach($request->productosVenta as $producto){
+            $venta = new Venta();
+            $venta->idCliente = $request->idCliente;
+            $venta->idProducto = $producto->idProducto;
+            $venta->cantidad = $producto->cantidad;
+            $venta->estado = 1;
+            if($request->idComprobante){
+                $venta->idComprobante = $request->idComprobante;
+            }
+            $venta->importe = $producto->importe;
         }
         $venta->save();
         return $venta; // para prueba
@@ -29,24 +33,21 @@ class VentaController extends Controller
         $venta = Venta::where('estado', 1)->get();
         return $venta;
     }
-
+    // es id del comprobante
     public function obtener(string $id){
-        return Venta::findOrFail($id);
+        return Venta::select('idCliente','idProducto','cantidad','fecha','hora','idComprobante','importe')
+        ->where('idComprobante','=',$id);
     }
 
     public function actualizar(Request $request, string $id){ // cambiar
-        $venta = Venta::findOrFail($id);
-        $venta->idCliente = $request->idCliente;
-        $venta->idProducto = $request->idProducto;
-        $venta->cantidad = $request->cantidad;
-        $venta->estado = 1;
-        if($request->idComprobante){
-            $venta->idComprobante = $request->idComprobante;
+        foreach($request->productosVenta as $producto){
+            $venta = Venta::findOrFail($producto->id);
+            $venta->cantidad = $producto->cantidad;
+            $venta->importe = $producto->importe;
         }
         $venta->save();
-        return $venta;
+        return $venta; // para prueba
     }
-
     public function eliminar(string $id){
         $venta = Venta::findOrFail($id);
         $venta->estado = 0;
