@@ -17,7 +17,7 @@ class ComprasController extends Controller
         ->selectRaw('IF(estado >= 1, "Recepcionado", "Registrado") AS estado')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
         ->where('eliminado', 0)
-        ->orderBy('fecha_compra')
+        ->orderBy('fecha_compra', 'desc')
         ->get();
     }
 
