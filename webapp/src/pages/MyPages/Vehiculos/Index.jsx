@@ -32,6 +32,10 @@ const Index = () => {
                 Header: "N°",
             },
             {
+                Header: "Cliente",
+                accessor: "nombreCliente",
+            },
+            {
                 Header: "Placa",
                 accessor: "placa",
             },

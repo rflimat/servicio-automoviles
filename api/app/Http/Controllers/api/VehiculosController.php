@@ -11,7 +11,10 @@ class VehiculosController extends Controller
 
     public function index()
     {
-        $vehiculo = Vehiculo::all();
+        $vehiculo = Vehiculo::select('vehiculos.id', 'placa', 'marca', 'anio', 'modelo', 'tipo_vehiculo', 'cliente_id')
+        ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as nombreCliente')
+        ->join('clientes', 'clientes.id', '=', 'vehiculos.cliente_id')
+        ->get();
         return $vehiculo;
     }
 
