@@ -30,8 +30,8 @@ const Edit = () => {
   };
 
   const [element, setElement] = useState({
-    fecha_venta: "",
-    fecha_recepcion: "",
+    fecha: "",
+    hora: "",
     costo_venta: "",
     nombreCliente: "",
   });
@@ -61,6 +61,7 @@ const Edit = () => {
     }
 
     newProductos[index].importe = Number(newProductos[index].cantidadAct) * Number(newProductos[index].precio_venta); // Se hace la actualizacion del importe del producto
+
     setProductosVenta(newProductos); // Actualiza el estado con la copia modificada del array
   };
 
@@ -77,7 +78,8 @@ const Edit = () => {
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
-      datetimeVenta: element.fecha_venta,
+      datetimeVenta: `${element.fecha} ${element.hora}`,
+      datetimeVentaAct: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       cliente: element.nombreCliente,
     },
     validationSchema: Yup.object().shape({
@@ -136,7 +138,7 @@ const Edit = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-6">
+              <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de venta</Label>
                 <Input
                   name="datetimeVenta"
@@ -159,6 +161,29 @@ const Edit = () => {
                   </FormFeedback>
                 ) : null}
               </div>
+              <div className="mb-3 col-12 col-md-3">
+                <Label className="form-label">Fecha y hora de venta al actualizar</Label>
+                <Input
+                  name="datetimeVentaAct"
+                  type="datetime-local"
+                  onChange={validationType.handleChange}
+                  onBlur={validationType.handleBlur}
+                  value={validationType.values.datetimeVentaAct || ""}
+                  invalid={
+                    validationType.touched.datetimeVentaAct &&
+                      validationType.errors.datetimeVentaAct
+                      ? true
+                      : false
+                  }
+                  readOnly
+                />
+                {validationType.touched.datetimeVentaAct &&
+                  validationType.errors.datetimeVentaAct ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.datetimeVentaAct}
+                  </FormFeedback>
+                ) : null}
+              </div>
             </div>
 
             <div className="table-responsive">
@@ -166,8 +191,7 @@ const Edit = () => {
                 <thead className="table-success">
                   <tr>
                     <th>N°</th>
-                    <th className="col-3">Nombre</th>
-                    <th className="col-3">Observacion</th>
+                    <th className="col-6">Nombre</th>
                     <th className="col-1">Cantidad</th>
                     <th className="col-2">Precio</th>
                     <th className="col-2">Importe</th>
@@ -182,27 +206,17 @@ const Edit = () => {
                         {producto.nombre}
                       </td>
                       <td>
-                        {producto.observacion}
-                      </td>
-                      <td>
                         <Input
                           name="cantidad"
                           type="text"
-                          value={producto.cantidad}
-                          onChange={(e) => handleChangeProducto(index, "cantidad", e.target.value)}
+                          value={producto.cantidadAct}
+                          onChange={(e) => handleChangeProducto(index, "cantidadAct", e.target.value)}
                           style={{ ...tdStyles, textAlign: "center" }}
                         />
                       </td>
                       <td>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          S/.
-                          <Input
-                            name="precio"
-                            type="text"
-                            value={producto.precio_venta}
-                            onChange={(e) => handleChangeProducto(index, "precio_venta", e.target.value)}
-                            style={tdStyles}
-                          />
+                          S/.{producto.precio_venta.toFixed(2)}
                         </div>
                       </td>
                       <td>
@@ -213,7 +227,7 @@ const Edit = () => {
                     </tr>
                   ))}
                   <tr>
-                    <td colSpan={5}>Costo total de la venta:</td>
+                    <td colSpan={4}>Costo total de la venta:</td>
                     <td colSpan={1}>
                       S/.{productosVenta.reduce((total, producto) => total + Number(producto.importe), 0).toFixed(2)}
                     </td>

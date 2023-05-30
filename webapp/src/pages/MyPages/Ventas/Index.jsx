@@ -18,8 +18,7 @@ const Index = () => {
     const navigate = useNavigate();
 
     const getData = async () => {
-        //const data = await get(`${import.meta.env.VITE_API_URL}/ventas`);
-        const data = [];
+        const data = await get(`${import.meta.env.VITE_API_URL}/ventas`);
         setVentas(data);
     }
 
@@ -38,11 +37,11 @@ const Index = () => {
             },
             {
                 Header: "Fecha Venta",
-                accessor: "fecha_venta",
+                accessor: "fecha",
             },
             {
-                Header: "Total",
-                accessor: "total",
+                Header: "Importe",
+                accessor: "importe",
             },
             {
                 Header: "Acciones",
@@ -57,7 +56,7 @@ const Index = () => {
                                 className="btn-sm btn-rounded me-1"
                                 
                                 onClick={() => {
-                                    const id = cellProps.row.original.id;
+                                    const id = cellProps.row.original.idComprobante;
                                     navigate(`/ventas/view/${id}`);
                                 }}
                             >
@@ -68,7 +67,7 @@ const Index = () => {
                                 color="info"
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
-                                    const id = cellProps.row.original.id;
+                                    const id = cellProps.row.original.idComprobante;
                                     navigate(`/ventas/edit/${id}`);
                                 }}
                             >
@@ -79,7 +78,7 @@ const Index = () => {
                                 color="danger"
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
-                                    const id = cellProps.row.original.id;
+                                    const id = cellProps.row.original.idComprobante;
                                     deleteSwal("ventas").then((result) => {
                                         if (result.isConfirmed) {
                                             del(`${import.meta.env.VITE_API_URL}/ventas/${id}`)

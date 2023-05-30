@@ -29,7 +29,8 @@ const View = () => {
 
   };
   const [element, setElement] = useState({
-    fecha_venta: "",
+    fecha: "",
+    hora: "",
     costo_venta: 0,
     nombre: "",
     productosVenta: [],
@@ -49,7 +50,7 @@ const View = () => {
   const validationType = useFormik({
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
-      datetimeVenta: element.fecha_venta,
+      datetimeVenta: `${element.fecha} ${element.hora}`,
       cliente: element.nombreCliente,
       costo_venta: element.costo_venta
     },
@@ -140,7 +141,7 @@ const View = () => {
               <thead className="table-success">
                 <tr>
                   <th>N°</th>
-                  <th className="col-5">Nombre</th>
+                  <th className="col-6">Nombre</th>
                   <th className="col-1">Cantidad</th>
                   <th className="col-2">Precio</th>
                   <th className="col-2">Importe</th>
@@ -154,13 +155,13 @@ const View = () => {
                       {producto.nombre}
                     </td>
                     <td>
-                      {producto.cantidad}
+                      {producto.cantidadAct}
                     </td>
                     <td>
-                      {producto.precio}
+                      S/. {producto.precio_venta.toFixed(2)}
                     </td>
                     <td>
-                      {producto.importe}
+                      S/. {producto.importe}
                     </td>
                    
                   </tr>

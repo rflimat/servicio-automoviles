@@ -34,7 +34,7 @@ const Add = () => {
   const [productoTemp, setProductoTemp] = useState({});
   const [cantidad, setCantidad] = useState(1);
   const [productosVenta, setProductosVenta] = useState([]);
-  const [clienteId, setClienteId] = useState(0);
+  const [idCliente, setidCliente] = useState(0);
   const navigate = useNavigate();
 
   const getClientes = async () => {
@@ -55,7 +55,7 @@ const Add = () => {
       let { id, codigo, nombre, cantidad, precio_venta } = element;
       return {
         element: {
-          id,
+          idProducto: id,
           nombre,
           cantidad,
           precio_venta
@@ -74,9 +74,9 @@ const Add = () => {
   const addProducto = (e) => {
     e.preventDefault();
     let producto = productoTemp;
-    if (!productosVenta.find((element) => element.id == producto.id)) {
+    if (!productosVenta.find((element) => element.idProducto == producto.id)) {
       producto.index = productosVenta.length + 1;
-      producto.cantidadAct = cantidad;
+      producto.cantidadAct = Number(cantidad);
       producto.importe = cantidad * Number(producto.precio_venta);
       setProductosVenta([...productosVenta, producto]);
       setCantidad(1);
@@ -127,7 +127,7 @@ const Add = () => {
     enableReinitialize: true, // Use this flag when initial values needs to be changed
     initialValues: {
       datetimeVenta: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-      clienteId: clienteId,
+      idCliente: idCliente,
     },
     validationSchema: Yup.object().shape({
 
@@ -136,15 +136,16 @@ const Add = () => {
       const venta = {
         fecha_venta: element.datetimeVenta,
         costo_venta: productosVenta.reduce((total, producto) => total + producto.importe, 0),
-        cliente_id: element.clienteId,
+        idCliente: element.idCliente,
         productosVenta
       }
+      console.log(venta)
       addSwal("ventas").then((result) => {
         if (result.isConfirmed) {
-          /*post(`${import.meta.env.VITE_API_URL}/ventas`, venta)
-            .then((res) => {*/
+          post(`${import.meta.env.VITE_API_URL}/ventas`, venta)
+            .then((res) => {
               successSwal("venta", "agregado").then(() => {
-                customSwal({
+                /*customSwal({
                   confirmButton: "success",
                   cancelButton: "secondary",
                   title: "Generar comprobante para venta",
@@ -159,12 +160,13 @@ const Add = () => {
                   } else {
                     navigate("/ventas");
                   }
-                })
+                })*/
+                navigate("/ventas");
               });
-            /*})
+            })
             .catch((err) => {
               errorSwal(err);
-            });*/
+            });
         }
       })
     },
@@ -190,22 +192,22 @@ const Add = () => {
               <div className="mb-3 col-12 col-md-6">
                 <Label>Cliente</Label>
                 <CustomSelect
-                  value={validationType.values.clienteId}
+                  value={validationType.values.idCliente}
                   options={clientes}
-                  onChange={(element) => setClienteId(element.value)}
+                  onChange={(element) => setidCliente(element.value)}
                   placeholder="Seleccione Cliente"
                   className="select2-selection"
                   isSearchable={true}
                 />
-                {validationType.touched.clienteId &&
-                  validationType.errors.clienteId ? (
+                {validationType.touched.idCliente &&
+                  validationType.errors.idCliente ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.clienteId}
+                    {validationType.errors.idCliente}
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-6">
-                <Label className="form-label">Fecha y hora de venta</Label>
+              <div className="mb-3 col-12 col-md-3">
+                <Label className="form-label">Fecha de venta</Label>
                 <DateTimeInput name="datetimeventa" value={validationType.values.datetimeVenta} onDateTimeChange={validationType.handleChange} />
                 {validationType.touched.datetimeVenta &&
                   validationType.errors.datetimeVenta ? (
