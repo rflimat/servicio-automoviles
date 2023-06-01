@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comprobante;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 
@@ -20,8 +21,8 @@ class VentaController extends Controller
             $venta->idProducto = $producto["idProducto"];
             $venta->cantidad = $producto["cantidadAct"];
             $venta->estado = 1;
-            if($request->idComprobante){
-                $venta->idComprobante = $request["idComprobante"];
+            if($request->nro_comprobante){ 
+                $venta->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
             }
             $venta->importe = $producto["importe"];
             $venta->save();

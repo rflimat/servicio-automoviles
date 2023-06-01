@@ -12,7 +12,8 @@ class ComprobanteController extends Controller
     {
         $request->validate([
             'idServicio' => ['bail','required','exists:tipos_servicio,id'],
-            'idMetodo_pago' => ['bail','required','exists:metodos_pago,id']
+            'idMetodo_pago' => ['bail','required','exists:metodos_pago,id'],
+            'nro_comprobante' => 'unique:App\Models\Comprobante'
         ]);
         $comprobante = new Comprobante();
         $comprobante->fecha_hora_creacion = $request->fecha_hora_creacion;

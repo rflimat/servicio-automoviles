@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comprobante;
 use App\Models\DetalleTrabajo;
 use App\Models\Evidencias;
 use App\Models\Trabajo;
@@ -22,8 +23,8 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        if($request->idComprobante){
-            $trabajo->idComprobante = $request->idComprobante;
+        if($request->nro_comprobante){ 
+            $trabajo->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
         }
         $trabajo->estado = 1;
         $trabajo->save();
@@ -76,8 +77,8 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        if($request->idComprobante){
-            $trabajo->idComprobante = $request->idComprobante;
+        if($request->nro_comprobante){ 
+            $trabajo->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
         }
         $trabajo->save();
         //actualiza datos y los guarda con save
