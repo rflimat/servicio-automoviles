@@ -50,6 +50,19 @@ return new class extends Migration
                 END IF;
             END;
         ');
+        //trigger : eliminacion de compra
+       DB::unprepared('DROP TRIGGER IF EXISTS cancelar_compra');
+        DB::unprepared(' 
+            CREATE TRIGGER cancelar_compra AFTER UPDATE ON compras FOR EACH ROW 
+            BEGIN 
+                IF NEW.eliminado=1 THEN
+                    UPDATE detalle_compras pe
+                    INNER JOIN productos p ON pe.producto_id=p.id
+                    SET p.cantidad=p.cantidad-pe.cantidad WHERE pe.compra_id=NEW.id;
+                END IF;
+            END;
+        ');
+
     }
 
 
