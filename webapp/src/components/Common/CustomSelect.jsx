@@ -7,6 +7,11 @@ const CustomSelect = ({
   value,
   placeholder,
   className,
+  isSearchable = false,
+  openMenuOnClick = true,
+  menuIsOpen = undefined,
+  isDisabled = false,
+  styles = {}
 }) => {
   const listValues = (options, value) => {
     return options ? options.find((option) => option.value === value) : "";
@@ -21,7 +26,16 @@ const CustomSelect = ({
         options={options}
         placeholder={placeholder}
         className={className}
-        isSearchable={false}
+        isSearchable={isSearchable}
+        openMenuOnClick={openMenuOnClick}
+        menuIsOpen={menuIsOpen}
+        isDisabled={isDisabled}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            ...styles,
+          }),
+        }}
       />
     </>
   );

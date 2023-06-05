@@ -37,6 +37,7 @@ const UserProfile = (props) => {
   const [element, setElement] = useState({
     name: "",
     username: "",
+    tipo: "",
     password: "",
     password1: "",
     email: "",
@@ -60,6 +61,7 @@ const UserProfile = (props) => {
     initialValues: {
       name: element.name,
       username: element.username,
+      tipo: element.tipo,
       password: "",
       password1: "",
       email: element.email,

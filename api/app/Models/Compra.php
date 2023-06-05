@@ -14,7 +14,6 @@ class Compra extends Model
         'fecha_recepcion',
         'eliminado',
         'fecha_compra',
-        'proveedor_id',
-        'observacion'
+        'proveedor_id'
     ];
 }

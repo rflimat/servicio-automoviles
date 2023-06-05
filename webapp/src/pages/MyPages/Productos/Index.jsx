@@ -62,7 +62,7 @@ const Index = () => {
                 accessor: "id",
                 Cell: cellProps => {
                     return (
-                        <>
+                        <div style={{display: "flex", justifyContent: "center"}}>
                             <Button
                                 type="button"
                                 color="success"
@@ -89,7 +89,7 @@ const Index = () => {
                             <Button
                                 type="button"
                                 color="danger"
-                                className="btn-sm btn-rounded ms-1"
+                                className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("productos").then((result) => {
@@ -109,7 +109,7 @@ const Index = () => {
                             >
                                 <i className='bx bx-trash'></i>
                             </Button>
-                        </>
+                        </div>
                     );
                 },
             },
@@ -125,7 +125,7 @@ const Index = () => {
         <div className="page-content">
             <div className="container-fluid">
                 <Breadcrumbs title="Productos" breadcrumbItem="Productos" />
-                {/* <Table columns={columns} data={data} /> */}
+                
                 <TableContainer
                     columns={columns}
                     data={productos}

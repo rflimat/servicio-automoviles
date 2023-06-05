@@ -5,7 +5,7 @@
 
 /* Dropzone */
 .dropzone {
-  min-height: 230px;
+  min-height: 180px;
   border: 2px dashed var(--#{$prefix}border-color);
   background: var(--#{$prefix}custom-white);
   border-radius: 6px;
@@ -13,5 +13,6 @@
   .dz-message {
     font-size: 24px;
     width: 100%;
+    padding: 8px;
   }
 }

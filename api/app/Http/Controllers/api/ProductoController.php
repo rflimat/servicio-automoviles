@@ -13,7 +13,7 @@ class ProductoController extends Controller
      */
     public function listar()
     {
-        $productos = Producto::all();
+        $productos = Producto::where('estado', 1)->get();
         return $productos;
     }
 
@@ -68,7 +68,8 @@ class ProductoController extends Controller
     public function eliminar(string $idProducto)
     {
         $producto = Producto::findOrFail($idProducto);
-        $producto->Estado = 0;
+        $producto->estado = 0;
+        $producto->save();
         //Producto::destroy($idProducto);
     }
 }

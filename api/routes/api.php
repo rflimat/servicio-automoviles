@@ -1,11 +1,16 @@
 <?php
 
 use App\Http\Controllers\api\AutenticacionController;
+use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\ComprasController;
+use App\Http\Controllers\api\ComprobanteController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
+use App\Http\Controllers\Api\TrabajadorController;
+use App\Http\Controllers\api\TrabajoController;
 use App\Http\Controllers\api\UsuarioController;
-
+use App\Http\Controllers\Api\VehiculosController;
+use App\Http\Controllers\api\VentaController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,13 +49,58 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::put('/proveedores/{id}', 'update');
         Route::delete('/proveedores/{id}', 'destroy');
     });
-    
-});
 
-Route::controller(ComprasController::class)->group(function (){
-    Route::get('/compra', 'index');
-    Route::post('/compra', 'store');
-    Route::get('/compra/{id}', 'show');
-    Route::put('/compra/{id}', 'update');
-    Route::delete('/compra/{id}', 'destroy');
+    Route::controller(ComprasController::class)->group(function (){
+        Route::get('/compras', 'index');
+        Route::post('/compras', 'store');
+        Route::get('/compras/{id}', 'show');
+        Route::put('/compras/{id}', 'update');
+        Route::delete('/compras/{id}', 'destroy');
+    });
+
+    Route::controller(ClienteController::class)->group(function (){
+        Route::get('/clientes', 'index');
+        Route::post('/clientes', 'store');
+        Route::get('/clientes/{id}', 'show');
+        Route::put('/clientes/{id}', 'update');
+        Route::delete('/clientes/{id}', 'destroy');
+    });
+
+    Route::controller(VehiculosController::class)->group(function (){
+        Route::get('/vehiculos', 'index');
+        Route::post('/vehiculos', 'store');
+        Route::get('/vehiculos/{id}', 'show');
+        Route::put('/vehiculos/{id}', 'update');
+        Route::delete('/vehiculos/{id}', 'destroy');
+    });
+
+    Route::controller(VentaController::class)->group( function() {
+        Route::post('/ventas','registrar');
+        Route::get('/ventas','listar');
+        Route::get('/ventas/{id}','obtener');
+        Route::put('/ventas/{id}','actualizar');
+        Route::delete('/ventas/{id}','eliminar');
+    });
+
+    Route::controller(TrabajadorController::class)->group( function() {
+        Route::get('/trabajadores', 'index');
+        Route::post('/trabajadores', 'store');
+        Route::get('/trabajadores/{id}', 'show');
+        Route::put('/trabajadores/{id}', 'update');
+        Route::delete('/trabajadores/{id}', 'destroy');
+    });
+    Route::controller(TrabajoController::class)->group( function() {
+        Route::post('/trabajos','registrar');
+        Route::get('/trabajos','listar');
+        Route::get('/trabajos/{id}','obtener');
+        Route::put('/trabajos/{id}','actualizar');
+        Route::delete('/trabajos/{id}','eliminar');
+    });
+    Route::controller(ComprobanteController::class)->group( function() {
+        Route::post('/comprobantes','registrar');
+        Route::get('/comprobantes','listar');
+        Route::get('/comprobantes/{id}','obtener');
+        Route::put('/comprobantes/{id}','actualizar');
+        Route::delete('/comprobantes/{id}','eliminar');
+    });
 });

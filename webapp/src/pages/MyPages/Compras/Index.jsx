@@ -18,7 +18,7 @@ const Index = () => {
     const navigate = useNavigate();
 
     const getData = async () => {
-        const data = await get(`${import.meta.env.VITE_API_URL}/productos`);
+        const data = await get(`${import.meta.env.VITE_API_URL}/compras`);
         setCompras(data);
     }
 
@@ -35,25 +35,18 @@ const Index = () => {
                 Header: "Estado",
                 accessor: "estado",
             },
-            {
-                Header: "Codigo",
-                accessor: "codigo",
-            },
-            {
-                Header: "Observacion",
-                accessor: "observacion",
-            },
+
             {
                 Header: "Fecha Registro",
-                accessor: "fecha",
+                accessor: "fecha_compra",
             },
             {
                 Header: "Fecha de Recepcion",
-                accessor: "feccha",
+                accessor: "fecha_recepcion",
             },
             {
                 Header: "Proveedor",
-                accessor: "proveedor",
+                accessor: "nombreProveedor",
             },                
             {
                 Header: "Acciones",
@@ -61,7 +54,19 @@ const Index = () => {
                 accessor: "id",
                 Cell: cellProps => {
                     return (
-                        <>
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <Button
+                                type="button"
+                                color="success"
+                                className="btn-sm btn-rounded me-1"
+                                
+                                onClick={() => {
+                                    const id = cellProps.row.original.id;
+                                    navigate(`/compras/view/${id}`);
+                                }}
+                            >
+                                <i className="far fa-eye"></i> 
+                            </Button>
                             <Button
                                 type="button"
                                 color="info"
@@ -76,12 +81,12 @@ const Index = () => {
                             <Button
                                 type="button"
                                 color="danger"
-                                className="btn-sm btn-rounded ms-1"
+                                className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
                                     deleteSwal("compras").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`${import.meta.env.VITE_API_URL}/productos/${id}`)
+                                            del(`${import.meta.env.VITE_API_URL}/compras/${id}`)
                                                 .then((res) => {
                                                     successSwal("compra", "eliminado").then(() => {
                                                         getData();
@@ -96,7 +101,7 @@ const Index = () => {
                             >
                                 <i className='bx bx-trash'></i>
                             </Button>
-                        </>
+                        </div>
                     );
                 },
             },
@@ -112,7 +117,7 @@ const Index = () => {
         <div className="page-content">
             <div className="container-fluid">
                 <Breadcrumbs title="Compras" breadcrumbItem="Compras" />
-                {/* <Table columns={columns} data={data} /> */}
+                
                 <TableContainer
                     columns={columns}
                     data={compras}

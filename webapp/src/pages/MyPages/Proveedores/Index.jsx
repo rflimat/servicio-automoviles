@@ -58,7 +58,7 @@ const Index = () => {
                                     navigate(`/proveedores/edit/${id}`);
                                 }}
                             >
-                                Editar
+                                <i className='bx bxs-pencil' ></i>
                             </Button>
                             <Button
                                 type="button"
@@ -81,7 +81,7 @@ const Index = () => {
                                     });
                                 }}
                             >
-                                Eliminar
+                                <i className='bx bx-trash'></i>
                             </Button>
                         </div>
                     );
@@ -97,7 +97,7 @@ const Index = () => {
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Proveedores" breadcrumbItem="Listar Proveedores" />
+                <Breadcrumbs title="Proveedores" breadcrumbItem="Proveedores" />
                 <TableContainer
                     columns={columns}
                     data={proveedores}

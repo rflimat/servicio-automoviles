@@ -15,6 +15,7 @@ import { useCallback } from "react";
 const SidebarContent = (props) => {
   const ref = useRef();
   const path = useLocation();
+  const objUser = JSON.parse(localStorage.getItem("authUser"));
 
   const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");
@@ -143,22 +144,23 @@ const SidebarContent = (props) => {
       <SimpleBar className="h-100" ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            <li className="menu-title">Menu </li>
+            {/*<li className="menu-title">Menu </li>
             <li>
               <Link to="/dashboard">
                 <i className="bx bx-home-circle"></i>
                 <span>Dashboard</span>
               </Link>
-            </li>
+            </li>*/}
 
             <li className="menu-title">Modulos</li>
 
-            <li>
+            
+            {objUser.tipo === "soporte" && (<li>
               <Link to="/usuarios">
                 <i className="bx bx-user"></i>
                 <span>Usuarios</span>
               </Link>
-            </li>
+            </li>)}
             <li>
               <Link to="/productos">
                 <i className="bx bx-package"></i>
@@ -173,8 +175,32 @@ const SidebarContent = (props) => {
             </li>
             <li>
               <Link to="/compras">
-                <i className="far fa-regular fa-shop"></i>
+                <i className='bx bx-cart' ></i>
                 <span>Compras</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/ventas">
+                <i className='bx bx-shopping-bag'></i>
+                <span>Ventas</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/clientes">
+                <i className='bx bxs-user'></i>
+                <span>Clientes</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/vehiculos">
+                <i className='bx bx-car' ></i>
+                <span>Vehiculos</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/trabajos">
+                <i className='bx bx-desktop' ></i>
+                <span>Trabajos</span>
               </Link>
             </li>
           </ul>

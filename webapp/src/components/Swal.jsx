@@ -80,4 +80,21 @@ const deleteSwal = (element) =>
     reverseButtons: true,
   });
 
-export { successSwal, errorSwal, addSwal, editSwal, deleteSwal };
+const customSwal = (element) =>
+  Swal.mixin({
+    customClass: {
+      confirmButton: `btn btn-${element.confirmButton} ms-1`,
+      cancelButton: `btn btn-${element.cancelButton} me-1`,
+    },
+    buttonsStyling: false,
+  }).fire({
+    title: `${element.title}`,
+    text: `${element.text}`,
+    icon: `${element.icon}`,
+    showCancelButton: true,
+    confirmButtonText: `${element.textConfirmButton}`,
+    cancelButtonText: `${element.textCancelButton}`,
+    reverseButtons: true,
+  });
+
+export { successSwal, errorSwal, addSwal, editSwal, deleteSwal, customSwal };

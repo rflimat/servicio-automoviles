@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 
 // // Profile
 import UserProfile from "../pages/Authentication/user-profile";
@@ -33,19 +33,43 @@ import ProductosView from "../pages/MyPages/Productos/View";
 import Compras from "../pages/MyPages/Compras/Index";
 import ComprasAdd from "../pages/MyPages/Compras/Add";
 import ComprasEdit from "../pages/MyPages/Compras/Edit";
+import ComprasView from "../pages/MyPages/Compras/View";
+
+import Clientes from "../pages/MyPages/Clientes/Index";
+import ClientesAdd from "../pages/MyPages/Clientes/Add";
+import ClientesEdit from "../pages/MyPages/Clientes/Edit";
+
+import Vehiculos from "../pages/MyPages/Vehiculos/Index";
+import VehiculosAdd from "../pages/MyPages/Vehiculos/Add";
+import VehiculosEdit from "../pages/MyPages/Vehiculos/Edit";
+import VehiculosView from "../pages/MyPages/Vehiculos/View";
+
+import Ventas from "../pages/MyPages/Ventas/Index";
+import VentasAdd from "../pages/MyPages/Ventas/Add";
+import VentasEdit from "../pages/MyPages/Ventas/Edit";
+import VentasView from "../pages/MyPages/Ventas/View";
+
+import Trabajos from "../pages/MyPages/Trabajos/Index";
+import TrabajosAdd from "../pages/MyPages/Trabajos/Add";
+import TrabajosEdit from "../pages/MyPages/Trabajos/Edit";
+import TrabajosView from "../pages/MyPages/Trabajos/View";
+
+import ComprobanteIndex from "../pages/MyPages/Comprobante/Index";
+
+const objUser = JSON.parse(localStorage.getItem("authUser"));
 
 const authProtectedRoutes = [
   // Dashboard
-  { path: "/dashboard", component: <Dashboard /> },,
+  { path: "/", component: (<></>) },
 
   // Profile
   { path: "/profile", component: <UserProfile /> },
 
   // Usuarios
-  { path: "/usuarios", component: <Usuarios /> },
-  { path: "/usuarios/add", component: <UsuariosAdd /> },
-  { path: "/usuarios/edit/:id", component: <UsuariosEdit /> },
-  
+  { path: "/usuarios", component: (objUser && objUser.tipo == "soporte") ? (<Usuarios />) : (<Navigate to='/' />) },
+  { path: "/usuarios/add", component: (objUser && objUser.tipo == "soporte") ? (<UsuariosAdd />) : (<Navigate to='/' />) },
+  { path: "/usuarios/edit/:id", component: (objUser && objUser.tipo == "soporte") ? (<UsuariosEdit />) : (<Navigate to='/' />) },
+
   //Productos
   { path: "/productos", component: <Productos /> },
   { path: "/productos/add", component: <ProductosAdd /> },
@@ -53,14 +77,41 @@ const authProtectedRoutes = [
   { path: "/productos/view/:id", component: <ProductosView /> },
 
   // Proveedores
-  { path: "/proveedores", component: <Proveedores/> },
-  { path: "/proveedores/add", component: <ProveedoresAdd/> },
-  { path: "/proveedores/edit/:id", component: <ProveedoresEdit/> },
+  { path: "/proveedores", component: <Proveedores /> },
+  { path: "/proveedores/add", component: <ProveedoresAdd /> },
+  { path: "/proveedores/edit/:id", component: <ProveedoresEdit /> },
 
   // Compras
-  { path: "/compras", component: <Compras/> },
-  { path: "/compras/add", component: <ComprasAdd/> },
-  { path: "/compras/edit/:id", component: <ComprasEdit/> },
+  { path: "/compras", component: <Compras /> },
+  { path: "/compras/add", component: <ComprasAdd /> },
+  { path: "/compras/edit/:id", component: <ComprasEdit /> },
+  { path: "/compras/view/:id", component: <ComprasView /> },
+
+  // Clientes
+  { path: "/clientes", component: <Clientes /> },
+  { path: "/clientes/add", component: <ClientesAdd /> },
+  { path: "/clientes/edit/:id", component: <ClientesEdit /> },
+
+  // Vehiculos
+  { path: "/vehiculos", component: <Vehiculos /> },
+  { path: "/vehiculos/add", component: <VehiculosAdd /> },
+  { path: "/vehiculos/edit/:id", component: <VehiculosEdit /> },
+  { path: "/vehiculos/view/:id", component: <VehiculosView /> },
+
+  // Ventas
+  { path: "/ventas", component: <Ventas /> },
+  { path: "/ventas/add", component: <VentasAdd /> },
+  { path: "/ventas/edit/:id", component: <VentasEdit /> },
+  { path: "/ventas/view/:id", component: <VentasView /> },
+
+  // Trabajos
+  { path: "/trabajos", component: <Trabajos /> },
+  { path: "/trabajos/add", component: <TrabajosAdd /> },
+  { path: "/trabajos/edit/:id", component: <TrabajosEdit /> },
+  { path: "/trabajos/view/:id", component: <TrabajosView /> },
+
+  // Comprobante
+  { path: "/comprobante/generate", component: <ComprobanteIndex /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

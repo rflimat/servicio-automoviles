@@ -15,6 +15,7 @@ class UsuarioController extends Controller
         ]);
         $usuario = new User();
         $usuario->username = $request->username;
+        $usuario->tipo = $request->tipo;
         $usuario->email = $request->email;
         $usuario->name = $request->name;
         $usuario->telefono = $request->telefono;
@@ -34,6 +35,7 @@ class UsuarioController extends Controller
     public function actualizar(Request $request, string $id){ // cambiar
         $usuario = User::findOrFail($id);
         $usuario->username = $request->username;
+        $usuario->tipo = $request->tipo;
         $usuario->email = $request->email;
         $usuario->name = $request->name;
         $usuario->telefono = $request->telefono;

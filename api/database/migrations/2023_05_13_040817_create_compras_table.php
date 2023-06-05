@@ -16,26 +16,33 @@ return new class extends Migration
             $table->decimal('costo_compra', 10, 2);
             $table->tinyInteger('estado');
             $table->tinyInteger('eliminado');
-            $table->text('observacion');
             $table->unsignedBigInteger('proveedor_id');
             $table->timestamps();
         });
 
-        Schema::create('detalle_compra', function (Blueprint $table) {
+        Schema::create('detalle_compras', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('producto_id');
             $table->unsignedBigInteger('compra_id');
             $table->integer('cantidad');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
             $table->decimal('importe', 10, 2);
         });
 
         DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_compra');
         DB::unprepared(' 
-            CREATE TRIGGER actualizar_stock_compra BEFORE INSERT ON detalle_compra FOR EACH ROW 
+            CREATE TRIGGER actualizar_stock_compra BEFORE INSERT ON detalle_compras FOR EACH ROW 
             BEGIN 
                 UPDATE productos SET cantidad=cantidad+NEW.cantidad WHERE id=NEW.producto_id;
+            END;
+        ');
+
+        DB::unprepared('DROP TRIGGER IF EXISTS cambiar_stock_compra');
+        DB::unprepared(' 
+            CREATE TRIGGER cambiar_stock_compra AFTER UPDATE ON detalle_compras FOR EACH ROW 
+            BEGIN 
+                UPDATE productos SET cantidad=cantidad-OLD.cantidad+NEW.cantidad WHERE id=NEW.producto_id;
             END;
         ');
 
@@ -43,10 +50,10 @@ return new class extends Migration
         DB::unprepared(' 
             CREATE TRIGGER cancelar_compra AFTER UPDATE ON compras FOR EACH ROW 
             BEGIN 
-                IF NEW.estado=0 THEN
-                    UPDATE detalle_producto pe
+                IF NEW.eliminado=1 THEN
+                    UPDATE detalle_compras pe
                     INNER JOIN productos p ON pe.producto_id=p.id
-                    SET cantidad=cantidad-pe.cantidad WHERE id=NEW.id;
+                    SET p.cantidad=p.cantidad-pe.cantidad WHERE pe.compra_id=NEW.id;
                 END IF;
             END;
         ');
@@ -69,8 +76,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('compras');
-        Schema::dropIfExists('detalle_compra');
+        Schema::dropIfExists('detalle_compras');
         DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_compra');
+        DB::unprepared('DROP TRIGGER IF EXISTS cambiar_stock_compra');
         DB::unprepared('DROP TRIGGER IF EXISTS cancelar_compra');
     }
 };

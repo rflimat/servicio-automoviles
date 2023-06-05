@@ -13,10 +13,11 @@ class ComprasController extends Controller
 
     public function index(Request $request)
     {
-        return Compra::select('compras.id', 'fecha_pedido', 'fecha_recepcion','observacion','costo_compra', 'estado', 'proveedor_id')
+        return Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'proveedor_id', 'proveedores.nombre as nombreProveedor')
+        ->selectRaw('IF(estado >= 1, "Recepcionado", "Registrado") AS estado')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
-        ->where('estado', 1)
-        ->orderBy('fecha_pedido')
+        ->where('eliminado', 0)
+        ->orderBy('fecha_compra', 'desc')
         ->get();
     }
 
@@ -33,17 +34,19 @@ class ComprasController extends Controller
         $compra->fecha_recepcion = $request->fecha_recepcion;
         $compra->costo_compra = $request->costo_compra;
         $compra->proveedor_id = $request->proveedor_id;
-        $compra->estado = 1;
+        $compra->estado = $request->estado;
+        $compra->eliminado = 0;
         $compra->save();
 
-        foreach($request->producto as $producto) {
-            $detallecompra = new DetalleCompra();
-            $detallecompra->compra_id = $compra->id;
-            $detallecompra->producto_id = $producto['id'];
-            $detallecompra->cantidad = $producto['cantidad'];
-            $detallecompra->precio = $producto['precio_venta'];
-            $detallecompra->importe = $producto['importe'];
-            $detallecompra->save();
+        foreach($request->productosCompra as $producto) {
+            $detalleCompra = new DetalleCompra();
+            $detalleCompra->compra_id = $compra->id;
+            $detalleCompra->producto_id = $producto['id'];
+            $detalleCompra->descripcion = $producto['observacion'];
+            $detalleCompra->cantidad = $producto['cantidad'];
+            $detalleCompra->precio = $producto['precio'];
+            $detalleCompra->importe = $producto['importe'];
+            $detalleCompra->save();
         }
 
         return response()->json($compra->id);
@@ -51,13 +54,13 @@ class ComprasController extends Controller
 
     public function show($id)
     {
-        $compra = Compra::select('compras.id', 'fecha_pedido', 'fecha_recepcion', 'costo_compra', 'estado', 'proveedor_id')
+        $compra = Compra::select('compras.id', 'fecha_compra', 'fecha_recepcion', 'costo_compra', 'proveedor_id', 'proveedores.nombre as nombreProveedor')
+        ->selectRaw('IF(estado >= 1, "Recepcionado", "Registrado") AS estado')
         ->join('proveedores', 'compras.proveedor_id', '=', 'proveedores.id')
-        ->where('estado', 1)
         ->where('compras.id', $id)
         ->first();
-        $compra->productos = DetalleCompra::select('productos.description', 'detalleproducto.quantity', 'productos.unidad_medida', 'detalle_compra.precio', 'detalle_compra.importe')
-            ->join('productos', 'detalle_compra.producto_id', '=', 'productos.id')
+        $compra->productosCompra = DetalleCompra::select('productos.id', 'productos.nombre', 'detalle_compras.descripcion as observacion', 'detalle_compras.cantidad', 'productos.unidad_medida', 'detalle_compras.precio', 'detalle_compras.importe')
+            ->join('productos', 'detalle_compras.producto_id', '=', 'productos.id')
             ->where('compra_id', $id)->get();
         return $compra;
     }
@@ -68,21 +71,20 @@ class ComprasController extends Controller
     $compra = Compra::findOrFail($id);
     $compra->fecha_compra = $request->fecha_compra;
     $compra->fecha_recepcion = $request->fecha_recepcion;
-    $compra->proveedor_id = $request->proveedor_id;
     $compra->costo_compra = $request->costo_compra;
+    $compra->estado = $request->estado;
     $compra->save();
 
   
-    foreach ($request->productos as $producto) {
-        $detallecompra = DetalleCompra::where('compra_id', $id)
+    foreach ($request->productosCompra as $producto) {
+        $detalleCompra = DetalleCompra::where('compra_id', $id)
             ->where('producto_id', $producto['id'])
             ->first();
 
-        if ($detallecompra) {
-
-            $detallecompra->cantidad = $producto['cantidad'];
-            $detallecompra->precio = $producto['precio_venta'];
-            $detallecompra->importe = $producto['importe'];
+        if ($detalleCompra) {
+            $detalleCompra->cantidad = $producto['cantidad'];
+            $detalleCompra->precio = $producto['precio'];
+            $detalleCompra->importe = $producto['importe'];
             $detalleCompra->save();
         }
     }
@@ -94,11 +96,8 @@ class ComprasController extends Controller
     public function destroy($id)
     {
         $compra = Compra::findOrFail($id);
-        $compra->estado = 0;
+        $compra->eliminado = 1;
         $compra->save();
         return 1;
     }
-
-
-
 }

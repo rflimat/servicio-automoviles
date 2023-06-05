@@ -8,6 +8,9 @@ import {
   FormFeedback,
   Form,
 } from "reactstrap";
+
+import CustomSelect from "../../../components/Common/CustomSelect";
+
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -20,6 +23,7 @@ import { get, put } from "../../../helpers/api_helper";
 const Edit = () => {
     const [element, setElement] = useState({
         name: "",
+        tipo: "",
         username: "",
         password: "",
         password1: "",
@@ -42,6 +46,7 @@ const Edit = () => {
       initialValues: {
         name: element.name,
         username: element.username,
+        tipo: element.tipo,
         password: "",
         password1: "",
         email: element.email,
@@ -51,6 +56,7 @@ const Edit = () => {
         name: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
         username: Yup.string().min(5, "Debe tener como mínimo 5 caracteres")
           .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
+        tipo: Yup.string().required("El valor es requerido ser seleccionado"),
         email: Yup.string()
           .email("Debe ser un email.valido")
           .max(255)
@@ -148,6 +154,26 @@ const Edit = () => {
                 ) : null}
               </div>
               <div className="mb-3">
+                <Label>Tipo de usuario</Label>
+                <CustomSelect
+                  defaultValue={{ label: "Seleccione", value: "Seleccione" }}
+                  value={validationType.values.tipo}
+                  onChange={element => validationType.setFieldValue("tipo", element.value)}
+                  options={[
+                    { label: "Administrador", value: "admin" },
+                    { label: "Soporte", value: "soporte" },
+                  ]}
+                  placeholder="Seleccione tipo de usuario"
+                  className="select2-selection"
+                />
+                {validationType.touched.tipoDocumento &&
+                  validationType.errors.tipoDocumento ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.tipoDocumento}
+                  </FormFeedback>
+                ) : null}
+              </div>
+              <div className="mb-3">
                 <Label className="form-label">Numero de telefono</Label>
                 <Input
                   name="telefono"
@@ -194,7 +220,7 @@ const Edit = () => {
                 ) : null}
               </div>
               <div className="mb-3">
-                <Label>Contraseña</Label>
+                <Label>Contraseña {"(Ingresar solo si desea nueva contraseña)"}</Label>
                 <Input
                   name="password"
                   type="password"
@@ -217,7 +243,7 @@ const Edit = () => {
                 ) : null}
               </div>
               <div className="mb-3">
-                <Label>Repite Contraseña</Label>
+                <Label>Repite Contraseña {"(Ingresar solo si desea nueva contraseña)"}</Label>
                 <Input
                   name="password1"
                   type="password"

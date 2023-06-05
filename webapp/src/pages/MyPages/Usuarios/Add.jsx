@@ -8,6 +8,9 @@ import {
   FormFeedback,
   Form,
 } from "reactstrap";
+
+import CustomSelect from "../../../components/Common/CustomSelect";
+
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -24,6 +27,7 @@ const Add = () => {
     initialValues: {
       name: "",
       username: "",
+      tipo: "",
       password: "",
       password1: "",
       email: "",
@@ -33,6 +37,7 @@ const Add = () => {
       name: Yup.string().min(3, "Debe tener como mínimo 3 caracteres").required("El valor es requerido"),
       username: Yup.string().min(5, "Debe tener como mínimo 5 caracteres")
         .max(30, "Debe tener como máximo 30 caracteres").required("El valor es requerido"),
+      tipo: Yup.string().required("El valor es requerido ser seleccionado"),
       email: Yup.string()
         .email("Debe ser un email.valido")
         .max(255)
@@ -50,7 +55,7 @@ const Add = () => {
     onSubmit: (element) => {
       addSwal("usuario").then((result) => {
         if (result.isConfirmed) {
-          post(`${import.meta.env.VITE_API_URL}/usuario`, element)
+          post(`${import.meta.env.VITE_API_URL}/usuarios`, element)
             .then((res) => {
               successSwal("usuario", "agregado").then(() => {
                 navigate("/usuarios");
@@ -126,6 +131,26 @@ const Add = () => {
                 validationType.errors.username ? (
                 <FormFeedback type="invalid">
                   {validationType.errors.username}
+                </FormFeedback>
+              ) : null}
+            </div>
+            <div className="mb-3">
+              <Label>Tipo de usuario</Label>
+              <CustomSelect
+                defaultValue={{ label: "Seleccione", value: "Seleccione" }}
+                value={validationType.values.tipo}
+                onChange={element => validationType.setFieldValue("tipo", element.value)}
+                options={[
+                  { label: "Administrador", value: "admin" },
+                  { label: "Soporte", value: "soporte" },
+                ]}
+                placeholder="Seleccione tipo de usuario"
+                className="select2-selection"
+              />
+              {validationType.touched.tipoDocumento &&
+                validationType.errors.tipoDocumento ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.tipoDocumento}
                 </FormFeedback>
               ) : null}
             </div>

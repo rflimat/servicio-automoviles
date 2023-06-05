@@ -40,8 +40,8 @@ const Login = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      username: "admin" || "",
-      password: "admin123" || "",
+      username: "",
+      password: "",
     },
     validationSchema: Yup.object({
       username: Yup.string().required("Ingrese su username"),
@@ -54,7 +54,8 @@ const Login = (props) => {
       })
       if (typeof response == "object") {
         localStorage.setItem("authUser", JSON.stringify(response));
-        navigate('/dashboard');
+        //navigate('/dashboard');
+        navigate('/productos');
       } else {
         setError("Usuario o contraseñas incorrectas");
         console.error(response);
@@ -64,11 +65,11 @@ const Login = (props) => {
 
   return (
     <React.Fragment>
-      <div className="home-btn d-none d-sm-block">
+      {/*<div className="home-btn d-none d-sm-block">
         <Link to="/" className="text-dark">
           <i className="bx bx-home h2" />
         </Link>
-      </div>
+      </div>*/}
       <div className="account-pages my-5 pt-sm-5">
         <Container>
           <Row className="justify-content-center">
@@ -118,7 +119,7 @@ const Login = (props) => {
                         <Input
                           name="username"
                           className="form-control"
-                          placeholder="Enter username"
+                          placeholder="Ingrese usuario"
                           type="text"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
@@ -137,12 +138,12 @@ const Login = (props) => {
                       </div>
 
                       <div className="mb-3">
-                        <Label className="form-label">Password</Label>
+                        <Label className="form-label">Contraseña</Label>
                         <Input
                           name="password"
                           value={validation.values.password || ""}
                           type="password"
-                          placeholder="Enter Password"
+                          placeholder="Ingrese contraseña"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           invalid={
@@ -190,9 +191,8 @@ const Login = (props) => {
                 <p>
                   <span style={{ display: "block" }}>
                     © {new Date().getFullYear()} Servicios Electricos Laser.
-                    Diseñado with{" "}
-                    <i className="mdi mdi-heart text-danger" /> by Themesbrand</span>
-                  <span style={{ display: "block" }}>Desarrollado por <a target="_blank" rel="noreferrer" href="https://rflimat.com">Raul Lima</a> & Development team</span>
+                  </span>
+                  <span style={{ display: "block" }}>Desarrollado por Systec</span>
                 </p>
               </div>
             </Col>
