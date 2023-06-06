@@ -253,21 +253,49 @@ const Header = props => {
                 <div className="px-lg-2">
                   <Row className="no-gutters">
                     <Col>
-                      <Link className="dropdown-icon-item" to="#">
+                      <Link className="dropdown-icon-item" to="/productos">
                         <i className="bx bx-package" style={{fontSize: 24}}></i>
                         <span>Productos</span>
                       </Link>
                     </Col>
                     <Col>
-                      <Link className="dropdown-icon-item" to="#">
+                      <Link className="dropdown-icon-item" to="/proveedores">
                         <i className="bx bx-building-house" style={{fontSize: 24}}></i>
                         <span>Proveedores</span>
                       </Link>
                     </Col>
                     <Col>
-                      <Link className="dropdown-icon-item" to="#">
+                      <Link className="dropdown-icon-item" to="/compras">
                         <i className="bx bx-cart" style={{fontSize: 24}}></i>
                         <span>Compras</span>
+                      </Link>
+                    </Col>
+                  </Row>
+                  <Row className="no-gutters">
+                    <Col>
+                      <Link className="dropdown-icon-item" to="/ventas">
+                        <i className="bx bx-shopping-bag" style={{fontSize: 24}}></i>
+                        <span>Ventas</span>
+                      </Link>
+                    </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="/clientes">
+                        <i className="bx bx-user" style={{fontSize: 24}}></i>
+                        <span>Clientes</span>
+                      </Link>
+                    </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="/vehiculos">
+                        <i className="bx bx-car" style={{fontSize: 24}}></i>
+                        <span>Vehiculos</span>
+                      </Link>
+                    </Col>
+                  </Row>
+                  <Row className="no-gutters">
+                    <Col>
+                      <Link className="dropdown-icon-item" to="/trabajos">
+                        <i className="bx bx-desktop" style={{fontSize: 24}}></i>
+                        <span>Trabajos</span>
                       </Link>
                     </Col>
                   </Row>

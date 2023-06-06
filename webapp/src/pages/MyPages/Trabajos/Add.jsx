@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  Row,
-  Col,
-  Card,
   Button,
   Label,
   Input,
@@ -13,7 +10,7 @@ import {
 } from "reactstrap";
 
 import CustomSelect from "../../../components/Common/CustomSelect";
-import Dropzone from "react-dropzone"
+import CustomDropzone from "../../../components/Common/CustomDropzone";
 
 // Formik validation
 import * as Yup from "yup";
@@ -30,30 +27,6 @@ const Add = () => {
   const [selectedFiles, setselectedFiles] = useState([])
 
   const navigate = useNavigate();
-
-  /* Upload files functions */
-  function handleAcceptedFiles(files) {
-    files.map(file =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    )
-    setselectedFiles(files)
-  }
-
-  /**
-   * Formats the size
-   */
-  function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
-  }
 
   const getTrabajadores = async () => {
     const data = await get(`${import.meta.env.VITE_API_URL}/trabajadores`);
@@ -91,41 +64,60 @@ const Add = () => {
     validationSchema: Yup.object().shape({
     }),
     onSubmit: (element) => {
+      const formData = new FormData();
+      selectedFiles.forEach((file) => formData.append('file', file));
+      console.log(...formData);
+
       addSwal("trabajo").then((result) => {
         if (result.isConfirmed) {
           /*post(`${import.meta.env.VITE_API_URL}/trabajos`, element)
             .then((res) => {
-              successSwal("trabajo", "agregado").then(() => {
-                addSwal("trabajo con comprobante").then((result) => {
-                  if (result.isConfirmed) {
-                    navigate("/comprobante/generate");
-                  } else {
-                    navigate("/trabajos");
-                  }
+              post(`${import.meta.env.VITE_API_URL}/trabajos/upload`, formData)
+                .then((res) => {
+                  successSwal("trabajo", "agregado").then(() => {
+                    customSwal({
+                      confirmButton: "success",
+                      cancelButton: "secondary",
+                      title: "Generar comprobante para trabajo",
+                      text: "¿Esta seguro de generar comprobante para trabajo?",
+                      icon: "question",
+                      textConfirmButton: "Generar",
+                      textCancelButton: "Cancelar"
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        let id = 1;
+                        navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
+                      } else {
+                        navigate("/trabajos");
+                      }
+                    });
+                  });
                 })
-              });
+                .catch((err) => {
+                  errorSwal(err);
+                });
             })
             .catch((err) => {
               errorSwal(err);
             });*/
-            successSwal("trabajo", "agregado").then(() => {
-              customSwal({
-                confirmButton: "success",
-                cancelButton: "secondary",
-                title: "Generar comprobante para trabajo",
-                text: "¿Esta seguro de generar comprobante para trabajo?",
-                icon: "question",
-                textConfirmButton: "Generar",
-                textCancelButton: "Cancelar"
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  let id = 1;
-                  navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
-                } else {
-                  navigate("/trabajos");
-                }
-              })
+          successSwal("trabajo", "agregado").then(() => {
+            customSwal({
+              confirmButton: "success",
+              cancelButton: "secondary",
+              title: "Generar comprobante para trabajo",
+              text: "¿Esta seguro de generar comprobante para trabajo?",
+              icon: "question",
+              textConfirmButton: "Generar",
+              textCancelButton: "Cancelar"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                let id = 1;
+                navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
+              } else {
+                navigate("/trabajos");
+              }
             });
+          });
         }
       });
     },
@@ -227,11 +219,11 @@ const Add = () => {
               </div>
               <div className="mb-3 col-12 col-md-6">
                 <Label className="form-label">Fecha y hora de inicio de trabajo</Label>
-                <DateTimeInput name="datetimeCompra" value={validationType.values.datetimeCompra} onDateTimeChange={validationType.handleChange} />
-                {validationType.touched.datetimeCompra &&
-                  validationType.errors.datetimeCompra ? (
+                <DateTimeInput name="fecha_hora_ingreso" value={validationType.values.fecha_hora_ingreso} onDateTimeChange={validationType.handleChange} />
+                {validationType.touched.fecha_hora_ingreso &&
+                  validationType.errors.fecha_hora_ingreso ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.datetimeCompra}
+                    {validationType.errors.fecha_hora_ingreso}
                   </FormFeedback>
                 ) : null}
               </div>
@@ -263,16 +255,16 @@ const Add = () => {
                 ) : null}
               </div>
               <div className="col-12 col-md-6">
-                <div className="mb-3">
+                {/*<div className="mb-3">
                   <Label className="form-label">Fecha y hora de fin de trabajo</Label>
-                  <DateTimeInput name="datetimeCompra" value={validationType.values.datetimeCompra} onDateTimeChange={validationType.handleChange} />
-                  {validationType.touched.datetimeCompra &&
-                    validationType.errors.datetimeCompra ? (
+                  <DateTimeInput name="fecha_hora_salida" value={validationType.values.fecha_hora_salida} onDateTimeChange={validationType.handleChange} />
+                  {validationType.touched.fecha_hora_salida &&
+                    validationType.errors.fecha_hora_salida ? (
                     <FormFeedback type="invalid">
-                      {validationType.errors.datetimeCompra}
+                      {validationType.errors.fecha_hora_salida}
                     </FormFeedback>
                   ) : null}
-                </div>
+                </div>*/}
                 <div className="mb-3">
                   <Label className="form-label">Costo estimado</Label>
                   <Input
@@ -301,61 +293,7 @@ const Add = () => {
 
             <div className="mb-3">
               <Label className="form-label">Estado del vehiculo</Label>
-              <Dropzone
-                onDrop={acceptedFiles => {
-                  handleAcceptedFiles(acceptedFiles)
-                }}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <div className="dropzone">
-                    <div
-                      className="dz-message needsclick mt-2"
-                      {...getRootProps()}
-                    >
-                      <input {...getInputProps()} />
-                      <div className="mb-3">
-                        <i className="display-4 text-muted bx bxs-cloud-upload" />
-                      </div>
-                      <h4>Subir archivo</h4>
-                    </div>
-                  </div>
-                )}
-              </Dropzone>
-              <div className="dropzone-previews mt-3" id="file-previews">
-                {selectedFiles.map((f, i) => {
-                  return (
-                    <Card
-                      className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                      key={i + "-file"}
-                    >
-                      <div className="p-2">
-                        <Row className="align-items-center">
-                          <Col className="col-auto">
-                            <img
-                              data-dz-thumbnail=""
-                              height="80"
-                              className="avatar-sm rounded bg-light"
-                              alt={f.name}
-                              src={f.preview}
-                            />
-                          </Col>
-                          <Col>
-                            <Link
-                              to="#"
-                              className="text-muted font-weight-bold"
-                            >
-                              {f.name}
-                            </Link>
-                            <p className="mb-0">
-                              <strong>{f.formattedSize}</strong>
-                            </p>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Card>
-                  )
-                })}
-              </div>
+              <CustomDropzone selectedFiles={selectedFiles} setselectedFiles={setselectedFiles} />
             </div>
 
 
