@@ -46,7 +46,7 @@ const Edit = () => {
     const getAnios = () => {
       let anios = [];
       let anioAct = format(new Date(), "yyyy");
-      for (let anio = anioAct; anio >= 1950; anio--) {
+      for (let anio = anioAct; anio >= 1987; anio--) {
         anios.push({
           label: `${anio}`,
           value: `${anio}`
@@ -198,11 +198,11 @@ const Edit = () => {
               ) : null}
             </div>
             <div className="mb-3">
-              <Label>tipo_vehiculo</Label>
+              <Label>Tipo</Label>
               <Input
                 name="tipo_vehiculo"
                 type="text"
-                placeholder="Ingrese numero de tipo_vehiculo"
+                placeholder="Ingrese tipo"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
                 value={validationType.values.tipo_vehiculo || ""}

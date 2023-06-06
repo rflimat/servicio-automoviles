@@ -18,65 +18,65 @@ import { get, put } from "../../../helpers/api_helper";
 import CustomSelect from "../../../components/Common/CustomSelect";
 
 const View = () => {
-    const [element, setElement] = useState({
-        placa: "",
-        marca: "",
-        anio: "",
-        modelo: "",
-        tipo_vehiculo: "",
-        cliente_id: "",
-      });
-    const navigate = useNavigate();
-    const [anios, setAnios] = useState([]);
-    const { id } = useParams();
-    const [clientes, setClientes] = useState([]);
-    const getClientes = async () => {
-      const data = await get(`${import.meta.env.VITE_API_URL}/clientes`);
-      let optionsClientes = data.map((element) => {
-        let { id, Nombres, Apellidos } = element;
-        return {
-          label: `${Nombres} ${Apellidos}`,
-          value: `${id}`
-        }
-      })
-      setClientes(optionsClientes);
-    }  
-    const getAnios = () => {
-      let anios = [];
-      let anioAct = format(new Date(), "yyyy");
-      for (let anio = anioAct; anio >= 1950; anio--) {
-        anios.push({
-          label: `${anio}`,
-          value: `${anio}`
-        });
+  const [element, setElement] = useState({
+    placa: "",
+    marca: "",
+    anio: "",
+    modelo: "",
+    tipo_vehiculo: "",
+    cliente_id: "",
+  });
+  const navigate = useNavigate();
+  const [anios, setAnios] = useState([]);
+  const { id } = useParams();
+  const [clientes, setClientes] = useState([]);
+  const getClientes = async () => {
+    const data = await get(`${import.meta.env.VITE_API_URL}/clientes`);
+    let optionsClientes = data.map((element) => {
+      let { id, Nombres, Apellidos } = element;
+      return {
+        label: `${Nombres} ${Apellidos}`,
+        value: `${id}`
       }
-      setAnios(anios);
-    }
-    useEffect(() => {
-        const getById = async () => {
-            const data = await get(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`);
-            setElement(data);
-        }
-        getById();
-        getClientes();
-        getAnios();
-    }, []);
-
-    const validationType = useFormik({
-        enableReinitialize: true, // Use this flag when initial values needs to be changed
-        initialValues: {
-          placa: element.placa,
-          nombre: element.nombre,
-          marca: element.marca,
-          anio: `${element.anio}`,
-          modelo: element.modelo,
-          tipo_vehiculo: element.tipo_vehiculo,
-          cliente_id: element.cliente_id,
-        },
-        
+    })
+    setClientes(optionsClientes);
+  }
+  const getAnios = () => {
+    let anios = [];
+    let anioAct = format(new Date(), "yyyy");
+    for (let anio = anioAct; anio >= 1987; anio--) {
+      anios.push({
+        label: `${anio}`,
+        value: `${anio}`
       });
-      return (
-        <React.Fragment>
+    }
+    setAnios(anios);
+  }
+  useEffect(() => {
+    const getById = async () => {
+      const data = await get(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`);
+      setElement(data);
+    }
+    getById();
+    getClientes();
+    getAnios();
+  }, []);
+
+  const validationType = useFormik({
+    enableReinitialize: true, // Use this flag when initial values needs to be changed
+    initialValues: {
+      placa: element.placa,
+      nombre: element.nombre,
+      marca: element.marca,
+      anio: `${element.anio}`,
+      modelo: element.modelo,
+      tipo_vehiculo: element.tipo_vehiculo,
+      cliente_id: element.cliente_id,
+    },
+
+  });
+  return (
+    <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
           <Breadcrumbs
@@ -183,11 +183,11 @@ const View = () => {
               ) : null}
             </div>
             <div className="mb-3">
-              <Label>tipo_vehiculo</Label>
+              <Label>Tipo</Label>
               <Input
                 name="tipo_vehiculo"
                 type="text"
-                placeholder="Ingrese numero de tipo_vehiculo"
+                placeholder="Ingrese tipo"
                 onChange={validationType.handleChange}
                 onBlur={validationType.handleBlur}
                 value={validationType.values.tipo_vehiculo || ""}
@@ -205,31 +205,31 @@ const View = () => {
                   {validationType.errors.tipo_vehiculo}
                 </FormFeedback>
               ) : null}
-            </div> 
+            </div>
             <div className="mb-3">
-            <Label>Cliente</Label>              
-                <CustomSelect
-                  defaultValue={validationType.values.cliente_id}
-                  value={validationType.values.cliente_id}
-                  options={clientes}
-                  onChange={element => validationType.setFieldValue("cliente_id", element.value)}
-                  placeholder="Seleccione Cliente"
-                  className="select2-selection"
-                  isSearchable={false}
-                  menuIsOpen={false}
-                  openMenuOnClick={false}
-                />
-                {validationType.touched.cliente_id &&
-                  validationType.errors.cliente_id ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.cliente_id}
-                  </FormFeedback>
-                ) : null}
-            </div>          
+              <Label>Cliente</Label>
+              <CustomSelect
+                defaultValue={validationType.values.cliente_id}
+                value={validationType.values.cliente_id}
+                options={clientes}
+                onChange={element => validationType.setFieldValue("cliente_id", element.value)}
+                placeholder="Seleccione Cliente"
+                className="select2-selection"
+                isSearchable={false}
+                menuIsOpen={false}
+                openMenuOnClick={false}
+              />
+              {validationType.touched.cliente_id &&
+                validationType.errors.cliente_id ? (
+                <FormFeedback type="invalid">
+                  {validationType.errors.cliente_id}
+                </FormFeedback>
+              ) : null}
+            </div>
             <div className="d-flex flex-wrap gap-2">
-              <Button type="button" color="primary" onClick={() => {                                 
-                                    navigate(`/vehiculos/edit/${id}`);
-                                }}>
+              <Button type="button" color="primary" onClick={() => {
+                navigate(`/vehiculos/edit/${id}`);
+              }}>
                 Editar
               </Button>{" "}
               <Button type="reset" color="secondary" onClick={() => navigate("/vehiculos")}>

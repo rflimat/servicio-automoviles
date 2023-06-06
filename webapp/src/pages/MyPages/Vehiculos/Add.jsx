@@ -39,7 +39,7 @@ const Add = () => {
   const getAnios = () => {
     let anios = [];
     let anioAct = format(new Date(), "yyyy");
-    for (let anio = anioAct; anio >= 1950; anio--) {
+    for (let anio = anioAct; anio >= 1987; anio--) {
       anios.push({
         label: `${anio}`,
         value: `${anio}`
