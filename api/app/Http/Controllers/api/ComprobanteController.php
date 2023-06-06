@@ -12,7 +12,8 @@ class ComprobanteController extends Controller
     {
         $request->validate([
             'idServicio' => ['bail','required','exists:tipos_servicio,id'],
-            'idMetodo_pago' => ['bail','required','exists:metodos_pago,id']
+            'idMetodo_pago' => ['bail','required','exists:metodos_pago,id'],
+            'nro_comprobante' => 'unique:App\Models\Comprobante'
         ]);
         $comprobante = new Comprobante();
         $comprobante->fecha_hora_creacion = $request->fecha_hora_creacion;
@@ -23,6 +24,11 @@ class ComprobanteController extends Controller
         $comprobante->estado = $request->estado;
         $comprobante->eliminado = 0;
         $comprobante->save();
+        /*
+        $total_trabajos_lista = DB::table('trabajos')
+            ->where('id',
+                Comprobante::select(comprobante.id)->where(nro_comprobante,$request->nro_comprobante))
+        */
     }
 
     public function listar()
