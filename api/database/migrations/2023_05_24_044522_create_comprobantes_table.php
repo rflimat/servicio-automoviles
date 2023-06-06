@@ -21,18 +21,38 @@ return new class extends Migration
             $table->unsignedInteger('idServicio')->nullable();
             $table->unsignedInteger('idMetodo_pago')->nullable();
             $table->integer('estado')->nullable();
-            $table->integer('eliminado');
+            $table->integer('eliminado')->nullable();
+            $table->double('costo_total')->nullable();
             $table->timestamps();
         });
         Schema::create('tipos_servicio', function (Blueprint $table) {
             $table->id();
-            $table->string('servicio');
+            $table->string('servicio'); // TRABAjo ventas ambos
         });
         Schema::create('metodos_pago', function (Blueprint $table) {
             $table->id();
-            $table->string('metodo');
+            $table->string('metodo'); // BOLETA FACTURA CONVENCIONAL
         });
-        
+        DB::table('tipos_servicio')->insert(['servicio' => 'Trabajo'],);
+        DB::table('tipos_servicio')->insert(['servicio' => 'Ventas'],);
+        DB::table('tipos_servicio')->insert(['servicio' => 'Ambos'],);
+
+        DB::table('metodos_pago')->insert(['metodo' => 'Boleta']);
+        DB::table('metodos_pago')->insert(['metodo' => 'Factura']);
+        DB::table('metodos_pago')->insert(['metodo' => 'Convencional']);
+
+        DB::unprepared(' 
+            CREATE TRIGGER calcular_costo BEFORE INSERT ON comprobantes FOR EACH ROW 
+            BEGIN
+                declare ct double;
+                set ct = 0;
+                if new.idServicio is not null then
+                    set ct = ct + (select sum(importe) from ventas where idComprobante = new.id) +
+                        (select sum(costo) from trabajos where idComprobante = new.id) ;
+                end if;
+                SET NEW.costo_total = ct;
+            END;
+        ');
     }
 
     /**

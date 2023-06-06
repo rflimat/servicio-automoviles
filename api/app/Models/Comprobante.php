@@ -15,6 +15,7 @@ class Comprobante extends Model
         'idMetodo_pago',
         'estado',
         'eliminado',
-        'nro_comprobante'
+        'nro_comprobante',
+        'costo_total'
     ];
 }
