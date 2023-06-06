@@ -24,6 +24,11 @@ class ComprobanteController extends Controller
         $comprobante->estado = $request->estado;
         $comprobante->eliminado = 0;
         $comprobante->save();
+        /*
+        $total_trabajos_lista = DB::table('trabajos')
+            ->where('id',
+                Comprobante::select(comprobante.id)->where(nro_comprobante,$request->nro_comprobante))
+        */
     }
 
     public function listar()
