@@ -23,6 +23,7 @@ class ComprobanteController extends Controller
         $comprobante->idMetodo_pago = $request->idMetodo_pago;
         $comprobante->estado = $request->estado;
         $comprobante->eliminado = 0;
+        $comprobante->costo_total = 0;
         $comprobante->save();
         /*
         $total_trabajos_lista = DB::table('trabajos')

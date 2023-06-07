@@ -8,6 +8,7 @@ use App\Models\DetalleTrabajo;
 use App\Models\TrabajoEvidencia;
 use App\Models\Trabajo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 // controla los modelos DetalleTrabajo, Evidencias y trabajo
 
 class TrabajoController extends Controller
@@ -147,5 +148,11 @@ class TrabajoController extends Controller
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->eliminado = 1;
         $trabajo->save();
+    }
+    public function upload(Request $request ){
+        $ruta = '/trabajos/'. $request->id;
+        foreach ($request->file as $archivo) {
+            Storage::disk('local')->put($ruta, $archivo);
+        }
     }
 }
