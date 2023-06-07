@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Comprobante;
 use App\Models\DetalleTrabajo;
-use App\Models\Evidencias;
+use App\Models\TrabajoEvidencia;
 use App\Models\Trabajo;
 use Illuminate\Http\Request;
 // controla los modelos DetalleTrabajo, Evidencias y trabajo
@@ -19,6 +19,7 @@ class TrabajoController extends Controller
         ]);
         $trabajo = new Trabajo();
         $trabajo->idTrabajador = $request->idTrabajador;
+        $trabajo->idVehiculo = $request->idVehiculo;
         $trabajo->problema_inicial = $request->problema_inicial;
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
@@ -26,22 +27,21 @@ class TrabajoController extends Controller
         if($request->nro_comprobante){ 
             $trabajo->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
         }
-        $trabajo->estado = 1;
+        $trabajo->estado = $request->estado;
+        $trabajo->eliminado = 0;
         $trabajo->save();
 
         // recorre los detalles del trabajo en la variable $trabajos 
-        foreach ($request->detalles as $trabajos) {
+        foreach ($request->detalleTrabajo as $trabajos) {
             $detalleTrabajo = new DetalleTrabajo();
             $detalleTrabajo->idTrabajo = $trabajo->id;
-            $detalleTrabajo->idVehiculo = $trabajos['idVehiculo'];
-            $detalleTrabajo->idCliente = $trabajos['idCliente'];
             $detalleTrabajo->descripcion = $trabajos['descripcion'];
-            $detalleTrabajo->fecha = $trabajos['fecha'];
-            $detalleTrabajo->hora = $trabajos['hora'];
+            $detalleTrabajo->fecha_hora = $trabajos['fecha_hora'];
+            $detalleTrabajo->costo = $trabajos['costo'];
             $detalleTrabajo->save();
         }
-        foreach ($request->evidencias as $evidencias) {
-            $evidenciasTrabajo = new Evidencias();
+        foreach ((array) $request->evidencias as $evidencias) {
+            $evidenciasTrabajo = new TrabajoEvidencia();
             $evidenciasTrabajo->idTrabajo = $trabajo->id;
             $evidenciasTrabajo->ruta = $evidencias['ruta'];
             $evidenciasTrabajo->save();
@@ -51,19 +51,30 @@ class TrabajoController extends Controller
 
     public function listar()
     {
-        $trabajos = Trabajo::where('estado', 1)->get();
+        $trabajos = Trabajo::select('trabajos.id', 'fecha_hora_ingreso', 'vehiculos.placa as vehiculo')
+        ->selectRaw('CONCAT("S/. ", FORMAT(costo, 2)) as costo')
+        ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as cliente')
+        ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS estado')
+        ->join('vehiculos', 'vehiculos.id', '=', 'trabajos.idVehiculo')
+        ->join('clientes', 'clientes.id', '=', 'vehiculos.cliente_id')
+        ->where('eliminado', 0)
+        ->get();
         return $trabajos;
     }
 
     public function obtener(string $id)
     {
-        $trabajo = Trabajo::findOrFail($id); // busca el id de trabajo y lo retorna
-        $trabajo->detalles = DetalleTrabajo::select('detalle_trabajos.id', 'idVehiculo', 'idCliente', 'descripcion', 'fecha', 'hora')
+        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial')
+        ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS estado')
+        ->where('id', $id)
+        ->first(); // busca el id de trabajo y lo retorna
+        $trabajo->detalleTrabajo = DetalleTrabajo::select('detalle_trabajos.id', 'descripcion', 'fecha_hora')
+            ->selectRaw('FORMAT(detalle_trabajos.costo, 2) as costo')
             ->join('trabajos', 'trabajos.id', '=', 'detalle_trabajos.idTrabajo')
             ->where('idTrabajo', $id)
             ->get(); // busca los detalles asignados a un trabajo 
-        $trabajo->evidencias = Evidencias::select('evidencias.id','ruta')
-            ->join('trabajos', 'trabajos.id', '=', 'evidencias.idTrabajo')
+        $trabajo->evidencias = TrabajoEvidencia::select('trabajo_evidencias.id', 'ruta')
+            ->join('trabajos', 'trabajos.id', '=', 'trabajo_evidencias.idTrabajo')
             ->where('idTrabajo',$id)
             ->get();
         return $trabajo; // retorna
@@ -73,6 +84,7 @@ class TrabajoController extends Controller
         // busca el trabajo y lo asigna a la variable $trabajo
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->idTrabajador = $request->idTrabajador;
+        $trabajo->idVehiculo = $request->idVehiculo;
         $trabajo->problema_inicial = $request->problema_inicial;
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
@@ -80,26 +92,31 @@ class TrabajoController extends Controller
         if($request->nro_comprobante){ 
             $trabajo->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
         }
+        $trabajo->estado = $request->estado;
         $trabajo->save();
         //actualiza datos y los guarda con save
 
-        foreach ($request->detalles as $trabajos) {
-            $detalleTrabajo = DetalleTrabajo::where('idTrabajo', $id)
+        foreach ($request->detalleTrabajo as $trabajos) {
+            if (isset($trabajos['id'])) {
+                $detalleTrabajo = DetalleTrabajo::where('idTrabajo', $id)
                 ->where('id', $trabajos['id'])
                 ->first();
-
-            if ($detalleTrabajo) {
-                $detalleTrabajo->idVehiculo = $trabajos['idVehiculo'];
-                $detalleTrabajo->idCliente = $trabajos['idCliente'];
                 $detalleTrabajo->descripcion = $trabajos['descripcion'];
-                $detalleTrabajo->fecha = $trabajos['fecha'];
-                $detalleTrabajo->hora = $trabajos['hora'];
+                $detalleTrabajo->fecha_hora = $trabajos['fecha_hora'];
+                $detalleTrabajo->costo = $trabajos['costo'];
+                $detalleTrabajo->save();
+            } else {
+                $detalleTrabajo = new DetalleTrabajo();
+                $detalleTrabajo->idTrabajo = $trabajo->id;
+                $detalleTrabajo->descripcion = $trabajos['descripcion'];
+                $detalleTrabajo->fecha_hora = $trabajos['fecha_hora'];
+                $detalleTrabajo->costo = $trabajos['costo'];
                 $detalleTrabajo->save();
             }
         }
 
-        foreach($request->evidencias as $evidencias){
-            $evidenciasTrabajo = Evidencias::where('idTrabajo', $id)
+        foreach((array) $request->evidencias as $evidencias){
+            $evidenciasTrabajo = TrabajoEvidencia::where('idTrabajo', $id)
                 ->where('id', $evidencias['id'])
                 ->first();
             $evidenciasTrabajo->ruta = $evidencias['ruta'];
@@ -112,7 +129,7 @@ class TrabajoController extends Controller
     {
         //Trabajo::destroy($id);
         $trabajo = Trabajo::findOrFail($id);
-        $trabajo->estado = 0;
+        $trabajo->eliminado = 1;
         $trabajo->save();
     }
 }

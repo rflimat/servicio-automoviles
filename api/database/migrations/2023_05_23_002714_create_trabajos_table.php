@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('trabajos', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('idTrabajador');
+            $table->unsignedInteger('idVehiculo');
             $table->longText('problema_inicial');
             $table->dateTime('fecha_hora_ingreso')->nullable();
             $table->dateTime('fecha_hora_salida')->nullable();
             $table->double('costo');
             $table->unsignedInteger('idComprobante')->nullable();
             $table->integer('estado')->nullable();
+            $table->integer('eliminado')->nullable();
             $table->timestamps();
         });
 
@@ -34,11 +36,9 @@ return new class extends Migration
         Schema::create('detalle_trabajos', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('idTrabajo');
-            $table->unsignedInteger('idVehiculo');
-            $table->unsignedInteger('idCliente');
             $table->longText('descripcion');
-            $table->date('fecha');
-            $table->time('hora');
+            $table->datetime('fecha_hora');
+            $table->double('costo');
             $table->timestamps();
         });
     }
@@ -49,5 +49,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('trabajos');
+        Schema::dropIfExists('trabajo_evidencias');
+        Schema::dropIfExists('detalle_trabajos');
     }
 };
