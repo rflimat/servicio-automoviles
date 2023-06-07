@@ -40,19 +40,18 @@ return new class extends Migration
         DB::table('metodos_pago')->insert(['metodo' => 'Boleta']);
         DB::table('metodos_pago')->insert(['metodo' => 'Factura']);
         DB::table('metodos_pago')->insert(['metodo' => 'Convencional']);
-
+        /*
         DB::unprepared(' 
             CREATE TRIGGER calcular_costo BEFORE INSERT ON comprobantes FOR EACH ROW 
             BEGIN
-                declare ct double;
-                set ct = 0;
-                if new.idServicio is not null then
+                if new.idServicio = 1 or then
                     set ct = ct + (select sum(importe) from ventas where idComprobante = new.id) +
                         (select sum(costo) from trabajos where idComprobante = new.id) ;
                 end if;
                 SET NEW.costo_total = ct;
             END;
         ');
+        */
     }
 
     /**

@@ -24,8 +24,16 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        if($request->nro_comprobante){ 
-            $trabajo->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
+        if($request->nro_comprobante){  
+            $comprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
+            if($comprobante){
+                $trabajo->idComprobante = $comprobante;
+            }else{
+                $nuevo_comprobante = new Comprobante();
+                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante;
+                $nuevo_comprobante->save();
+                $trabajo->idComprobante= $nuevo_comprobante->id;
+            }
         }
         $trabajo->estado = $request->estado;
         $trabajo->eliminado = 0;
@@ -89,8 +97,16 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        if($request->nro_comprobante){ 
-            $trabajo->idComprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
+        if($request->nro_comprobante){  
+            $comprobante = Comprobante::select('id')->where('nro_comprobante',$request->nro_comprobante);
+            if($comprobante){
+                $trabajo->idComprobante = $comprobante;
+            }else{
+                $nuevo_comprobante = new Comprobante();
+                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante;
+                $nuevo_comprobante->save();
+                $trabajo->idComprobante= $nuevo_comprobante->id;
+            }
         }
         $trabajo->estado = $request->estado;
         $trabajo->save();
