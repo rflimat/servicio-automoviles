@@ -95,7 +95,7 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::get('/trabajos/{id}','obtener');
         Route::put('/trabajos/{id}','actualizar');
         Route::delete('/trabajos/{id}','eliminar');
-        Route::post('/trabajos/upload','upload');
+        //Route::post('/trabajos/upload','upload');
     });
     Route::controller(ComprobanteController::class)->group( function() {
         Route::post('/comprobantes','registrar');
@@ -105,3 +105,5 @@ Route::middleware('auth:sanctum')->group( function(){
         Route::delete('/comprobantes/{id}','eliminar');
     });
 });
+
+Route::post('/trabajos/upload', [TrabajoController::class, 'upload']);

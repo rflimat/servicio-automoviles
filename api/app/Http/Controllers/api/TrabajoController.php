@@ -151,8 +151,9 @@ class TrabajoController extends Controller
     }
     public function upload(Request $request ){
         $ruta = '/trabajos/'. $request->id;
-        foreach ($request->file as $archivo) {
+        foreach ((array) $request->file as $archivo) {
             Storage::disk('local')->put($ruta, $archivo);
         }
+        return $request;
     }
 }
