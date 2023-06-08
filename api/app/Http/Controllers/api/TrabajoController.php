@@ -160,7 +160,7 @@ class TrabajoController extends Controller
     */
 
     public function upload(Request $request, string $id ){
-        $ruta = '/trabajos/'. $id; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
+        $ruta = "/trabajos/". $id; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
         foreach ( $request->file() as $namefile => $file ) { // recorre los archivos
             $file->store($ruta, 'public');  // guarda el archivo en la ruta y en el disco publico
         }
