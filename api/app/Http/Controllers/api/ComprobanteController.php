@@ -40,11 +40,11 @@ class ComprobanteController extends Controller
 
     public function obtener(string $id)
     {
-        $comprobante = Comprobante::select('comprobantes.id','nro_comprobante', 'fecha_hora_creacion', 'fecha_hora_cancelacion', 'estado', 'tipos_servicio.servicio', 'metodos_pago.metodo')
+        $comprobante = Comprobante::select('comprobantes.id','nro_comprobante', 'fecha_hora_creacion', 'fecha_hora_cancelacion', 'estado', 'tipos_servicio.id as idServicio', 'tipos_servicio.servicio', 'metodos_pago.id as idMetodo_pago', 'metodos_pago.metodo')
             ->join('tipos_servicio', 'comprobantes.idServicio', '=', 'tipos_servicio.id')
             ->join('metodos_pago','comprobantes.idMetodo_pago','=','metodos_pago.id')
             ->where('comprobantes.id', $id)
-            ->get(); // busca los detalles asignados a un trabajo 
+            ->first(); // busca los detalles asignados a un trabajo 
         return $comprobante; // retorna
     }
     public function actualizar(Request $request, string $id)
