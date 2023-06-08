@@ -18,7 +18,7 @@ return new class extends Migration
             $table->longText('problema_inicial');
             $table->dateTime('fecha_hora_ingreso')->nullable();
             $table->dateTime('fecha_hora_salida')->nullable();
-            $table->double('costo');
+            $table->double('costo')->default(0);
             $table->unsignedInteger('idComprobante')->nullable();
             $table->integer('estado')->nullable();
             $table->integer('eliminado')->nullable();

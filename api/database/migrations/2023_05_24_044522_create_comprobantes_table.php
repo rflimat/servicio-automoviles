@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedInteger('idMetodo_pago')->nullable();
             $table->integer('estado')->nullable();
             $table->integer('eliminado')->nullable();
-            $table->double('costo_total')->nullable();
+            $table->decimal('costo_total')->nullable()->default(0);
             $table->timestamps();
         });
         Schema::create('tipos_servicio', function (Blueprint $table) {
@@ -40,18 +40,60 @@ return new class extends Migration
         DB::table('metodos_pago')->insert(['metodo' => 'Boleta']);
         DB::table('metodos_pago')->insert(['metodo' => 'Factura']);
         DB::table('metodos_pago')->insert(['metodo' => 'Convencional']);
-        /*
+        
         DB::unprepared(' 
-            CREATE TRIGGER calcular_costo BEFORE INSERT ON comprobantes FOR EACH ROW 
-            BEGIN
-                if new.idServicio = 1 or then
-                    set ct = ct + (select sum(importe) from ventas where idComprobante = new.id) +
-                        (select sum(costo) from trabajos where idComprobante = new.id) ;
-                end if;
-                SET NEW.costo_total = ct;
-            END;
+            create trigger insert_venta_para_comprobante after insert on ventas for each row
+            begin
+                update comprobantes
+                set costo_total = costo_total + new.importe
+                where comprobantes.id =new.idComprobante;
+            end;
         ');
-        */
+        DB::unprepared(' 
+            create trigger insert_trabajo_para_comprobante after insert on trabajos for each row
+            begin
+                update comprobantes
+                set costo_total = costo_total + new.costo
+                where comprobantes.id =new.idComprobante;
+            end;
+        ');
+        DB::unprepared(' 
+            create trigger update_trabajo_para_comprobante after update on trabajos for each row
+            begin
+                if new.idComprobante = old.idComprobante then
+                    update comprobantes
+                    set costo_total = costo_total + new.costo - old.costo
+                    where comprobantes.id =new.idComprobante;
+                end if;
+            end
+        ');
+        DB::unprepared(' 
+            create trigger update_venta_para_comprobante after update on ventas for each row
+            begin
+                if new.idComprobante = old.idComprobante then
+                    update comprobantes
+                    set costo_total = costo_total - old.importe + new.importe
+                    where comprobantes.id =new.idComprobante;
+                end if;
+            end;
+        ');
+        DB::unprepared(' 
+            create trigger delete_venta_para_comprobante after delete on ventas for each row
+            begin
+                update comprobantes
+                set costo_total = costo_total - old.importe
+                where comprobantes.id =old.idComprobante;
+            end;
+        ');
+        DB::unprepared(' 
+            create trigger delete_trabajo_para_comprobante after delete on trabajos for each row
+            begin
+                update comprobantes
+                set costo_total = costo_total - old.costo
+                where comprobantes.id =old.idComprobante;
+            end;
+        ');
+        
     }
 
     /**

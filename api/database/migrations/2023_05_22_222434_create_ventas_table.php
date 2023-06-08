@@ -22,7 +22,7 @@ return new class extends Migration
             $table->time('hora')->nullable();
             $table->integer('estado')->nullable();
             $table->unsignedInteger('idComprobante')->nullable();
-            $table->decimal('importe');
+            $table->decimal('importe')->default(0);
             $table->timestamps();
 
         });
