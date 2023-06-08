@@ -149,11 +149,25 @@ class TrabajoController extends Controller
         $trabajo->eliminado = 1;
         $trabajo->save();
     }
-    public function upload(Request $request ){
-        $ruta = '/trabajos/'. $request->id;
+    /*
+    public function upload(Request $request, string $id ){
+        $ruta = '/trabajos/'. $id;
         foreach ((array) $request->file as $archivo) {
-            Storage::disk('local')->put($ruta, $archivo);
+            Storage::disk('public')->put($ruta, $archivo);
         }
-        return $request;
+        return $ruta;
+    }
+    */
+
+    public function upload(Request $request, string $id ){
+        $ruta = '/trabajos/'. $id; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
+        foreach ( $request->file() as $namefile => $file ) { // recorre los archivos
+            $file->store($ruta, 'public');  // guarda el archivo en la ruta y en el disco publico
+        }
+        /*
+        foreach ( $request as $archivo) {
+            return 
+            //Storage::disk('public')->put($ruta, $archivo);
+        }*/
     }
 }
