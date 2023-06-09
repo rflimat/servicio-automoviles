@@ -166,15 +166,8 @@ const View = () => {
             <div className="mb-3">
               <Label>Estado</Label>
               <Input
-                defaultValue={{ label: "Registrado", value: 0 }}
                 value={validationType.values.estado}
-                onChange={element => validationType.setFieldValue("estado", element.value)}
-                options={[
-                  { label: "Registrado", value: "0" },
-                  { label: "Recepcionado", value: "1" },
-                ]}
                 placeholder="Seleccione estado"
-                className="select2-selection"
                 readOnly
               />
               {validationType.touched.estado &&

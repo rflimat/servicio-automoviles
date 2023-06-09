@@ -25,7 +25,7 @@ const Edit = () => {
         anio: "",
         modelo: "",
         tipo_vehiculo: "",
-        cliente_id: "",
+        cliente_id: 0,
       });
     const navigate = useNavigate();
     const [anios, setAnios] = useState([]);
@@ -37,7 +37,7 @@ const Edit = () => {
         let { id, Nombres, Apellidos } = element;
         return {
           label: `${Nombres} ${Apellidos}`,
-          value: `${id}`
+          value: id
         }
       })
       setClientes(optionsClientes);
@@ -59,6 +59,7 @@ const Edit = () => {
         const getById = async () => {
             const data = await get(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`);
             setElement(data);
+            console.log(data);
         }
         getById();
         getClientes();
