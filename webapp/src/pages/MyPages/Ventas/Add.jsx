@@ -124,19 +124,19 @@ const Add = () => {
   }, []);
 
   const validationType = useFormik({
-    enableReinitialize: true, // Use this flag when initial values needs to be changed
+    enableReinitialize: false, // Use this flag when initial values needs to be changed
     initialValues: {
-      datetimeVenta: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-      idCliente: idCliente,
+      nro_comprobante: "",
+      fecha_venta: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+      idCliente: null,
     },
     validationSchema: Yup.object().shape({
 
     }),
     onSubmit: (element) => {
       const venta = {
-        fecha_venta: element.datetimeVenta,
+        ...element,
         costo_venta: productosVenta.reduce((total, producto) => total + producto.importe, 0),
-        idCliente: element.idCliente,
         productosVenta
       }
       console.log(venta)
@@ -145,7 +145,7 @@ const Add = () => {
           post(`${import.meta.env.VITE_API_URL}/ventas`, venta)
             .then((res) => {
               successSwal("venta", "agregado").then(() => {
-                /*customSwal({
+                customSwal({
                   confirmButton: "success",
                   cancelButton: "secondary",
                   title: "Generar comprobante para venta",
@@ -155,13 +155,12 @@ const Add = () => {
                   textCancelButton: "Cancelar"
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    let id = 1;
+                    let id = res.idComprobante;
                     navigate(`/comprobante/generate?tipo=venta&id=${id}`);
                   } else {
                     navigate("/ventas");
                   }
-                })*/
-                navigate("/ventas");
+                })
               });
             })
             .catch((err) => {
@@ -194,7 +193,7 @@ const Add = () => {
                 <CustomSelect
                   value={validationType.values.idCliente}
                   options={clientes}
-                  onChange={(element) => setidCliente(element.value)}
+                  onChange={(element) => validationType.setFieldValue("idCliente", element.value)}
                   placeholder="Seleccione Cliente"
                   className="select2-selection"
                   isSearchable={true}
@@ -208,11 +207,34 @@ const Add = () => {
               </div>
               <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha de venta</Label>
-                <DateTimeInput name="datetimeventa" value={validationType.values.datetimeVenta} onDateTimeChange={validationType.handleChange} />
-                {validationType.touched.datetimeVenta &&
-                  validationType.errors.datetimeVenta ? (
+                <DateTimeInput name="fecha_venta" value={validationType.values.fecha_venta} onDateTimeChange={validationType.handleChange} />
+                {validationType.touched.fecha_venta &&
+                  validationType.errors.fecha_venta ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.datetimeVenta}
+                    {validationType.errors.fecha_venta}
+                  </FormFeedback>
+                ) : null}
+              </div>
+              <div className="mb-3 col-12 col-md-3">
+                <Label className="form-label">Numero de comprobante</Label>
+                <Input
+                  name="nro_comprobante"
+                  placeholder="Ingrese numero de comprobante"
+                  type="text"
+                  value={validationType.values.nro_comprobante || ""}
+                  onChange={validationType.handleChange}
+                  onBlur={validationType.handleBlur}
+                  invalid={
+                    validationType.touched.nro_comprobante &&
+                    validationType.errors.nro_comprobante
+                      ? true
+                      : false
+                  }
+                />
+                {validationType.touched.nro_comprobante &&
+                validationType.errors.nro_comprobante ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.nro_comprobante}
                   </FormFeedback>
                 ) : null}
               </div>

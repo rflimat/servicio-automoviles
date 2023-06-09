@@ -17,7 +17,7 @@ import { format } from 'date-fns'
 import CustomSelect from "../../../components/Common/CustomSelect";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { editSwal, errorSwal, successSwal } from "../../../components/Swal";
+import { editSwal, errorSwal, successSwal, customSwal } from "../../../components/Swal";
 import { get, put } from "../../../helpers/api_helper";
 
 const Edit = () => {
@@ -96,7 +96,22 @@ const Edit = () => {
           put(`${import.meta.env.VITE_API_URL}/ventas/${id}`, venta)
             .then((res) => {
               successSwal("venta", "actualizado").then(() => {
-                navigate("/ventas");
+                customSwal({
+                  confirmButton: "success",
+                  cancelButton: "secondary",
+                  title: "Actualizar comprobante para venta",
+                  text: "¿Esta seguro de actualizar comprobante para venta?",
+                  icon: "question",
+                  textConfirmButton: "Actualizar",
+                  textCancelButton: "Cancelar"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    let id = res.idComprobante;
+                    navigate(`/comprobante/generate?tipo=venta&id=${id}`);
+                  } else {
+                    navigate("/ventas");
+                  }
+                })
               });
             })
             .catch((err) => {
