@@ -11,33 +11,38 @@ import {
   Button,
 } from "reactstrap";
 
+/**
+   * Formats the size
+   */
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return "0 Bytes"
+  const k = 1024
+  const dm = decimals < 0 ? 0 : decimals
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+}
+
 const CustomDropzone = ({ selectedFiles, setselectedFiles, isHidden = false }) => {
   /* Upload files functions */
   function handleAcceptedFiles(files) {
-    files.map(file =>
-      Object.assign(file, {
+    files.forEach(file => {
+      const processedFile = Object.assign(file, {
         preview: URL.createObjectURL(file),
         formattedSize: formatBytes(file.size),
-      })
-    )
-    setselectedFiles(files)
+      });
+
+      // Verificar si el archivo ya existe en la lista de archivos seleccionados
+      const isDuplicate = selectedFiles.some(selectedFile => selectedFile.name === processedFile.name);
+      if (!isDuplicate) {
+        setselectedFiles(prevFiles => [...prevFiles, processedFile]);
+      }
+    });
   }
 
   function deleteFile(name) {
     setselectedFiles(files => files.filter(file => file.name !== name));
-  }
-
-  /**
-   * Formats the size
-   */
-  function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
   }
 
   return (
@@ -45,6 +50,9 @@ const CustomDropzone = ({ selectedFiles, setselectedFiles, isHidden = false }) =
       <Dropzone
         onDrop={(acceptedFiles) => {
           handleAcceptedFiles(acceptedFiles);
+        }}
+        accept={{
+          'image/*': ['.jpeg', '.jpg', '.png']
         }}
       >
         {({ getRootProps, getInputProps }) => (
@@ -86,7 +94,7 @@ const CustomDropzone = ({ selectedFiles, setselectedFiles, isHidden = false }) =
                       <strong>{f.formattedSize}</strong>
                     </p>
                   </Col>
-                  <Col xs={1}>
+                  <Col xs={1} hidden={isHidden}>
                     <Button
                       type="button"
                       color="danger"
@@ -107,3 +115,4 @@ const CustomDropzone = ({ selectedFiles, setselectedFiles, isHidden = false }) =
 };
 
 export default CustomDropzone;
+export { formatBytes };
