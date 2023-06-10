@@ -22,14 +22,14 @@ export async function get(url, config = {}) {
 export async function post(url, data, config = {}) {
   const token = authHeader();
   return axiosApi
-    .post(url, { ...data }, { ...config, headers: token })
+    .post(url, data, { ...config, headers: token })
     .then((response) => response.data);
 }
 
 export async function put(url, data, config = {}) {
   const token = authHeader();
   return axiosApi
-    .put(url, { ...data }, { ...config, headers: token })
+    .put(url, data, { ...config, headers: token })
     .then((response) => response.data);
 }
 
