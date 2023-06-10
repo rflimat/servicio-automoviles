@@ -49,12 +49,6 @@ class TrabajoController extends Controller
             $detalleTrabajo->costo = $trabajos['costo'];
             $detalleTrabajo->save();
         }
-        foreach ((array) $request->evidencias as $evidencias) {
-            $evidenciasTrabajo = new TrabajoEvidencia();
-            $evidenciasTrabajo->idTrabajo = $trabajo->id;
-            $evidenciasTrabajo->ruta = $evidencias['ruta'];
-            $evidenciasTrabajo->save();
-        }
         return $trabajo; // para prueba
     }
 
@@ -82,7 +76,7 @@ class TrabajoController extends Controller
             ->join('trabajos', 'trabajos.id', '=', 'detalle_trabajos.idTrabajo')
             ->where('idTrabajo', $id)
             ->get(); // busca los detalles asignados a un trabajo 
-        $trabajo->evidencias = TrabajoEvidencia::select('trabajo_evidencias.id', 'ruta')
+        $trabajo->evidencias = TrabajoEvidencia::select('trabajo_evidencias.id', 'ruta', 'size')
             ->join('trabajos', 'trabajos.id', '=', 'trabajo_evidencias.idTrabajo')
             ->where('idTrabajo', $id)
             ->get();
@@ -137,13 +131,16 @@ class TrabajoController extends Controller
             }
         }
 
-        foreach ((array) $request->evidencias as $evidencias) {
-            $evidenciasTrabajo = TrabajoEvidencia::where('idTrabajo', $id)
-                ->where('id', $evidencias['id'])
-                ->first();
-            $evidenciasTrabajo->ruta = $evidencias['ruta'];
-            $evidenciasTrabajo->save();
+        /* Eliminar evidencias que se borraron al actualizar */
+        $evidenciasTrabajo = TrabajoEvidencia::whereNotIn('id', $request->evidencias)->get();
+        $noEvidencias = $evidenciasTrabajo->pluck('ruta');
+        TrabajoEvidencia::whereNotIn('id', $request->evidencias)->delete();
+
+        foreach ($noEvidencias as $noEvidencia) {
+            $ruta = "/trabajos/". strval($id) . "/" . $noEvidencia;
+            Storage::disk('public')->delete($ruta);
         }
+
         return $trabajo; // para prueba
     }
 
@@ -154,38 +151,25 @@ class TrabajoController extends Controller
         $trabajo->eliminado = 1;
         $trabajo->save();
     }
-<<<<<<< HEAD
-
-    public function upload(Request $request) {
-        if($request->hasFile("file")){
-            $file = $request->file('file');
-            $ruta = '/trabajos/'. $request->id;
-            /*foreach (array($request->file) as $archivo) {
-                Storage::disk('local')->put($ruta, $archivo);
-            }*/
-        }
-        return 1;
-=======
-    /*
-    public function upload(Request $request, string $id ){
-        $ruta = '/trabajos/'. $id;
-        foreach ((array) $request->file as $archivo) {
-            Storage::disk('public')->put($ruta, $archivo);
-        }
-        return $ruta;
-    }
-    */
 
     public function upload(Request $request, string $id ){
-        $ruta = "/trabajos/". $id; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
-        foreach ( $request->file() as $namefile => $file ) { // recorre los archivos
-            $file->store($ruta, 'public');  // guarda el archivo en la ruta y en el disco publico
+        $ruta = "/trabajos/". $id . "/"; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
+
+        if ($request->hasFile('files')) {
+            foreach ( $request->file('files') as $namefile => $file ) { // recorre los archivos
+                $name = time() . "_" . $file->getClientOriginalName(); // Asignar nombre a archivo en el servidor
+                $size = $file->getSize(); //Obtener y asignar tamaño de archivo
+                Storage::disk('public')->put($ruta . $name, file_get_contents($file));  // guarda el archivo en la ruta y en el disco publico
+
+                $evidenciasTrabajo = new TrabajoEvidencia();
+                $evidenciasTrabajo->idTrabajo = $id;
+                $evidenciasTrabajo->ruta = $name;
+                $evidenciasTrabajo->size = $size;
+                $evidenciasTrabajo->save();
+            }
+            return response()->json(['message' => 'Files uploaded successfully']);
+        } else {
+            return response()->json(['message' => 'Error to uploaded']);
         }
-        /*
-        foreach ( $request as $archivo) {
-            return 
-            //Storage::disk('public')->put($ruta, $archivo);
-        }*/
->>>>>>> 9bdb04f19338d9fb82fb17beeb8768dfebcb5fb4
     }
 }

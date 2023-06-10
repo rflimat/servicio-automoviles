@@ -30,6 +30,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idTrabajo');
             $table->string('ruta');
+            $table->integer('size');
             $table->timestamps();
         });
 
