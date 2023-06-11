@@ -205,7 +205,7 @@ const SidebarContent = (props) => {
             </li>
             <li>
               <Link to="/trabajadores">
-              <i className='bx bxs-user'></i>
+              <i className='fa fa-users'></i>
                 <span>Trabajadores</span>
               </Link>
             </li>

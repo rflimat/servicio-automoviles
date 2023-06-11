@@ -300,7 +300,7 @@ const Header = props => {
                     </Col>
                     <Col>
                       <Link className="dropdown-icon-item" to="/trabajadores">
-                      <i className='bx bxs-user' style={{fontSize: 24}}></i>
+                      <i className='fa fa-users' style={{fontSize: 24}}></i>
                         <span>Trabajadores</span>
                       </Link>
                     </Col>
