@@ -204,10 +204,10 @@ const View = () => {
                       {producto.cantidad}
                     </td>
                     <td>
-                      {producto.precio}
+                      S/.{producto.precio}
                     </td>
                     <td>
-                      {producto.importe}
+                      S/.{producto.importe}
                     </td>
                    
                   </tr>

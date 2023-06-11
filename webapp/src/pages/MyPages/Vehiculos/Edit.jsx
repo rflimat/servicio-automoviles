@@ -85,7 +85,7 @@ const Edit = () => {
             if (result.isConfirmed) {
               put(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`, element)
                 .then((res) => {
-                  successSwal("producto", "actualizado").then(() => {
+                  successSwal("vehiculo", "actualizado").then(() => {
                     navigate("/vehiculos");
                   });
                 })
