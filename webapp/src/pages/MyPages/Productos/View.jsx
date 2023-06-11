@@ -137,21 +137,24 @@ const View = () => {
               </div>
               <div className="mb-3">
                 <Label className="form-label">Precio de Venta</Label>
-                <Input
-                  name="precio_venta"
-                  placeholder="Ingrese precio de venta"
-                  type="number"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.precio_venta || ""}
-                  invalid={
-                    validationType.touched.precio_venta &&
-                      validationType.errors.precio_venta
-                      ? true
-                      : false
-                  }
-                  readOnly
-                />
+                <div className="input-group">
+                  <span className="input-group-text" id="basic-addon1">S/.</span>
+                  <Input
+                    name="precio_venta"
+                    placeholder="Ingrese precio de venta"
+                    type="number"
+                    onChange={validationType.handleChange}
+                    onBlur={validationType.handleBlur}
+                    value={validationType.values.precio_venta || ""}
+                    invalid={
+                      validationType.touched.precio_venta &&
+                        validationType.errors.precio_venta
+                        ? true
+                        : false
+                    }
+                    readOnly
+                  />
+                </div>
                 {validationType.touched.precio_venta &&
                   validationType.errors.precio_venta ? (
                   <FormFeedback type="invalid">
