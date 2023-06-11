@@ -298,7 +298,14 @@ const Header = props => {
                         <span>Trabajos</span>
                       </Link>
                     </Col>
+                    <Col>
+                      <Link className="dropdown-icon-item" to="/trabajadores">
+                      <i className='bx bxs-user' style={{fontSize: 24}}></i>
+                        <span>Trabajadores</span>
+                      </Link>
+                    </Col>
                   </Row>
+                  
                 </div>
               </DropdownMenu>
             </Dropdown>

@@ -203,6 +203,12 @@ const SidebarContent = (props) => {
                 <span>Trabajos</span>
               </Link>
             </li>
+            <li>
+              <Link to="/trabajadores">
+              <i className='bx bxs-user'></i>
+                <span>Trabajadores</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </SimpleBar>

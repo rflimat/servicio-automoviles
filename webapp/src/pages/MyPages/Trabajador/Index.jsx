@@ -14,12 +14,12 @@ import {
 import { del, get, post, put } from "../../../helpers/api_helper.jsx";
 
 const Index = () => {
-    const [vehiculos, setVehiculos] = useState([]);
+    const [Trabajador, setTrabajador] = useState([]);
     const navigate = useNavigate();
 
     const getData = async () => {
-        const data = await get(`${import.meta.env.VITE_API_URL}/vehiculos`);
-        setVehiculos(data);
+        const data = await get(`${import.meta.env.VITE_API_URL}/trabajadores`);
+        setTrabajador(data);
     }
 
     useEffect(() => {
@@ -32,28 +32,20 @@ const Index = () => {
                 Header: "N°",
             },
             {
-                Header: "Cliente",
-                accessor: "nombreCliente",
+                Header: "Nombres",
+                accessor: "Nombres",
             },
             {
-                Header: "Placa",
-                accessor: "placa",
+                Header: "Apellidos",
+                accessor: "Apellidos",
             },
             {
-                Header: "Marca",
-                accessor: "marca",
+                Header: "Telefono",
+                accessor: "celular",
             },
             {
-                Header: "Año",
-                accessor: "anio",
-            },
-            {
-                Header: "Modelo",
-                accessor: "modelo",
-            },
-            {
-                Header: "Tipo",
-                accessor: "tipo_vehiculo",
+                Header: "Correo Electronico",
+                accessor: "correo",
             },           
             
             {
@@ -62,26 +54,14 @@ const Index = () => {
                 accessor: "id",
                 Cell: cellProps => {
                     return (
-                        <div style={{display: "flex", justifyContent: "center"}}>
-                            <Button
-                                type="button"
-                                color="success"
-                                className="btn-sm btn-rounded me-1"
-                                
-                                onClick={() => {
-                                    const id = cellProps.row.original.id;
-                                    navigate(`/vehiculos/view/${id}`);
-                                }}
-                            >
-                                <i className="far fa-eye"></i> 
-                            </Button>
+                        <div style={{display: "flex", justifyContent: "center"}}>                        
                             <Button
                                 type="button"
                                 color="info"
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    navigate(`/vehiculos/edit/${id}`);
+                                    navigate(`/trabajadores/edit/${id}`);
                                 }}
                             >
                                <i className='bx bxs-pencil' ></i>
@@ -92,11 +72,11 @@ const Index = () => {
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
                                     const id = cellProps.row.original.id;
-                                    deleteSwal("vehiculos").then((result) => {
+                                    deleteSwal("Trabajador").then((result) => {
                                         if (result.isConfirmed) {
-                                            del(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`)
+                                            del(`${import.meta.env.VITE_API_URL}/trabajadores/${id}`)
                                                 .then((res) => {
-                                                    successSwal("Vehiculo", "eliminado").then(() => {
+                                                    successSwal("Trabajador", "eliminado").then(() => {
                                                         getData();
                                                     });
                                                 })
@@ -119,22 +99,22 @@ const Index = () => {
 
     //meta title
     document.title =
-        "Vehiculos | Servicios Electricos Laser";
+        "Trabajadores | Servicios Electricos Laser";
 
     return (
         <div className="page-content">
             <div className="container-fluid">
-                <Breadcrumbs title="Vehiculos" breadcrumbItem="Vehiculos" />
+                <Breadcrumbs title="Trabajadores" breadcrumbItem="Trabajadores" />
                 
                 <TableContainer
                     columns={columns}
-                    data={vehiculos}
+                    data={Trabajador}
                     isGlobalFilter={true}
                     isAddOptions={true}
                     customPageSize={10}
                     addText="Nuevo"
                     handleAddClick={() => {
-                        navigate('/vehiculos/add');
+                        navigate('/trabajadores/add');
                     }}
                     className="custom-header-css"
                 />

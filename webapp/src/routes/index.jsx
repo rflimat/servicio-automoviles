@@ -54,6 +54,10 @@ import TrabajosAdd from "../pages/MyPages/Trabajos/Add";
 import TrabajosEdit from "../pages/MyPages/Trabajos/Edit";
 import TrabajosView from "../pages/MyPages/Trabajos/View";
 
+import Trabajador from "../pages/MyPages/Trabajador/Index";
+import TrabajadorAdd from "../pages/MyPages/Trabajador/Add";
+import TrabajadorEdit from "../pages/MyPages/Trabajador/Edit";
+
 import ComprobanteIndex from "../pages/MyPages/Comprobante/Index";
 
 const objUser = JSON.parse(localStorage.getItem("authUser"));
@@ -109,6 +113,11 @@ const authProtectedRoutes = [
   { path: "/trabajos/add", component: <TrabajosAdd /> },
   { path: "/trabajos/edit/:id", component: <TrabajosEdit /> },
   { path: "/trabajos/view/:id", component: <TrabajosView /> },
+
+   // Trabajador
+   { path: "/trabajadores", component: <Trabajador /> },
+   { path: "/trabajadores/add", component: <TrabajadorAdd /> },
+   { path: "/trabajadores/edit/:id", component: <TrabajadorEdit /> },
 
   // Comprobante
   { path: "/comprobante/generate", component: <ComprobanteIndex /> },
