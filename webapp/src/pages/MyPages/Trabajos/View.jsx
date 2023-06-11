@@ -271,7 +271,7 @@ const View = () => {
                         {format(new Date(trabajo.fecha_hora), "dd/MM/yyyy HH:mm:ss")}
                       </td>
                       <td>
-                        S/. {trabajo.costo}
+                        S/.{trabajo.costo}
                       </td>
                     </tr>
                   ))}

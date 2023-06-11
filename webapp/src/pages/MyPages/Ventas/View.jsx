@@ -158,10 +158,10 @@ const View = () => {
                       {producto.cantidadAct}
                     </td>
                     <td>
-                      S/. {producto.precio_venta.toFixed(2)}
+                      S/.{producto.precio_venta.toFixed(2)}
                     </td>
                     <td>
-                      S/. {producto.importe}
+                      S/.{producto.importe}
                     </td>
                    
                   </tr>

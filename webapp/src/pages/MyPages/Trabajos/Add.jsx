@@ -129,22 +129,26 @@ const Add = () => {
             let id = res.id;
             post(`${import.meta.env.VITE_API_URL}/trabajos/upload/${id}`, formData).then(() => {
               successSwal("trabajo", "agregado").then(() => {
-                customSwal({
-                  confirmButton: "success",
-                  cancelButton: "secondary",
-                  title: "Generar comprobante para trabajo",
-                  text: "¿Esta seguro de generar comprobante para trabajo?",
-                  icon: "question",
-                  textConfirmButton: "Generar",
-                  textCancelButton: "Cancelar"
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    let id = res.idComprobante;
-                    navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
-                  } else {
-                    navigate("/trabajos");
-                  }
-                })
+                if (trabajo.nro_comprobante) {
+                  customSwal({
+                    confirmButton: "success",
+                    cancelButton: "secondary",
+                    title: "Generar comprobante para trabajo",
+                    text: "¿Esta seguro de generar comprobante para trabajo?",
+                    icon: "question",
+                    textConfirmButton: "Generar",
+                    textCancelButton: "Cancelar"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      let id = res.idComprobante;
+                      navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
+                    } else {
+                      navigate("/trabajos");
+                    }
+                  })
+                } else {
+                  navigate("/trabajos");
+                }
               });
             }).catch((err) => {
               errorSwal(err);

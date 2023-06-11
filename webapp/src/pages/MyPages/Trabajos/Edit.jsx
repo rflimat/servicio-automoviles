@@ -37,6 +37,7 @@ const Edit = () => {
     problema_inicial: "",
     fecha_hora_ingreso: "",
     fecha_hora_salida: "",
+    nro_comprobante: "",
     costo: "",
     estado: ""
   });
@@ -110,6 +111,7 @@ const Edit = () => {
       fecha_hora_ingreso: element.fecha_hora_ingreso,
       fecha_hora_salida: element.fecha_hora_salida,
       costo: element.costo,
+      nro_comprobante: element.nro_comprobante,
       estado: element.estado == "Iniciado" ? "0" : "1",
     },
     validationSchema: Yup.object().shape({
@@ -140,22 +142,26 @@ const Edit = () => {
             .then((res) => {
               post(`${import.meta.env.VITE_API_URL}/trabajos/upload/${id}`, formData).then(() => {
                 successSwal("trabajo", "actualizado").then(() => {
-                  customSwal({
-                    confirmButton: "success",
-                    cancelButton: "secondary",
-                    title: "Actualizar comprobante para trabajo",
-                    text: "¿Esta seguro de actualizar comprobante para trabajo?",
-                    icon: "question",
-                    textConfirmButton: "Actualizar",
-                    textCancelButton: "Cancelar"
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      let id = res.idComprobante;
-                      navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
-                    } else {
-                      navigate("/trabajos");
-                    }
-                  });
+                  if (trabajo.nro_comprobante.length > 0) {
+                    customSwal({
+                      confirmButton: "success",
+                      cancelButton: "secondary",
+                      title: "Actualizar comprobante para trabajo",
+                      text: "¿Esta seguro de actualizar comprobante para trabajo?",
+                      icon: "question",
+                      textConfirmButton: "Actualizar",
+                      textCancelButton: "Cancelar"
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        let id = res.idComprobante;
+                        navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
+                      } else {
+                        navigate("/trabajos");
+                      }
+                    });
+                  } else {
+                    navigate("/trabajos");
+                  }
                 });
               }).catch((err) => {
                 errorSwal(err);
@@ -230,32 +236,37 @@ const Edit = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-6">
-                <Label className="form-label">
-                  Fecha y hora de fin de trabajo
-                </Label>
-                {estadoAnt && (
+
+              {estadoAnt && (
+                <div className="mb-3 col-12 col-md-6">
+                  <Label className="form-label">
+                    Fecha y hora de fin de trabajo
+                  </Label>
                   <Input
                     name="fecha_hora_salida"
                     value={validationType.values.fecha_hora_salida}
                     type="datetime-local"
                     readOnly
                   />
-                )}
-                {!estadoAnt && (
+                </div>
+              )}
+              {!estadoAnt && validationType.values.estado == "1" && (
+                <div className="mb-3 col-12 col-md-6">
+                  <Label className="form-label">
+                    Fecha y hora de fin de trabajo
+                  </Label>
                   <DateTimeInput
                     name="fecha_hora_salida"
                     value={validationType.values.fecha_hora_salida}
                     onDateTimeChange={validationType.handleChange}
                   />
-                )}
-                {validationType.touched.fecha_hora_salida &&
-                  validationType.errors.fecha_hora_salida ? (
-                  <FormFeedback type="invalid">
-                    {validationType.errors.fecha_hora_salida}
-                  </FormFeedback>
-                ) : null}
-              </div>
+                  {validationType.touched.fecha_hora_salida &&
+                    validationType.errors.fecha_hora_salida ? (
+                    <FormFeedback type="invalid">
+                      {validationType.errors.fecha_hora_salida}
+                    </FormFeedback>
+                  ) : null}
+                </div>)}
             </div>
 
             <div className="row">

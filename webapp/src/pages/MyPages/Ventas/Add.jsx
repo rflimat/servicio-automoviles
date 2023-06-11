@@ -34,7 +34,6 @@ const Add = () => {
   const [productoTemp, setProductoTemp] = useState({});
   const [cantidad, setCantidad] = useState(1);
   const [productosVenta, setProductosVenta] = useState([]);
-  const [idCliente, setidCliente] = useState(0);
   const navigate = useNavigate();
 
   const getClientes = async () => {
@@ -139,28 +138,31 @@ const Add = () => {
         costo_venta: productosVenta.reduce((total, producto) => total + producto.importe, 0),
         productosVenta
       }
-      console.log(venta)
       addSwal("ventas").then((result) => {
         if (result.isConfirmed) {
           post(`${import.meta.env.VITE_API_URL}/ventas`, venta)
             .then((res) => {
               successSwal("venta", "agregado").then(() => {
-                customSwal({
-                  confirmButton: "success",
-                  cancelButton: "secondary",
-                  title: "Generar comprobante para venta",
-                  text: "¿Esta seguro de generar comprobante para venta?",
-                  icon: "question",
-                  textConfirmButton: "Generar",
-                  textCancelButton: "Cancelar"
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    let id = res.idComprobante;
-                    navigate(`/comprobante/generate?tipo=venta&id=${id}`);
-                  } else {
-                    navigate("/ventas");
-                  }
-                })
+                if (venta.nro_comprobante) {
+                  customSwal({
+                    confirmButton: "success",
+                    cancelButton: "secondary",
+                    title: "Generar comprobante para venta",
+                    text: "¿Esta seguro de generar comprobante para venta?",
+                    icon: "question",
+                    textConfirmButton: "Generar",
+                    textCancelButton: "Cancelar"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      let id = res.idComprobante;
+                      navigate(`/comprobante/generate?tipo=venta&id=${id}`);
+                    } else {
+                      navigate("/ventas");
+                    }
+                  })
+                } else {
+                  navigate("/ventas");
+                }
               });
             })
             .catch((err) => {

@@ -34,6 +34,7 @@ const Edit = () => {
     hora: "",
     costo_venta: "",
     nombreCliente: "",
+    nro_comprobante: ""
   });
 
   const [productos, setProductos] = useState([]);
@@ -81,13 +82,15 @@ const Edit = () => {
       datetimeVenta: `${element.fecha} ${element.hora}`,
       datetimeVentaAct: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       cliente: element.nombreCliente,
+      nro_comprobante: element.nro_comprobante,
     },
     validationSchema: Yup.object().shape({
     }),
     onSubmit: (element) => {
       const venta = {
-        fecha_venta: element.datetimeVenta,
-        estado: element.estado,
+        ...element,
+        fecha: format(new Date(element.datetimeVentaAct), "yyyy-MM-dd"),
+        hora: format(new Date(element.datetimeVentaAct), "HH:mm:ss"),
         costo_venta: productosVenta.reduce((total, producto) => total + Number(producto.importe), 0),
         productosVenta
       }
@@ -96,22 +99,26 @@ const Edit = () => {
           put(`${import.meta.env.VITE_API_URL}/ventas/${id}`, venta)
             .then((res) => {
               successSwal("venta", "actualizado").then(() => {
-                customSwal({
-                  confirmButton: "success",
-                  cancelButton: "secondary",
-                  title: "Actualizar comprobante para venta",
-                  text: "¿Esta seguro de actualizar comprobante para venta?",
-                  icon: "question",
-                  textConfirmButton: "Actualizar",
-                  textCancelButton: "Cancelar"
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    let id = res.idComprobante;
-                    navigate(`/comprobante/generate?tipo=venta&id=${id}`);
-                  } else {
-                    navigate("/ventas");
-                  }
-                })
+                if (element.nro_comprobante.length > 0) {
+                  customSwal({
+                    confirmButton: "success",
+                    cancelButton: "secondary",
+                    title: "Actualizar comprobante para venta",
+                    text: "¿Esta seguro de actualizar comprobante para venta?",
+                    icon: "question",
+                    textConfirmButton: "Actualizar",
+                    textCancelButton: "Cancelar"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      let id = res.idComprobante;
+                      navigate(`/comprobante/generate?tipo=venta&id=${id}`);
+                    } else {
+                      navigate("/ventas");
+                    }
+                  })
+                } else {
+                  navigate("/ventas");
+                }
               });
             })
             .catch((err) => {
@@ -178,19 +185,10 @@ const Edit = () => {
               </div>
               <div className="mb-3 col-12 col-md-3">
                 <Label className="form-label">Fecha y hora de venta al actualizar</Label>
-                <Input
+                <DateTimeInput
                   name="datetimeVentaAct"
-                  type="datetime-local"
-                  onChange={validationType.handleChange}
-                  onBlur={validationType.handleBlur}
-                  value={validationType.values.datetimeVentaAct || ""}
-                  invalid={
-                    validationType.touched.datetimeVentaAct &&
-                      validationType.errors.datetimeVentaAct
-                      ? true
-                      : false
-                  }
-                  readOnly
+                  value={validationType.values.datetimeVentaAct}
+                  onDateTimeChange={validationType.handleChange}
                 />
                 {validationType.touched.datetimeVentaAct &&
                   validationType.errors.datetimeVentaAct ? (
