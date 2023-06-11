@@ -102,5 +102,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('comprobantes');
+        Schema::dropIfExists('tipos_servicio');
+        Schema::dropIfExists('metodos_pago');
     }
 };

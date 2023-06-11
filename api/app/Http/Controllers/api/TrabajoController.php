@@ -25,17 +25,23 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        if ($request->nro_comprobante) {
-            $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
-            if ($comprobante) {
-                $trabajo->idComprobante = $comprobante->id;
-            } else {
-                $nuevo_comprobante = new Comprobante();
-                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante;
-                $nuevo_comprobante->save();
-                $trabajo->idComprobante = $nuevo_comprobante->id;
-            }
+
+        $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
+        if ($comprobante) {
+            $trabajo->idComprobante = $comprobante->id;
+            $comprobante->idServicio = ($comprobante->idServicio == 2 && 3);
+        } else {
+            $nuevo_comprobante = new Comprobante();
+            $nuevo_comprobante->idServicio = 1; // Id de tipo de servicio de ventas
+            $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
+            $nuevo_comprobante->fecha_hora_creacion = $request->fecha_hora_ingreso;
+            $nuevo_comprobante->nro_comprobante = $request->nro_comprobante ? $request->nro_comprobante : "";
+            $nuevo_comprobante->estado = 0;
+            $nuevo_comprobante->eliminado = 0;
+            $nuevo_comprobante->save();
+            $trabajo->idComprobante = $nuevo_comprobante->id;
         }
+
         $trabajo->estado = $request->estado;
         $trabajo->eliminado = 0;
         $trabajo->save();
@@ -54,22 +60,25 @@ class TrabajoController extends Controller
 
     public function listar()
     {
-        $trabajos = Trabajo::select('trabajos.id', 'fecha_hora_ingreso', 'vehiculos.placa as vehiculo')
+        $trabajos = Trabajo::select('trabajos.id', 'vehiculos.placa as vehiculo')
+            ->selectRaw('DATE_FORMAT(fecha_hora_ingreso, "%d/%m/%Y %H:%i:%s") as fecha_hora_ingreso')
             ->selectRaw('CONCAT("S/. ", FORMAT(costo, 2)) as costo')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as cliente')
             ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS estado')
             ->join('vehiculos', 'vehiculos.id', '=', 'trabajos.idVehiculo')
             ->join('clientes', 'clientes.id', '=', 'vehiculos.cliente_id')
             ->where('eliminado', 0)
+            ->orderBy('fecha_hora_ingreso', 'desc')
             ->get();
         return $trabajos;
     }
 
     public function obtener(string $id)
     {
-        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial')
-            ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS estado')
-            ->where('id', $id)
+        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial', 'comprobantes.nro_comprobante')
+            ->selectRaw('IF(trabajos.estado >= 1, "Finalizado", "Iniciado") AS estado')
+            ->join('comprobantes', 'trabajos.idComprobante', '=', 'comprobantes.id')
+            ->where('trabajos.id', $id)
             ->first(); // busca el id de trabajo y lo retorna
         $trabajo->detalleTrabajo = DetalleTrabajo::select('detalle_trabajos.id', 'descripcion', 'fecha_hora')
             ->selectRaw('FORMAT(detalle_trabajos.costo, 2) as costo')
@@ -92,22 +101,6 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-        if ($request->nro_comprobante) {
-            $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante);
-            if ($comprobante) {
-                $trabajo->idComprobante = $comprobante;
-            } else {
-                $nuevo_comprobante = new Comprobante();
-                $nuevo_comprobante->idServicio = 1; // Id de tipo de servicio de trabajo
-                $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
-                $nuevo_comprobante->fecha_hora_creacion = $request->fecha_hora_ingreso;
-                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante;
-                $nuevo_comprobante->estado = 0;
-                $nuevo_comprobante->eliminado = 0;
-                $nuevo_comprobante->save();
-                $trabajo->idComprobante = $nuevo_comprobante->id;
-            }
-        }
         $trabajo->estado = $request->estado;
         $trabajo->save();
         //actualiza datos y los guarda con save
@@ -137,7 +130,7 @@ class TrabajoController extends Controller
         TrabajoEvidencia::whereNotIn('id', $request->evidencias)->delete();
 
         foreach ($noEvidencias as $noEvidencia) {
-            $ruta = "/trabajos/". strval($id) . "/" . $noEvidencia;
+            $ruta = "/trabajos/" . strval($id) . "/" . $noEvidencia;
             Storage::disk('public')->delete($ruta);
         }
 
@@ -152,11 +145,12 @@ class TrabajoController extends Controller
         $trabajo->save();
     }
 
-    public function upload(Request $request, string $id ){
-        $ruta = "/trabajos/". $id . "/"; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
+    public function upload(Request $request, string $id)
+    {
+        $ruta = "/trabajos/" . $id . "/"; // selecciona la ruta donde se guardara los trabajos de acuerdo al id de un trabajo
 
         if ($request->hasFile('files')) {
-            foreach ( $request->file('files') as $namefile => $file ) { // recorre los archivos
+            foreach ($request->file('files') as $namefile => $file) { // recorre los archivos
                 $name = time() . "_" . $file->getClientOriginalName(); // Asignar nombre a archivo en el servidor
                 $size = $file->getSize(); //Obtener y asignar tamaño de archivo
                 Storage::disk('public')->put($ruta . $name, file_get_contents($file));  // guarda el archivo en la ruta y en el disco publico
