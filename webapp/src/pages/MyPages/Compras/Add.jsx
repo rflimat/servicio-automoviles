@@ -45,7 +45,7 @@ const Add = () => {
       let { id, nombre } = element;
       return {
         label: nombre,
-        value: id
+        value: `${id}`
       }
     })
     setProveedores(optionsProveedores);
@@ -61,7 +61,7 @@ const Add = () => {
           nombre
         },
         label: `${codigo} => ${nombre}`,
-        value: id
+        value: `${id}`
       }
     })
     setProductos(optionsProductos);

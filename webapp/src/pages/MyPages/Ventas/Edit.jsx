@@ -229,7 +229,7 @@ const Edit = () => {
                       </td>
                       <td>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          S/.{producto.precio_venta.toFixed(2)}
+                          S/.{producto.precio_venta}
                         </div>
                       </td>
                       <td>

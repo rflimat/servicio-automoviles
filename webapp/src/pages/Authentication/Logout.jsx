@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import withRouter from "../../components/Common/withRouter";
 import { useNavigate } from "react-router-dom";
-import { postJwtLogout } from "../../helpers/fakebackend_helper";
+import { post } from "../../helpers/api_helper.jsx";
 
 const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    postJwtLogout({}).then(() => {
+    post(`${import.meta.env.VITE_API_URL}/logout`, {}).then(() => {
     localStorage.removeItem("authUser");
     navigate('/login');
     }).catch(() => {

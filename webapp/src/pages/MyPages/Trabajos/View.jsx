@@ -46,7 +46,7 @@ const View = () => {
       let { id, Nombres, Apellidos } = element;
       return {
         label: `${Nombres} ${Apellidos}`,
-        value: id
+        value: `${id}`
       }
     })
     setTrabajadores(optionsTrabajadores);
@@ -58,7 +58,7 @@ const View = () => {
       let { id, placa } = element;
       return {
         label: `${placa}`,
-        value: id
+        value: `${id}`
       }
     })
     setVehiculos(optionsVehiculos);

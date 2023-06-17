@@ -58,7 +58,7 @@ const Edit = () => {
       let { id, Nombres, Apellidos } = element;
       return {
         label: `${Nombres} ${Apellidos}`,
-        value: id
+        value: `${id}`
       }
     })
     setTrabajadores(optionsTrabajadores);
@@ -70,7 +70,7 @@ const Edit = () => {
       let { id, placa } = element;
       return {
         label: `${placa}`,
-        value: id
+        value: `${id}`
       }
     })
     setVehiculos(optionsVehiculos);
@@ -87,6 +87,7 @@ const Edit = () => {
   const addTrabajo = (e) => {
     e.preventDefault();
     let trabajo = {
+      index: detalleTrabajo.length + 1,
       descripcion: descripcionTrabajo,
       fecha_hora: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       costo: costoTrabajo

@@ -68,7 +68,8 @@ class VentaController extends Controller
             ->join('comprobantes', 'ventas.idComprobante', '=', 'comprobantes.id')
             ->where('idComprobante', $id)
             ->first();
-        $venta->productosVenta = Venta::select('ventas.id as idVenta', 'productos.id', 'productos.nombre', 'productos.cantidad', 'ventas.cantidad as cantidadAct', 'productos.precio_venta', 'ventas.importe')
+        $venta->productosVenta = Venta::select('ventas.id as idVenta', 'productos.id', 'productos.nombre', 'productos.cantidad', 'ventas.cantidad as cantidadAct', 'ventas.importe')
+            ->selectRaw('FORMAT(productos.precio_venta, 2) as precio_venta')
             ->join('productos', 'ventas.idProducto', '=', 'productos.id')
             ->where('idComprobante', $id)->get();
         $venta->costo_venta = Venta::where('idComprobante', '=', $id)->sum('importe');

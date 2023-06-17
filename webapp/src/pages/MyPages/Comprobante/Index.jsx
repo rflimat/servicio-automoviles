@@ -151,9 +151,9 @@ const Index = () => {
                 value={validationType.values.idMetodo_pago}
                 onChange={element => validationType.setFieldValue("idMetodo_pago", element.value)}
                 options={[
-                  { label: "Boleta", value: 1 },
-                  { label: "Factura", value: 2 },
-                  { label: "Convencional", value: 3 },
+                  { label: "Boleta", value: "1" },
+                  { label: "Factura", value: "2" },
+                  { label: "Convencional", value: "3" },
                 ]}
                 placeholder="Seleccione metodo de pago"
                 className="select2-selection"
@@ -195,8 +195,8 @@ const Index = () => {
                   validationType.setFieldValue("estado", element.value)
                 }
                 options={[
-                  { label: "Registrado", value: 0 },
-                  { label: "Cancelado", value: 1 },
+                  { label: "Registrado", value: "0" },
+                  { label: "Cancelado", value: "1" },
                 ]}
                 placeholder="Seleccione estado"
                 className="select2-selection"

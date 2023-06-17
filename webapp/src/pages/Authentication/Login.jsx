@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import withRouter from "../../components/Common/withRouter";
-
-import {
-  postJwtLogin,
-} from "../../helpers/fakebackend_helper.jsx";
+import { post } from "../../helpers/api_helper.jsx";
 
 // Formik validation
 import * as Yup from "yup";
@@ -48,14 +45,14 @@ const Login = (props) => {
       password: Yup.string().required("Ingrese su contraseña"),
     }),
     onSubmit: async (values) => {
-      const response = await postJwtLogin({
+      const response = await post(`${import.meta.env.VITE_API_URL}/login`, {
         username: values.username,
         password: values.password,
-      })
+      });
       if (typeof response == "object") {
         localStorage.setItem("authUser", JSON.stringify(response));
-        //navigate('/dashboard');
-        navigate('/productos');
+        //window.location.pathname = '/dashboard';
+        window.location.pathname = '/productos';
       } else {
         setError("Usuario o contraseñas incorrectas");
         console.error(response);

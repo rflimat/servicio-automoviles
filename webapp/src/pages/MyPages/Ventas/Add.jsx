@@ -42,7 +42,7 @@ const Add = () => {
       let { id, Nombres, Apellidos } = element;
       return {
         label: `${Nombres} ${Apellidos}`,
-        value: id
+        value: `${id}`
       }
     })
     setClientes(optionsClientes);
@@ -60,7 +60,7 @@ const Add = () => {
           precio_venta
         },
         label: `${codigo} => ${nombre}`,
-        value: id
+        value: `${id}`
       }
     })
     setProductos(optionsProductos);
@@ -76,7 +76,7 @@ const Add = () => {
     if (!productosVenta.find((element) => element.idProducto == producto.id)) {
       producto.index = productosVenta.length + 1;
       producto.cantidadAct = Number(cantidad);
-      producto.importe = cantidad * Number(producto.precio_venta);
+      producto.importe = Number(cantidad) * Number(producto.precio_venta);
       setProductosVenta([...productosVenta, producto]);
       setCantidad(1);
     } else {
@@ -313,7 +313,7 @@ const Add = () => {
                           <Input
                             name="precio"
                             type="text"
-                            value={producto.precio_venta.toFixed(2)}
+                            value={producto.precio_venta}
                             onChange={(e) => handleChangeProducto(index, "precio_venta", e.target.value)}
                             style={tdStyles}
                           />
