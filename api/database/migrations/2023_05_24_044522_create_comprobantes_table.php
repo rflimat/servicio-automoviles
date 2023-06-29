@@ -45,7 +45,7 @@ return new class extends Migration
             create trigger insert_venta_para_comprobante after insert on ventas for each row
             begin
                 update comprobantes
-                set costo_total = costo_total + new.importe
+                set costo_total = costo_total + new.total_importe
                 where comprobantes.id =new.idComprobante;
             end;
         ');
@@ -72,7 +72,7 @@ return new class extends Migration
             begin
                 if new.idComprobante = old.idComprobante then
                     update comprobantes
-                    set costo_total = costo_total - old.importe + new.importe
+                    set costo_total = costo_total - old.total_importe + new.total_importe
                     where comprobantes.id =new.idComprobante;
                 end if;
             end;
@@ -81,7 +81,7 @@ return new class extends Migration
             create trigger delete_venta_para_comprobante after delete on ventas for each row
             begin
                 update comprobantes
-                set costo_total = costo_total - old.importe
+                set costo_total = costo_total - old.total_importe
                 where comprobantes.id =old.idComprobante;
             end;
         ');

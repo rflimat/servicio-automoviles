@@ -16,21 +16,41 @@ return new class extends Migration
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
             $table->unsignedinteger('idCliente');
-            $table->unsignedInteger('idProducto');
+            //$table->unsignedInteger('idProducto');
             $table->integer('cantidad');
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
             $table->integer('estado')->nullable();
             $table->unsignedInteger('idComprobante')->nullable();
+            $table->decimal('total_importe')->default(0);
+            $table->timestamps();
+
+        });
+
+        Schema::create('detalle_ventas', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('idVenta');
+            $table->unsignedInteger('idProducto');
+            $table->integer('cantidad')->default(0);
+            $table->string('descripcion')->nullable();
             $table->decimal('importe')->default(0);
             $table->timestamps();
 
         });
+        // cuando se agrega un detalle ventas
         DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_producto_en_venta');
         DB::unprepared(' 
-            CREATE TRIGGER actualizar_stock_producto_en_venta BEFORE INSERT ON ventas FOR EACH ROW 
+            CREATE TRIGGER actualizar_stock_producto_en_venta BEFORE INSERT ON detalle_ventas FOR EACH ROW 
             BEGIN 
                 UPDATE productos SET productos.cantidad=productos.cantidad-NEW.cantidad WHERE productos.id=NEW.idProducto;
+            END;
+        ');
+        // cuando se hace un update de detalle ventas
+        DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_producto_en_venta2');
+        DB::unprepared(' 
+            CREATE TRIGGER actualizar_stock_producto_en_venta2 BEFORE UPDATE ON detalle_ventas FOR EACH ROW 
+            BEGIN
+                UPDATE productos SET productos.cantidad=productos.cantidad-NEW.cantidad+OLD.cantidad WHERE productos.id=NEW.idProducto;
             END;
         ');
         

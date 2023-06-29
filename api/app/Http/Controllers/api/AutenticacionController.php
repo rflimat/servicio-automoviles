@@ -19,7 +19,7 @@ class AutenticacionController extends Controller
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
             $cookie = cookie('cookie_token', $token, 60*24);
-            return response(["token"=>$token, "id"=>$user->id, "username"=>$user->name, "tipo"=>$user->tipo], Response::HTTP_OK)->withoutCookie($cookie);
+            return response(["token"=>$token, "id"=>$user->id, "username"=>$user->username, "name"=>$user->name], Response::HTTP_OK)->withoutCookie($cookie);
         }else{
             return response(Response::HTTP_UNAUTHORIZED);
         }
