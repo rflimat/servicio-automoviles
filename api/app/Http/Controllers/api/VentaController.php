@@ -39,7 +39,6 @@ class VentaController extends Controller
             $venta->idComprobante = $nuevo_comprobante->id;
         }
 
-        $venta->save();
 
         foreach($request->productosVenta as $productoVendido) {
             $detalleVenta = new DetalleVenta();
@@ -50,7 +49,8 @@ class VentaController extends Controller
             $detalleVenta->importe = $productoVendido['importe'];
             $detalleVenta->save();
         }
-
+        
+        $venta->save();
         return response()->json($venta->id);
     }
 
