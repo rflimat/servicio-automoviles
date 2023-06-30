@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Comprobante;
 use App\Models\DetalleVenta;
+use App\Models\Producto;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 
@@ -17,6 +18,22 @@ class VentaController extends Controller
             //'idCliente' => 'required|exists:clientes,id',
             'idProducto' => 'required|exists:productos,id',
         ]);*/
+
+        // validaciones
+        $ids = [];
+        foreach($request->productosVenta as $clave) {
+            if(in_array($clave['idProducto'],$ids)){ // si es que el id se encuentra
+                return response()->json(['message' => 'Error: Existen productos iguales']);
+            }else{
+                $ids[] = $clave['idProducto'];
+                $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
+                if($ProductosExistentes->cantidad - $clave['cantidad'] <0){
+                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente']);
+                }
+            }
+        }
+
+
         $venta = new Venta();
         $venta->idCliente = $request->idCliente;
         $venta->cantidad = $request->cantidad;
@@ -39,7 +56,7 @@ class VentaController extends Controller
             $venta->idComprobante = $nuevo_comprobante->id;
         }
 
-
+        $venta->save();
         foreach($request->productosVenta as $productoVendido) {
             $detalleVenta = new DetalleVenta();
             $detalleVenta->idVenta = $venta->id;
@@ -50,7 +67,6 @@ class VentaController extends Controller
             $detalleVenta->save();
         }
         
-        $venta->save();
         return response()->json($venta->id);
     }
 
@@ -69,13 +85,13 @@ class VentaController extends Controller
     // es id de la venta
     public function obtener(string $id)
     {
-        $venta = Venta::select('idCliente', 'fecha', 'hora', 'idComprobante', 'comprobantes.nro_comprobante','total_importe')
+        $venta = Venta::select('idCliente', 'fecha', 'hora', 'idComprobante', 'comprobantes.nro_comprobante','total_importe','cantidad')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as nombreCliente')
             ->join('clientes', 'ventas.idCliente', '=', 'clientes.id')
             ->join('comprobantes', 'ventas.idComprobante', '=', 'comprobantes.id')
             ->where('ventas.id', $id)
             ->first();
-        $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe')
+        $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe','detalle_ventas.descripcion')
             ->selectRaw('FORMAT(productos.precio_venta, 2) as precio_venta')
             ->join('productos', 'detalle_ventas.idProducto', '=', 'productos.id')
             ->where('idVenta', $id)->get();
@@ -84,6 +100,16 @@ class VentaController extends Controller
 
     public function actualizar(Request $request, string $id)
     { // cambiar
+        // evita que existan los productos en cantidades negativas
+        foreach($request->productosVenta as $clave) {
+            $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
+            $detalleActual = DetalleVenta::where('idVenta', $id)
+            ->where('idProducto', $clave['idProducto'])
+            ->first();
+            if(($ProductosExistentes->cantidad - $clave['CantidadVenta'] +$detalleActual->cantidad) <0){
+                return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente']);
+            }
+        }
         $venta = Venta::findOrFail($id);
         $venta->idCliente = $request->idCliente;
         $venta->cantidad = $request->cantidad;
@@ -97,7 +123,7 @@ class VentaController extends Controller
             ->first();
             if ($detalleVenta) {
                 $detalleVenta->idProducto = $productoVendido['idProducto'];
-                $detalleVenta->cantidad = $productoVendido['cantidad'];
+                $detalleVenta->cantidad = $productoVendido['CantidadVenta'];
                 $detalleVenta->descripcion = $productoVendido['descripcion'];
                 $detalleVenta->importe = $productoVendido['importe'];
                 $detalleVenta->save();
