@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedinteger('idCliente');
             //$table->unsignedInteger('idProducto');
-            $table->integer('cantidad');
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
             $table->integer('estado')->nullable();

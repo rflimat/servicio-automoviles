@@ -29,7 +29,9 @@ class TrabajoController extends Controller
         $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
         if ($comprobante) {
             $trabajo->idComprobante = $comprobante->id;
-            $comprobante->idServicio = ($comprobante->idServicio == 2 && 3);
+            //$comprobante->idServicio = ($comprobante->idServicio == 2 && 3);
+            $comprobante->idServicio = 3;
+            $comprobante->save();
         } else {
             $nuevo_comprobante = new Comprobante();
             $nuevo_comprobante->idServicio = 1; // Id de tipo de servicio de ventas

@@ -36,14 +36,15 @@ class VentaController extends Controller
 
         $venta = new Venta();
         $venta->idCliente = $request->idCliente;
-        $venta->cantidad = $request->cantidad;
         $venta->total_importe = $request->total_importe;
         $venta->estado = 1; // 1 quiere decir que no esta eliminado
         
         $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
         if ($comprobante) {
             $venta->idComprobante = $comprobante->id;
-            $comprobante->idServicio = ($comprobante->idServicio == 1 && 3);
+            //$comprobante->idServicio = ($comprobante->idServicio == 1 && 3);
+            $comprobante->idServicio = 3;
+            $comprobante->save();
         } else {
             $nuevo_comprobante = new Comprobante();
             $nuevo_comprobante->idServicio = 2; // Id de tipo de servicio de ventas
@@ -85,7 +86,7 @@ class VentaController extends Controller
     // es id de la venta
     public function obtener(string $id)
     {
-        $venta = Venta::select('idCliente', 'fecha', 'hora', 'idComprobante', 'comprobantes.nro_comprobante','total_importe','cantidad')
+        $venta = Venta::select('idCliente', 'fecha', 'hora', 'idComprobante', 'comprobantes.nro_comprobante','total_importe')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as nombreCliente')
             ->join('clientes', 'ventas.idCliente', '=', 'clientes.id')
             ->join('comprobantes', 'ventas.idComprobante', '=', 'comprobantes.id')
@@ -112,7 +113,6 @@ class VentaController extends Controller
         }
         $venta = Venta::findOrFail($id);
         $venta->idCliente = $request->idCliente;
-        $venta->cantidad = $request->cantidad;
         $venta->estado = 1; // 1 quiere decir que no esta eliminado
         $venta->total_importe = $request->total_importe;
         $venta->save();
