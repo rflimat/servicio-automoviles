@@ -94,7 +94,7 @@ class TrabajoController extends Controller
             ->selectRaw('DATE_FORMAT(fecha_hora_ingreso, "%d/%m/%Y %H:%i:%s") as fecha_hora_ingreso')
             ->selectRaw('CONCAT("S/. ", FORMAT(costo, 2)) as costo')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as cliente')
-            ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS situacion_estado')
+            ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS estado')
             ->join('vehiculos', 'vehiculos.id', '=', 'trabajos.idVehiculo')
             ->join('clientes', 'clientes.id', '=', 'vehiculos.cliente_id')
             ->where('eliminado', 0)
@@ -105,8 +105,8 @@ class TrabajoController extends Controller
 
     public function obtener(string $id)
     {
-        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial','costo','estado')
-            ->selectRaw('IF(trabajos.estado >= 1, "Finalizado", "Iniciado") AS situacion_estado')
+        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial','costo',)
+            ->selectRaw('IF(trabajos.estado >= 1, "Finalizado", "Iniciado") AS estado')
             ->where('trabajos.id', $id)
             ->first(); // busca el id de trabajo y lo retorna
         $trabajo->detalleTrabajo = DetalleTrabajo::select('detalle_trabajos.id', 'descripcion', 'fecha_hora')
