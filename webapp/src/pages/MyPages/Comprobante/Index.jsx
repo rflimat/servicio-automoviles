@@ -37,7 +37,7 @@ const Index = () => {
       },
       {
         Header: "Cliente",
-        accessor: "nombreCliente",
+        accessor: "cliente",
       },
       {
         Header: "Fecha creacion",

@@ -45,6 +45,7 @@ const View = () => {
       fecha_hora_cancelacion: element.fecha_hora_cancelacion,
       idMetodo_pago: element.idMetodo_pago,
       nro_comprobante: element.nro_comprobante,
+      cliente: element.cliente,
       estado: element.estado,
       costo_total: element.costo_total,
     },
@@ -61,8 +62,8 @@ const View = () => {
     const getById = async () => {
       const data = await get(`${import.meta.env.VITE_API_URL}/comprobantes/${id}`);
       setElement(data);
-      setProductosVenta(data.ventas[0].productosVenta);
-      setDetalleTrabajo(data.trabajos[0].detalleTrabajo);
+      setProductosVenta(data.productosVenta);
+      setDetalleTrabajo(data.detalleTrabajo);
       let estadoAnt = data.estado == 0 ? false : true;
       setEstadoAnt(estadoAnt);
     }
@@ -207,30 +208,54 @@ const View = () => {
               </div>
             </div>
             
-            <div className="mb-3">
-              <Label className="form-label">Costo total</Label>
-              <div className="input-group">
-                <span className="input-group-text" id="basic-addon1">S/.</span>
+            <div className="row">
+              <div className="col-12 col-md-6 mb-3">
+                <Label className="form-label">Cliente</Label>
                 <Input
-                  name="costo_total"
-                  placeholder="Ingrese costo total"
+                  name="cliente"
+                  placeholder="Ingrese nombre cliente"
                   type="text"
-                  value={validationType.values.costo_total || ""}
+                  value={validationType.values.cliente || ""}
                   invalid={
-                    validationType.touched.costo_total &&
-                      validationType.errors.costo_total
+                    validationType.touched.cliente &&
+                      validationType.errors.cliente
                       ? true
                       : false
                   }
                   readOnly
                 />
+                {validationType.touched.cliente &&
+                  validationType.errors.cliente ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.cliente}
+                  </FormFeedback>
+                ) : null}
               </div>
-              {validationType.touched.costo_total &&
-                validationType.errors.costo_total ? (
-                <FormFeedback type="invalid">
-                  {validationType.errors.costo_total}
-                </FormFeedback>
-              ) : null}
+              <div className="col-12 col-md-6 mb-3">
+                <Label className="form-label">Costo total</Label>
+                <div className="input-group">
+                  <span className="input-group-text" id="basic-addon1">S/.</span>
+                  <Input
+                    name="costo_total"
+                    placeholder="Ingrese costo total"
+                    type="text"
+                    value={validationType.values.costo_total || ""}
+                    invalid={
+                      validationType.touched.costo_total &&
+                        validationType.errors.costo_total
+                        ? true
+                        : false
+                    }
+                    readOnly
+                  />
+                </div>
+                {validationType.touched.costo_total &&
+                  validationType.errors.costo_total ? (
+                  <FormFeedback type="invalid">
+                    {validationType.errors.costo_total}
+                  </FormFeedback>
+                ) : null}
+              </div>
             </div>
 
             { productosVenta.length > 0 && (
@@ -258,7 +283,7 @@ const View = () => {
                             {producto.cantidad}
                           </td>
                           <td>
-                            S/.{producto.precio_venta}
+                            S/.{producto.precio_venta.toFixed(2)}
                           </td>
                           <td>
                             S/.{producto.importe}

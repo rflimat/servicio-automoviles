@@ -46,7 +46,7 @@ const Generate = () => {
       fecha_hora_cancelacion: element.fecha_hora_cancelacion,
       idMetodo_pago: element.idMetodo_pago,
       nro_comprobante: element.nro_comprobante,
-      nombreCliente: "",
+      cliente: element.cliente,
       estado: element.estado,
       costo_total: element.costo_total,
     },
@@ -81,8 +81,8 @@ const Generate = () => {
     const getById = async () => {
       const data = await get(`${import.meta.env.VITE_API_URL}/comprobantes/${id}`);
       setElement(data);
-      setProductosVenta(data.ventas[0].productosVenta);
-      setDetalleTrabajo(data.trabajos[0].detalleTrabajo);
+      setProductosVenta(data.productosVenta);
+      setDetalleTrabajo(data.detalleTrabajo);
       let estadoAnt = data.estado == 0 ? false : true;
       setEstadoAnt(estadoAnt);
     }
@@ -100,7 +100,7 @@ const Generate = () => {
         <Container fluid={true}>
           <Breadcrumbs
             title="Comprobante"
-            breadcrumbItem="Generar Comprobante"
+            breadcrumbItem="Editar Comprobante"
           />
 
           <Form
@@ -235,22 +235,22 @@ const Generate = () => {
               <div className="col-12 col-md-6 mb-3">
                 <Label className="form-label">Cliente</Label>
                 <Input
-                  name="nombreCliente"
+                  name="cliente"
                   placeholder="Ingrese nombre cliente"
                   type="text"
-                  value={validationType.values.nombreCliente || ""}
+                  value={validationType.values.cliente || ""}
                   invalid={
-                    validationType.touched.nombreCliente &&
-                      validationType.errors.nombreCliente
+                    validationType.touched.cliente &&
+                      validationType.errors.cliente
                       ? true
                       : false
                   }
                   readOnly
                 />
-                {validationType.touched.nombreCliente &&
-                  validationType.errors.nombreCliente ? (
+                {validationType.touched.cliente &&
+                  validationType.errors.cliente ? (
                   <FormFeedback type="invalid">
-                    {validationType.errors.nombreCliente}
+                    {validationType.errors.cliente}
                   </FormFeedback>
                 ) : null}
               </div>
@@ -306,7 +306,7 @@ const Generate = () => {
                             {producto.cantidad}
                           </td>
                           <td>
-                            S/.{producto.precio_venta}
+                            S/.{producto.precio_venta.toFixed(2)}
                           </td>
                           <td>
                             S/.{producto.importe}
