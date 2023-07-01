@@ -32,32 +32,55 @@ class VentaController extends Controller
                 }
             }
         }
-
+        if($request->nro_comprobante){
+            $comprobante = Comprobante::select('idVenta')->where('nro_comprobante', $request->nro_comprobante)->first();
+            if($comprobante && $comprobante->idVenta != NULL){
+                // si es que el campo esa ocupado lanza un mensaje de error
+                return response()->json(['message' => 'Error: Comprobante ya esta asociado a una venta'],404);
+            }
+        }
+         // fin validaciones
 
         $venta = new Venta();
         $venta->idCliente = $request->idCliente;
         $venta->total_importe = $request->total_importe;
         $venta->estado = 1; // 1 quiere decir que no esta eliminado
-        
-        $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
-        if ($comprobante) {
-            $venta->idComprobante = $comprobante->id;
-            //$comprobante->idServicio = ($comprobante->idServicio == 1 && 3);
-            $comprobante->idServicio = 3;
-            $comprobante->save();
-        } else {
+        $venta->save();
+
+        if($request->nro_comprobante){
+            // Si es que se envia el nro de comprobante entonces busca un comprobante con el mismo numero para asociarlo
+            $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
+            if($comprobante){
+                // si es que el campo de comprobante sta vacio entonces se agrega el id de la venta
+                    $comprobante->idVenta = $venta->id;
+                    $comprobante->idServicio = $comprobante->idServicio = 1 ? 3 : 2;
+                    $comprobante->save();
+            }else{
+                // en el caso de que se envia un numero de comprobante y no se encuentra se crea uno
+                $nuevo_comprobante = new Comprobante();
+                $nuevo_comprobante->idServicio = 2; // Id de tipo de servicio de ventas
+                $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
+                $nuevo_comprobante->fecha_hora_creacion = now();
+                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante; 
+                $nuevo_comprobante->estado = 0;
+                $nuevo_comprobante->eliminado = 0;
+                $nuevo_comprobante->idVenta = $venta->id;
+                $nuevo_comprobante->save();
+            }
+
+        }else{
+            // caso de que no se envia un comprobante solo se crea uno con un numero null
             $nuevo_comprobante = new Comprobante();
             $nuevo_comprobante->idServicio = 2; // Id de tipo de servicio de ventas
             $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
-            $nuevo_comprobante->fecha_hora_creacion = $request->fecha_venta;
-            $nuevo_comprobante->nro_comprobante = $request->nro_comprobante ? $request->nro_comprobante : "";
+            $nuevo_comprobante->fecha_hora_creacion = now();
+            $nuevo_comprobante->nro_comprobante = NULL; 
             $nuevo_comprobante->estado = 0;
             $nuevo_comprobante->eliminado = 0;
+            $nuevo_comprobante->idVenta = $venta->id;
             $nuevo_comprobante->save();
-            $venta->idComprobante = $nuevo_comprobante->id;
         }
 
-        $venta->save();
         foreach($request->productosVenta as $productoVendido) {
             $detalleVenta = new DetalleVenta();
             $detalleVenta->idVenta = $venta->id;
@@ -73,7 +96,7 @@ class VentaController extends Controller
 
     public function listar()
     {
-        $venta = Venta::select('ventas.id','ventas.idComprobante', 'idCliente', 'hora','total_importe')
+        $venta = Venta::select('ventas.id', 'idCliente', 'hora','total_importe')
             ->selectRaw('DATE_FORMAT(fecha, "%d/%m/%Y") as fecha')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as nombreCliente')
             ->join('clientes', 'ventas.idCliente', '=', 'clientes.id')
@@ -85,10 +108,9 @@ class VentaController extends Controller
     // es id de la venta
     public function obtener(string $id)
     {
-        $venta = Venta::select('idCliente', 'fecha', 'hora', 'idComprobante', 'comprobantes.nro_comprobante','total_importe')
+        $venta = Venta::select('idCliente', 'fecha', 'hora','total_importe')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as nombreCliente')
             ->join('clientes', 'ventas.idCliente', '=', 'clientes.id')
-            ->join('comprobantes', 'ventas.idComprobante', '=', 'comprobantes.id')
             ->where('ventas.id', $id)
             ->first();
         $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe')

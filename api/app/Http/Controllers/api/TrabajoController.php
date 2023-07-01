@@ -15,9 +15,22 @@ class TrabajoController extends Controller
 {
     public function registrar(Request $request)
     {
+        /*
         $request->validate([
             //'idTrabajador' => 'required|exists:trabajadors,id',
         ]);
+        */
+
+        // validaciones
+        if($request->nro_comprobante){
+            $comprobante = Comprobante::select('idTrabajo')->where('nro_comprobante', $request->nro_comprobante)->first();
+            if($comprobante && $comprobante->idTrabajo != NULL){
+                // si es que el campo esa ocupado lanza un mensaje de error
+                return response()->json(['message' => 'Error: Comprobante ya esta asociado a un trabajo'],404);
+            }
+        }
+        // fin validacoines
+
         $trabajo = new Trabajo();
         $trabajo->idTrabajador = $request->idTrabajador;
         $trabajo->idVehiculo = $request->idVehiculo;
@@ -25,28 +38,43 @@ class TrabajoController extends Controller
         $trabajo->fecha_hora_ingreso = $request->fecha_hora_ingreso;
         $trabajo->fecha_hora_salida = $request->fecha_hora_salida;
         $trabajo->costo = $request->costo;
-
-        $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
-        if ($comprobante) {
-            $trabajo->idComprobante = $comprobante->id;
-            //$comprobante->idServicio = ($comprobante->idServicio == 2 && 3);
-            $comprobante->idServicio = 3;
-            $comprobante->save();
-        } else {
-            $nuevo_comprobante = new Comprobante();
-            $nuevo_comprobante->idServicio = 1; // Id de tipo de servicio de ventas
-            $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
-            $nuevo_comprobante->fecha_hora_creacion = $request->fecha_hora_ingreso;
-            $nuevo_comprobante->nro_comprobante = $request->nro_comprobante ? $request->nro_comprobante : "";
-            $nuevo_comprobante->estado = 0;
-            $nuevo_comprobante->eliminado = 0;
-            $nuevo_comprobante->save();
-            $trabajo->idComprobante = $nuevo_comprobante->id;
-        }
-
         $trabajo->estado = $request->estado;
         $trabajo->eliminado = 0;
         $trabajo->save();
+
+        if($request->nro_comprobante){
+            // Si es que se envia el nro de comprobante entonces busca un comprobante con el mismo numero para asociarlo
+            $comprobante = Comprobante::select('id')->where('nro_comprobante', $request->nro_comprobante)->first();
+            if($comprobante){
+                // si es que el campo de comprobante sta vacio entonces se agrega el id de la venta
+                    $comprobante->idTrabajo = $trabajo->id;
+                    $comprobante->idServicio = $comprobante->idServicio = 2 ? 3 : 1;
+                    $comprobante->save();
+            }else{
+                // en el caso de que se envia un numero de comprobante y no se encuentra se crea uno
+                $nuevo_comprobante = new Comprobante();
+                $nuevo_comprobante->idServicio = 1; // Id de tipo de servicio de trabajos
+                $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
+                $nuevo_comprobante->fecha_hora_creacion = now();
+                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante; 
+                $nuevo_comprobante->estado = 0;
+                $nuevo_comprobante->eliminado = 0;
+                $nuevo_comprobante->idTrabajo = $trabajo->id;
+                $nuevo_comprobante->save();
+            }
+
+        }else{
+            // caso de que no se envia un comprobante solo se crea uno con un numero null
+            $nuevo_comprobante = new Comprobante();
+            $nuevo_comprobante->idServicio = 1; // Id de tipo de servicio de trabajos
+            $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
+            $nuevo_comprobante->fecha_hora_creacion = now();
+            $nuevo_comprobante->nro_comprobante = NULL; 
+            $nuevo_comprobante->estado = 0;
+            $nuevo_comprobante->eliminado = 0;
+            $nuevo_comprobante->idTrabajo = $trabajo->id;
+            $nuevo_comprobante->save();
+        }
 
         // recorre los detalles del trabajo en la variable $trabajos 
         foreach ($request->detalleTrabajo as $trabajos) {
@@ -66,7 +94,7 @@ class TrabajoController extends Controller
             ->selectRaw('DATE_FORMAT(fecha_hora_ingreso, "%d/%m/%Y %H:%i:%s") as fecha_hora_ingreso')
             ->selectRaw('CONCAT("S/. ", FORMAT(costo, 2)) as costo')
             ->selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as cliente')
-            ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS estado')
+            ->selectRaw('IF(estado >= 1, "Finalizado", "Iniciado") AS situacion_estado')
             ->join('vehiculos', 'vehiculos.id', '=', 'trabajos.idVehiculo')
             ->join('clientes', 'clientes.id', '=', 'vehiculos.cliente_id')
             ->where('eliminado', 0)
@@ -77,9 +105,8 @@ class TrabajoController extends Controller
 
     public function obtener(string $id)
     {
-        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial', 'comprobantes.nro_comprobante')
-            ->selectRaw('IF(trabajos.estado >= 1, "Finalizado", "Iniciado") AS estado')
-            ->join('comprobantes', 'trabajos.idComprobante', '=', 'comprobantes.id')
+        $trabajo = Trabajo::select('trabajos.id', 'idVehiculo', 'idTrabajador', 'fecha_hora_ingreso', 'fecha_hora_salida', 'problema_inicial','costo','estado')
+            ->selectRaw('IF(trabajos.estado >= 1, "Finalizado", "Iniciado") AS situacion_estado')
             ->where('trabajos.id', $id)
             ->first(); // busca el id de trabajo y lo retorna
         $trabajo->detalleTrabajo = DetalleTrabajo::select('detalle_trabajos.id', 'descripcion', 'fecha_hora')

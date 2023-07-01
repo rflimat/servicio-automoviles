@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('comprobantes', function (Blueprint $table) {
             $table->id();
-            $table->string('nro_comprobante'); //asdasda
+            $table->string('nro_comprobante')->nullable(); //asdasda
             $table->datetime('fecha_hora_creacion')->nullable();
             $table->datetime('fecha_hora_cancelacion')->nullable();
             $table->unsignedInteger('idServicio')->nullable();
@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('estado')->nullable();
             $table->integer('eliminado')->nullable();
             $table->decimal('costo_total')->nullable()->default(0);
+            $table->unsignedInteger('idVenta')->nullable();
+            $table->unsignedInteger('idTrabajo')->nullable();
             $table->timestamps();
         });
         Schema::create('tipos_servicio', function (Blueprint $table) {
@@ -46,9 +48,10 @@ return new class extends Migration
             begin
                 update comprobantes
                 set costo_total = costo_total + new.total_importe
-                where comprobantes.id =new.idComprobante;
+                where comprobantes.idVenta =new.id;
             end;
         ');
+        /*
         DB::unprepared(' 
             create trigger insert_trabajo_para_comprobante after insert on trabajos for each row
             begin
@@ -57,6 +60,7 @@ return new class extends Migration
                 where comprobantes.id =new.idComprobante;
             end;
         ');
+        
         DB::unprepared(' 
             create trigger update_trabajo_para_comprobante after update on trabajos for each row
             begin
@@ -67,6 +71,8 @@ return new class extends Migration
                 end if;
             end
         ');
+        */
+        /*
         DB::unprepared(' 
             create trigger update_venta_para_comprobante after update on ventas for each row
             begin
@@ -77,6 +83,8 @@ return new class extends Migration
                 end if;
             end;
         ');
+        */
+        /*
         DB::unprepared(' 
             create trigger delete_venta_para_comprobante after delete on ventas for each row
             begin
@@ -85,6 +93,8 @@ return new class extends Migration
                 where comprobantes.id =old.idComprobante;
             end;
         ');
+        */
+        /*
         DB::unprepared(' 
             create trigger delete_trabajo_para_comprobante after delete on trabajos for each row
             begin
@@ -93,6 +103,7 @@ return new class extends Migration
                 where comprobantes.id =old.idComprobante;
             end;
         ');
+        */
         
     }
 

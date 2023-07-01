@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('fecha_hora_ingreso')->nullable();
             $table->dateTime('fecha_hora_salida')->nullable();
             $table->double('costo')->default(0);
-            $table->unsignedInteger('idComprobante')->nullable();
+            //$table->unsignedInteger('idComprobante')->nullable();
             $table->integer('estado')->nullable();
             $table->integer('eliminado')->nullable();
             $table->timestamps();

@@ -13,7 +13,7 @@ class Venta extends Model
         //'idProducto',
         'cantidad',
         'estado',
-        'idComprobante',
+        //'idComprobante',
         'total_importe'
     ];
 

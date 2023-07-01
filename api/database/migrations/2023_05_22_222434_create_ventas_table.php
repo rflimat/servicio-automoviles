@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
             $table->integer('estado')->nullable();
-            $table->unsignedInteger('idComprobante')->nullable();
+            //$table->unsignedInteger('idComprobante')->nullable();
             $table->decimal('total_importe')->default(0);
             $table->timestamps();
 
@@ -36,6 +36,7 @@ return new class extends Migration
 
         });
         // cuando se agrega un detalle ventas
+        
         DB::unprepared('DROP TRIGGER IF EXISTS actualizar_stock_producto_en_venta');
         DB::unprepared(' 
             CREATE TRIGGER actualizar_stock_producto_en_venta BEFORE INSERT ON detalle_ventas FOR EACH ROW 

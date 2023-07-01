@@ -38,6 +38,46 @@ class ComprobanteController extends Controller
 
     public function listar()
     {
+        $comprobantes = Comprobante::select('comprobantes.id','nro_comprobante','comprobantes.fecha_hora_creacion','comprobantes.fecha_hora_cancelacion','idServicio',
+        'servicio','idMetodo_pago','metodo','comprobantes.estado','costo_total')
+            ->join('tipos_servicio','idServicio','=','tipos_servicio.id')
+            ->join('metodos_pago','idMetodo_pago','=','metodos_pago.id')
+            ->where('eliminado',0)
+            ->get();
+
+        foreach($comprobantes as $comprobante){
+            if($comprobante->idServicio == 2 or $comprobante->idServicio == 3){
+                // caso en que sea venta o venta + trabajo
+                // se busca al cliente por la venta
+                $comprobante['cliente'] = Comprobante::selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as cliente')
+                ->where('comprobantes.id',$comprobante->id)
+                ->join('ventas','ventas.id','=','idVenta')
+                ->join('clientes','clientes.id','=','idCliente')
+                ->first()->cliente;
+
+                // si es caso 3 entonces tambien incluye una placa
+                if($comprobante->idServicio == 3){
+                    $comprobante['placa'] = Comprobante::where('comprobantes.id',$comprobante->id)
+                    ->join('trabajos','trabajos.id','=','idTrabajo')
+                    ->join('vehiculos','vehiculos.id','=','idVehiculo')
+                    ->first()->placa;
+                }
+            }else{
+                // caso que solo sea trabajo y no venta
+                $comprobante['placa'] = Comprobante::where('comprobantes.id',$comprobante->id)
+                    ->join('trabajos','trabajos.id','=','idTrabajo')
+                    ->join('vehiculos','vehiculos.id','=','idVehiculo')
+                    ->first()->placa;
+                $comprobante['cliente'] = Comprobante::selectRaw('CONCAT(clientes.Nombres, " ", clientes.Apellidos) as cliente')
+                ->where('comprobantes.id',$comprobante->id)
+                ->join('trabajos','trabajos.id','=','idTrabajo')
+                ->join('vehiculos','vehiculos.id','=','idVehiculo')
+                ->join('clientes','clientes.id','=','cliente_id')
+                ->first()->cliente;
+            }
+        }
+        return $comprobantes;
+        /*
         $comprobantes = Comprobante::select('comprobantes.id','nro_comprobante','fecha_hora_creacion','fecha_hora_cancelacion','idServicio','servicio','idMetodo_pago','metodo','estado','costo_total')
             ->join('tipos_servicio','idServicio','=','tipos_servicio.id')
             ->join('metodos_pago','idMetodo_pago','=','metodos_pago.id')
@@ -69,14 +109,15 @@ class ComprobanteController extends Controller
                 ->where('detalle_trabajos.idTrabajo', $trabajos['id'])
                 ->get();
             }
-
+            
         }
+        */
         return $comprobantes;
     }
 
     public function obtener(string $id)
     {
-        
+        // falta
         $comprobante = Comprobante::select('comprobantes.id','nro_comprobante','fecha_hora_creacion','fecha_hora_cancelacion','idServicio','servicio','idMetodo_pago','metodo','estado','costo_total')
             ->join('tipos_servicio','idServicio','=','tipos_servicio.id')
             ->join('metodos_pago','idMetodo_pago','=','metodos_pago.id')
