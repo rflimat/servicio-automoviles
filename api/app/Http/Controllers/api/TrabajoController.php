@@ -166,7 +166,7 @@ class TrabajoController extends Controller
 
         $comprobante = Comprobante::where('idTrabajo','=',$trabajo->id)->first();
 
-        return response()->json(['id' =>$trabajo->id, 'idComprobante' => $comprobante->id]); 
+        return response()->json(['id' =>$trabajo->id, 'idComprobante' => $comprobante->id, 'nroComprobante' => $comprobante->nro_comprobante]); 
     }
 
     public function eliminar(string $id)

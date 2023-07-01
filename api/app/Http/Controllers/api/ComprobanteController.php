@@ -43,6 +43,7 @@ class ComprobanteController extends Controller
             ->join('tipos_servicio','idServicio','=','tipos_servicio.id')
             ->join('metodos_pago','idMetodo_pago','=','metodos_pago.id')
             ->where('eliminado',0)
+            ->whereNot('nro_comprobante', '')
             ->get();
 
         foreach($comprobantes as $comprobante){

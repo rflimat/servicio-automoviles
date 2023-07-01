@@ -85,7 +85,7 @@ class VentaController extends Controller
             $detalleVenta = new DetalleVenta();
             $detalleVenta->idVenta = $venta->id;
             $detalleVenta->idProducto = $productoVendido['idProducto'];
-            $detalleVenta->cantidad = $productoVendido['cantidad'];
+            $detalleVenta->cantidad = $productoVendido['cantidadAct'];
             $detalleVenta->importe = $productoVendido['importe'];
             $detalleVenta->save();
         }
@@ -152,7 +152,7 @@ class VentaController extends Controller
 
         $comprobante = Comprobante::where('idVenta','=',$venta->id)->first();
 
-        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id]);
+        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id, 'nroComprobante' => $comprobante->nro_comprobante]);
     }
     public function eliminar(string $id)
     {
