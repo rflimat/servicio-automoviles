@@ -22,7 +22,7 @@ const errorSwal = (err) =>
     buttonsStyling: false,
   }).fire({
     title: "Error!",
-    text: err.message,
+    text: err.response.data.message ? err.response.data.message : err.message,
     icon: "error",
     confirmButtonText: "Ok",
   }).then(() => (err.response.status === 401));
