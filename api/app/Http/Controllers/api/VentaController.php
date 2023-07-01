@@ -23,12 +23,12 @@ class VentaController extends Controller
         $ids = [];
         foreach($request->productosVenta as $clave) {
             if(in_array($clave['idProducto'],$ids)){ // si es que el id se encuentra
-                return response()->json(['message' => 'Error: Existen productos iguales']);
+                return response()->json(['message' => 'Error: Existen productos iguales'],404);
             }else{
                 $ids[] = $clave['idProducto'];
                 $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
                 if($ProductosExistentes->cantidad - $clave['cantidad'] <0){
-                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente']);
+                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
                 }
             }
         }
@@ -107,7 +107,7 @@ class VentaController extends Controller
             ->where('idProducto', $clave['idProducto'])
             ->first();
             if(($ProductosExistentes->cantidad - $clave['CantidadVenta'] +$detalleActual->cantidad) <0){
-                return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente']);
+                return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
             }
         }
         $venta = Venta::findOrFail($id);
@@ -132,7 +132,8 @@ class VentaController extends Controller
     }
     public function eliminar(string $id)
     {
-        return Venta::where('id', $id)
-            ->update(['estado' => 0]);
+        $venta = Venta::findOrFail($id);
+        $venta->estado = 0;
+        $venta->save();
     }
 }
