@@ -63,7 +63,6 @@ class VentaController extends Controller
             $detalleVenta->idVenta = $venta->id;
             $detalleVenta->idProducto = $productoVendido['idProducto'];
             $detalleVenta->cantidad = $productoVendido['cantidad'];
-            $detalleVenta->descripcion = $productoVendido['descripcion'];
             $detalleVenta->importe = $productoVendido['importe'];
             $detalleVenta->save();
         }
@@ -92,7 +91,7 @@ class VentaController extends Controller
             ->join('comprobantes', 'ventas.idComprobante', '=', 'comprobantes.id')
             ->where('ventas.id', $id)
             ->first();
-        $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe','detalle_ventas.descripcion')
+        $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe')
             ->selectRaw('FORMAT(productos.precio_venta, 2) as precio_venta')
             ->join('productos', 'detalle_ventas.idProducto', '=', 'productos.id')
             ->where('idVenta', $id)->get();
@@ -124,7 +123,6 @@ class VentaController extends Controller
             if ($detalleVenta) {
                 $detalleVenta->idProducto = $productoVendido['idProducto'];
                 $detalleVenta->cantidad = $productoVendido['CantidadVenta'];
-                $detalleVenta->descripcion = $productoVendido['descripcion'];
                 $detalleVenta->importe = $productoVendido['importe'];
                 $detalleVenta->save();
             }

@@ -51,7 +51,7 @@ class ComprobanteController extends Controller
                 ->where('estado','1')
                 ->get();
             foreach($comprobante['ventas'] as $venta){
-                $venta['productosVenta'] = DetalleVenta::select('detalle_ventas.id','productos.nombre','detalle_ventas.cantidad','detalle_ventas.descripcion','importe')
+                $venta['productosVenta'] = DetalleVenta::select('detalle_ventas.id','productos.nombre','detalle_ventas.cantidad','importe')
                 ->join('productos', 'detalle_ventas.idProducto', '=', 'productos.id')
                 ->where('detalle_ventas.idVenta', $venta['id'])
                 ->get();
@@ -90,7 +90,7 @@ class ComprobanteController extends Controller
         ->where('estado','1')
         ->get();
         foreach($comprobante['ventas'] as $venta){
-            $venta['productosVenta'] = DetalleVenta::select('detalle_ventas.id','productos.nombre','detalle_ventas.cantidad','detalle_ventas.descripcion','importe')
+            $venta['productosVenta'] = DetalleVenta::select('detalle_ventas.id','productos.nombre','detalle_ventas.cantidad','importe')
             ->join('productos', 'detalle_ventas.idProducto', '=', 'productos.id')
             ->where('detalle_ventas.idVenta', $venta['id'])
             ->get();
