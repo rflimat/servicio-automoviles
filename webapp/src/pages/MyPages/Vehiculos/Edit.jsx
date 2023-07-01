@@ -223,7 +223,7 @@ const Edit = () => {
             </div> 
             <div className="row">
             <Label>Cliente</Label>
-              <div className="mb-3 col-12 col-md-11">
+              <div className="mb-3 col-8 col-sm-10">
                 <CustomSelect
                   defaultValue={validationType.values.cliente_id}
                   value={validationType.values.cliente_id}
@@ -240,7 +240,7 @@ const Edit = () => {
                   </FormFeedback>
                 ) : null}
               </div>
-              <div className="mb-3 col-12 col-md-1">
+              <div className="mb-3 col-4 col-sm-2">
                 <Button type="button" className="w-100" color="success" onClick={() => navigate("/clientes/add")}>
                   Nuevo
                 </Button>
