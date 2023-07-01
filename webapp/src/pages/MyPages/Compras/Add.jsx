@@ -207,8 +207,8 @@ const Add = () => {
                 value={validationType.values.estado}
                 onChange={element => setEstado(element.value)}
                 options={[
-                  { label: "Registrado", value: "0" },
-                  { label: "Recepcionado", value: "1" },
+                  { label: "Registrado", value: 0 },
+                  { label: "Recepcionado", value: 1 },
                 ]}
                 placeholder="Seleccione estado"
                 className="select2-selection"

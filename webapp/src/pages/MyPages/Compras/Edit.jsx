@@ -168,12 +168,12 @@ const Edit = () => {
 
               {validationType.values.estado == 0 ? (
                 <CustomSelect
-                  defaultValue={{ label: "Registrado", value: "0" }}
+                  defaultValue={{ label: "Registrado", value: 0 }}
                   value={validationType.values.estado}
                   onChange={element => validationType.setFieldValue("estado", element.value)}
                   options={[
-                    { label: "Registrado", value: "0" },
-                    { label: "Recepcionado", value: "1" },
+                    { label: "Registrado", value: 0 },
+                    { label: "Recepcionado", value: 1 },
                   ]}
                   placeholder="Seleccione estado"
                   className="select2-selection"
