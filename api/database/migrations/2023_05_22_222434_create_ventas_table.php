@@ -61,6 +61,18 @@ return new class extends Migration
                 NEW.hora= time(NEW.created_at);
             END;
         ');
+
+        DB::unprepared('DROP TRIGGER IF EXISTS cancelar_venta');
+        DB::unprepared(' 
+            CREATE TRIGGER cancelar_venta AFTER UPDATE ON ventas FOR EACH ROW 
+            BEGIN 
+                IF NEW.estado=0 THEN
+                    UPDATE detalle_ventas pe
+                    INNER JOIN productos p ON pe.idProducto=p.id
+                    SET p.cantidad=p.cantidad+pe.cantidad WHERE pe.idVenta=NEW.id;
+                END IF;
+            END;
+        ');
     }
 
     /**
