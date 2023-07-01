@@ -27,8 +27,8 @@ class VentaController extends Controller
             }else{
                 $ids[] = $clave['idProducto'];
                 $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
-                if($ProductosExistentes->cantidad - $clave['cantidad'] <0){
-                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
+                if($ProductosExistentes->cantidad - $clave['cantidad'] <0 or $ProductosExistentes->cantidad == 0){
+                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente STOCK ACTUAL: '. $ProductosExistentes->cantidad ],404);
                 }
             }
         }

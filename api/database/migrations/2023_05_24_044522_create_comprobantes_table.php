@@ -43,68 +43,57 @@ return new class extends Migration
         DB::table('metodos_pago')->insert(['metodo' => 'Factura']);
         DB::table('metodos_pago')->insert(['metodo' => 'Convencional']);
         
+        // añade el costo total en comprobante
         DB::unprepared(' 
-            create trigger insert_venta_para_comprobante after insert on ventas for each row
+            create trigger crear_costo_comprobante before insert on comprobantes
+            for each row
             begin
-                update comprobantes
-                set costo_total = costo_total + new.total_importe
-                where comprobantes.idVenta =new.id;
-            end;
-        ');
-        /*
-        DB::unprepared(' 
-            create trigger insert_trabajo_para_comprobante after insert on trabajos for each row
-            begin
-                update comprobantes
-                set costo_total = costo_total + new.costo
-                where comprobantes.id =new.idComprobante;
-            end;
-        ');
-        
-        DB::unprepared(' 
-            create trigger update_trabajo_para_comprobante after update on trabajos for each row
-            begin
-                if new.idComprobante = old.idComprobante then
-                    update comprobantes
-                    set costo_total = costo_total + new.costo - old.costo
-                    where comprobantes.id =new.idComprobante;
+                if new.idVenta is not null then
+                    set new.costo_total = (select total_importe from ventas where ventas.id = new.idVenta);
                 end if;
-            end
-        ');
-        */
-        /*
-        DB::unprepared(' 
-            create trigger update_venta_para_comprobante after update on ventas for each row
-            begin
-                if new.idComprobante = old.idComprobante then
-                    update comprobantes
-                    set costo_total = costo_total - old.total_importe + new.total_importe
-                    where comprobantes.id =new.idComprobante;
+                if new.idTrabajo is not null then
+                    set new.costo_total = (select costo from trabajos where trabajos.id = new.idTrabajo);
                 end if;
             end;
         ');
-        */
-        /*
+
         DB::unprepared(' 
-            create trigger delete_venta_para_comprobante after delete on ventas for each row
+            create trigger editar_costo_comprobante before update on comprobantes
+            for each row
             begin
-                update comprobantes
-                set costo_total = costo_total - old.total_importe
-                where comprobantes.id =old.idComprobante;
+                set new.costo_total = 0;
+                if new.idTrabajo is not null then
+                    set new.costo_total = new.costo_total + (select costo from trabajos where trabajos.id = new.idTrabajo);
+                end if;
+                if new.idVenta is not null then
+                    set new.costo_total = new.costo_total + (select total_importe from ventas where ventas.id = new.idVenta);
+                end if;
             end;
         ');
-        */
-        /*
+        // simula un update para trabajos de modo que el trigger para actualizar costo de comprobante se ejecuta
         DB::unprepared(' 
-            create trigger delete_trabajo_para_comprobante after delete on trabajos for each row
+            create trigger editar_costo_trabajo after update on trabajos 
+            for each row
             begin
-                update comprobantes
-                set costo_total = costo_total - old.costo
-                where comprobantes.id =old.idComprobante;
+                if new.costo != old.costo then
+                    update comprobantes
+                    set idTrabajo = idTrabajo
+                    where idTrabajo = new.id;
+                end if;
             end;
         ');
-        */
-        
+        // simula un update para ventas de modo que el trigger para actualizar costo de comprobante se ejecuta
+        DB::unprepared(' 
+            create trigger editar_total_importe_venta after update on ventas 
+            for each row
+            begin
+                if new.total_importe != old.total_importe then
+                    update comprobantes
+                    set idVenta = idVenta
+                    where idVenta = new.id;
+                end if;
+            end;
+        ');
     }
 
     /**
