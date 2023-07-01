@@ -111,7 +111,9 @@ const Add = () => {
       fecha_hora_salida: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
       fecha_hora_trabajo: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
     },
-    validationSchema: Yup.object().shape({}),
+    validationSchema: Yup.object().shape({
+      problema_inicial: Yup.string().required("El valor es requerido"),
+    }),
     onSubmit: (element) => {
       const formData = new FormData();
       for (let i = 0; i < selectedFiles.length; i++) {
@@ -134,10 +136,10 @@ const Add = () => {
                   customSwal({
                     confirmButton: "success",
                     cancelButton: "secondary",
-                    title: "Generar comprobante para trabajo",
-                    text: "¿Esta seguro de generar comprobante para trabajo?",
+                    title: "Agregar o actualizar comprobante para trabajo",
+                    text: "¿Esta seguro de agregar o actualizar comprobante para trabajo?",
                     icon: "question",
-                    textConfirmButton: "Generar",
+                    textConfirmButton: "Ok",
                     textCancelButton: "Cancelar"
                   }).then((result) => {
                     if (result.isConfirmed) {

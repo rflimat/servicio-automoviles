@@ -147,10 +147,10 @@ const Add = () => {
                   customSwal({
                     confirmButton: "success",
                     cancelButton: "secondary",
-                    title: "Generar comprobante para venta",
-                    text: "¿Esta seguro de generar comprobante para venta?",
+                    title: "Agregar o actualizar comprobante para venta",
+                    text: "¿Esta seguro de agregar o actualizar comprobante para venta?",
                     icon: "question",
-                    textConfirmButton: "Generar",
+                    textConfirmButton: "Ok",
                     textCancelButton: "Cancelar"
                   }).then((result) => {
                     if (result.isConfirmed) {

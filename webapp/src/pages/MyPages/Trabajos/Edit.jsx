@@ -116,6 +116,7 @@ const Edit = () => {
       estado: element.estado == "Iniciado" ? "0" : "1",
     },
     validationSchema: Yup.object().shape({
+      problema_inicial: Yup.string().required("El valor es requerido"),
     }),
     onSubmit: (element) => {
       const evidencias = [];
@@ -143,7 +144,7 @@ const Edit = () => {
             .then((res) => {
               post(`${import.meta.env.VITE_API_URL}/trabajos/upload/${id}`, formData).then(() => {
                 successSwal("trabajo", "actualizado").then(() => {
-                  if (trabajo.nro_comprobante.length > 0) {
+                  if (res.nroComprobante && res.nroComprobante.length > 0) {
                     customSwal({
                       confirmButton: "success",
                       cancelButton: "secondary",

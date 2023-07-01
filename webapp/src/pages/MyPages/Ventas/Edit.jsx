@@ -92,7 +92,7 @@ const Edit = () => {
           put(`${import.meta.env.VITE_API_URL}/ventas/${id}`, venta)
             .then((res) => {
               successSwal("venta", "actualizado").then(() => {
-                if (element.nro_comprobante.length > 0) {
+                if (res.nroComprobante && res.nroComprobante.length > 0) {
                   customSwal({
                     confirmButton: "success",
                     cancelButton: "secondary",
