@@ -57,40 +57,41 @@ class VentaController extends Controller
                     $comprobante->save();
             }else{
                 // en el caso de que se envia un numero de comprobante y no se encuentra se crea uno
-                $nuevo_comprobante = new Comprobante();
-                $nuevo_comprobante->idServicio = 2; // Id de tipo de servicio de ventas
-                $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
-                $nuevo_comprobante->fecha_hora_creacion = now();
-                $nuevo_comprobante->nro_comprobante = $request->nro_comprobante; 
-                $nuevo_comprobante->estado = 0;
-                $nuevo_comprobante->eliminado = 0;
-                $nuevo_comprobante->idVenta = $venta->id;
-                $nuevo_comprobante->save();
+                $comprobante = new Comprobante();
+                $comprobante->idServicio = 2; // Id de tipo de servicio de ventas
+                $comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
+                $comprobante->fecha_hora_creacion = now();
+                $comprobante->nro_comprobante = $request->nro_comprobante; 
+                $comprobante->estado = 0;
+                $comprobante->eliminado = 0;
+                $comprobante->idVenta = $venta->id;
+                $comprobante->save();
             }
 
         }else{
             // caso de que no se envia un comprobante solo se crea uno con un numero null
-            $nuevo_comprobante = new Comprobante();
-            $nuevo_comprobante->idServicio = 2; // Id de tipo de servicio de ventas
-            $nuevo_comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
-            $nuevo_comprobante->fecha_hora_creacion = now();
-            $nuevo_comprobante->nro_comprobante = NULL; 
-            $nuevo_comprobante->estado = 0;
-            $nuevo_comprobante->eliminado = 0;
-            $nuevo_comprobante->idVenta = $venta->id;
-            $nuevo_comprobante->save();
+            $comprobante = new Comprobante();
+            $comprobante->idServicio = 2; // Id de tipo de servicio de ventas
+            $comprobante->idMetodo_pago = 3; // Id del metodo de pago (Convencional por defecto)
+            $comprobante->fecha_hora_creacion = now();
+            $comprobante->nro_comprobante = NULL; 
+            $comprobante->estado = 0;
+            $comprobante->eliminado = 0;
+            $comprobante->idVenta = $venta->id;
+            $comprobante->save();
         }
 
         foreach($request->productosVenta as $productoVendido) {
             $detalleVenta = new DetalleVenta();
             $detalleVenta->idVenta = $venta->id;
             $detalleVenta->idProducto = $productoVendido['idProducto'];
-            $detalleVenta->cantidad = $productoVendido['cantidadAct'];
+            $detalleVenta->cantidad = $productoVendido['cantidad'];
             $detalleVenta->importe = $productoVendido['importe'];
             $detalleVenta->save();
         }
         
-        return response()->json($venta->id);
+        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id]);
+        //return response()->json($venta->id);
     }
 
 
@@ -149,7 +150,9 @@ class VentaController extends Controller
             }
         }
 
-        return response()->json($venta->id);
+        $comprobante = Comprobante::where('idVenta','=',$venta->id)->first();
+
+        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id]);
     }
     public function eliminar(string $id)
     {
