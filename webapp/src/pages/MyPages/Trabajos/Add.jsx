@@ -55,7 +55,7 @@ const Add = () => {
       let { id, Nombres, Apellidos } = element;
       return {
         label: `${Nombres} ${Apellidos}`,
-        value: `${id}`,
+        value: id,
       };
     });
     setTrabajadores(optionsTrabajadores);
@@ -67,7 +67,7 @@ const Add = () => {
       let { id, placa } = element;
       return {
         label: `${placa}`,
-        value: `${id}`,
+        value: id,
       };
     });
     setVehiculos(optionsVehiculos);
@@ -142,7 +142,7 @@ const Add = () => {
                   }).then((result) => {
                     if (result.isConfirmed) {
                       let id = res.idComprobante;
-                      navigate(`/comprobante/generate?tipo=trabajo&id=${id}`);
+                      navigate(`/comprobantes/generate?tipo=trabajo&id=${id}`);
                     } else {
                       navigate("/trabajos");
                     }

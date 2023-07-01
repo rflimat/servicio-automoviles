@@ -41,7 +41,10 @@ const Index = () => {
             },
             {
                 Header: "Importe",
-                accessor: "importe",
+                accessor: "total_importe",
+                Cell: cellProps => (
+                    <>S/. {cellProps.value} </>
+                )
             },
             {
                 Header: "Acciones",
@@ -49,36 +52,36 @@ const Index = () => {
                 accessor: "id",
                 Cell: cellProps => {
                     return (
-                        <div style={{display: "flex", justifyContent: "center"}}>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
                             <Button
                                 type="button"
                                 color="success"
                                 className="btn-sm btn-rounded me-1"
-                                
+
                                 onClick={() => {
-                                    const id = cellProps.row.original.idComprobante;
+                                    const id = cellProps.row.original.id;
                                     navigate(`/ventas/view/${id}`);
                                 }}
                             >
-                                <i className="far fa-eye"></i> 
+                                <i className="far fa-eye"></i>
                             </Button>
                             <Button
                                 type="button"
                                 color="info"
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
-                                    const id = cellProps.row.original.idComprobante;
+                                    const id = cellProps.row.original.id;
                                     navigate(`/ventas/edit/${id}`);
                                 }}
                             >
-                               <i className='bx bxs-pencil' ></i>
+                                <i className='bx bxs-pencil' ></i>
                             </Button>
                             <Button
                                 type="button"
                                 color="danger"
                                 className="btn-sm btn-rounded me-1"
                                 onClick={() => {
-                                    const id = cellProps.row.original.idComprobante;
+                                    const id = cellProps.row.original.id;
                                     deleteSwal("ventas").then((result) => {
                                         if (result.isConfirmed) {
                                             del(`${import.meta.env.VITE_API_URL}/ventas/${id}`)
@@ -112,7 +115,7 @@ const Index = () => {
         <div className="page-content">
             <div className="container-fluid">
                 <Breadcrumbs title="Ventas" breadcrumbItem="Ventas" />
-                
+
                 <TableContainer
                     columns={columns}
                     data={ventas}

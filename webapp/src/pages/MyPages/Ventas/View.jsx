@@ -31,7 +31,7 @@ const View = () => {
   const [element, setElement] = useState({
     fecha: "",
     hora: "",
-    costo_venta: 0,
+    total_importe: 0,
     nombre: "",
     productosVenta: [],
   });
@@ -52,14 +52,14 @@ const View = () => {
     initialValues: {
       datetimeVenta: `${element.fecha} ${element.hora}`,
       cliente: element.nombreCliente,
-      costo_venta: element.costo_venta
+      total_importe: element.total_importe
     },
     validationSchema: Yup.object().shape({
     }),
     onSubmit: (element) => {
       const venta = {
         fecha_venta: element.datetimeVenta,
-        costo_venta: productosVenta.reduce((total, producto) => total + producto.importe, 0),
+        total_importe: productosVenta.reduce((total, producto) => total + producto.importe, 0),
         cliente_id: element.cliente,
         productosVenta
       }
@@ -137,51 +137,51 @@ const View = () => {
             </div>
 
             <div className="table-responsive">
-            <table className="table table-bordered text-center table-hover">
-              <thead className="table-success">
-                <tr>
-                  <th>N°</th>
-                  <th className="col-6">Nombre</th>
-                  <th className="col-1">Cantidad</th>
-                  <th className="col-2">Precio</th>
-                  <th className="col-2">Importe</th>
-                </tr>
-              </thead>
-              <tbody>
-                {element.productosVenta.map((producto, index) => (
-                  <tr key={index + 1}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {producto.nombre}
-                    </td>
-                    <td>
-                      {producto.cantidadAct}
-                    </td>
-                    <td>
-                      S/.{producto.precio_venta}
-                    </td>
-                    <td>
-                      S/.{producto.importe}
-                    </td>
-                   
+              <table className="table table-bordered text-center table-hover">
+                <thead className="table-success">
+                  <tr>
+                    <th>N°</th>
+                    <th className="col-6">Nombre</th>
+                    <th className="col-1">Cantidad</th>
+                    <th className="col-2">Precio</th>
+                    <th className="col-2">Importe</th>
                   </tr>
-                ))}
-                <tr>
-                  <td colSpan={4}>Costo total de la venta:</td>
-                  <td colSpan={1}>
-                    S/.{validationType.values.costo_venta}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {element.productosVenta.map((producto, index) => (
+                    <tr key={index + 1}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {producto.producto}
+                      </td>
+                      <td>
+                        {producto.CantidadVenta}
+                      </td>
+                      <td>
+                        S/.{producto.precio_venta}
+                      </td>
+                      <td>
+                        S/.{producto.importe}
+                      </td>
+
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan={4}>Costo total de la venta:</td>
+                    <td colSpan={1}>
+                      S/.{validationType.values.total_importe}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="d-flex flex-wrap gap-2">
-            <Button type="button" color="primary" onClick={() => {                                 
-                                    navigate(`/ventas/edit/${id}`);
-                                }}>
-                  Editar  
-                </Button>{" "}
+              <Button type="button" color="primary" onClick={() => {
+                navigate(`/ventas/edit/${id}`);
+              }}>
+                Editar
+              </Button>{" "}
               <Button type="reset" color="secondary" onClick={() => navigate("/ventas")}>
                 Cancelar
               </Button>

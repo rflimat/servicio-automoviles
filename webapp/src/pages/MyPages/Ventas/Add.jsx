@@ -42,7 +42,7 @@ const Add = () => {
       let { id, Nombres, Apellidos } = element;
       return {
         label: `${Nombres} ${Apellidos}`,
-        value: `${id}`
+        value: id
       }
     })
     setClientes(optionsClientes);
@@ -60,7 +60,7 @@ const Add = () => {
           precio_venta
         },
         label: `${codigo} => ${nombre}`,
-        value: `${id}`
+        value: id
       }
     })
     setProductos(optionsProductos);
@@ -73,7 +73,7 @@ const Add = () => {
   const addProducto = (e) => {
     e.preventDefault();
     let producto = productoTemp;
-    if (!productosVenta.find((element) => element.idProducto == producto.id)) {
+    if (!productosVenta.find((element) => element.idProducto == producto.idProducto)) {
       producto.index = productosVenta.length + 1;
       producto.cantidadAct = Number(cantidad);
       producto.importe = Number(cantidad) * Number(producto.precio_venta);
@@ -135,7 +135,7 @@ const Add = () => {
     onSubmit: (element) => {
       const venta = {
         ...element,
-        costo_venta: productosVenta.reduce((total, producto) => total + producto.importe, 0),
+        total_importe: productosVenta.reduce((total, producto) => total + producto.importe, 0),
         productosVenta
       }
       addSwal("ventas").then((result) => {
@@ -155,7 +155,7 @@ const Add = () => {
                   }).then((result) => {
                     if (result.isConfirmed) {
                       let id = res.idComprobante;
-                      navigate(`/comprobante/generate?tipo=venta&id=${id}`);
+                      navigate(`/comprobantes/generate?tipo=venta&id=${id}`);
                     } else {
                       navigate("/ventas");
                     }

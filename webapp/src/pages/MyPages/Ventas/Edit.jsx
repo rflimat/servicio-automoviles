@@ -32,7 +32,7 @@ const Edit = () => {
   const [element, setElement] = useState({
     fecha: "",
     hora: "",
-    costo_venta: "",
+    total_importe: "",
     nombreCliente: "",
     nro_comprobante: ""
   });
@@ -54,14 +54,7 @@ const Edit = () => {
     attributeProducto[`${name}`] = newName; // Se asigna el nuevo dato al atributo
 
     newProductos[index] = { ...newProductos[index], ...attributeProducto }; // Modifica el elemento específico dentro de la copia
-    
-    // Condicion para determinar si la cantidad de productos ingresada es superior a la cantidad existente
-    let productoAct = productos.find((element) => element.idProducto == newProductos[index].idProducto);
-    if (newProductos[index].cantidadAct > productoAct.cantidad) {
-      newProductos[index].cantidadAct = productoAct.cantidad; // Si se cumple la condicion, se asigna la cantidad maxima del producto
-    }
-
-    newProductos[index].importe = Number(newProductos[index].cantidadAct) * Number(newProductos[index].precio_venta); // Se hace la actualizacion del importe del producto
+    newProductos[index].importe = Number(newProductos[index].CantidadVenta) * Number(newProductos[index].precio_venta); // Se hace la actualizacion del importe del producto
 
     setProductosVenta(newProductos); // Actualiza el estado con la copia modificada del array
   };
@@ -91,7 +84,7 @@ const Edit = () => {
         ...element,
         fecha: format(new Date(element.datetimeVentaAct), "yyyy-MM-dd"),
         hora: format(new Date(element.datetimeVentaAct), "HH:mm:ss"),
-        costo_venta: productosVenta.reduce((total, producto) => total + Number(producto.importe), 0),
+        total_importe: productosVenta.reduce((total, producto) => total + Number(producto.importe), 0),
         productosVenta
       }
       editSwal("ventas").then((result) => {
@@ -111,7 +104,7 @@ const Edit = () => {
                   }).then((result) => {
                     if (result.isConfirmed) {
                       let id = res.idComprobante;
-                      navigate(`/comprobante/generate?tipo=venta&id=${id}`);
+                      navigate(`/comprobantes/generate?tipo=venta&id=${id}`);
                     } else {
                       navigate("/ventas");
                     }
@@ -216,14 +209,14 @@ const Edit = () => {
                     <tr key={index + 1}>
                       <td>{index + 1}</td>
                       <td>
-                        {producto.nombre}
+                        {producto.producto}
                       </td>
                       <td>
                         <Input
                           name="cantidad"
                           type="text"
-                          value={producto.cantidadAct}
-                          onChange={(e) => handleChangeProducto(index, "cantidadAct", e.target.value)}
+                          value={producto.CantidadVenta}
+                          onChange={(e) => handleChangeProducto(index, "CantidadVenta", e.target.value)}
                           style={{ ...tdStyles, textAlign: "center" }}
                         />
                       </td>

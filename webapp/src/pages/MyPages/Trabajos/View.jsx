@@ -46,7 +46,7 @@ const View = () => {
       let { id, Nombres, Apellidos } = element;
       return {
         label: `${Nombres} ${Apellidos}`,
-        value: `${id}`
+        value: id
       }
     })
     setTrabajadores(optionsTrabajadores);
@@ -58,7 +58,7 @@ const View = () => {
       let { id, placa } = element;
       return {
         label: `${placa}`,
-        value: `${id}`
+        value: id
       }
     })
     setVehiculos(optionsVehiculos);
@@ -284,11 +284,13 @@ const View = () => {
                 </tbody>
               </table>
             </div>
-
+            
+            { selectedFiles.length > 0 && (
             <div className="mb-3">
               <Label className="form-label">Estado del vehiculo</Label>
               <CustomDropzone selectedFiles={selectedFiles} setselectedFiles={setselectedFiles} isHidden={true} />
             </div>
+            )}
 
             <div className="d-flex flex-wrap gap-2">
               <Button type="button" color="primary" onClick={() => navigate(`/trabajos/edit/${id}`)}>
