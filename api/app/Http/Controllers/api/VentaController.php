@@ -85,7 +85,7 @@ class VentaController extends Controller
             $detalleVenta = new DetalleVenta();
             $detalleVenta->idVenta = $venta->id;
             $detalleVenta->idProducto = $productoVendido['idProducto'];
-            $detalleVenta->cantidad = $productoVendido['cantidad'];
+            $detalleVenta->cantidad = $productoVendido['cantidadAct'];
             $detalleVenta->importe = $productoVendido['importe'];
             $detalleVenta->save();
         }
@@ -133,7 +133,6 @@ class VentaController extends Controller
             }
         }
         $venta = Venta::findOrFail($id);
-        $venta->idCliente = $request->idCliente;
         $venta->estado = 1; // 1 quiere decir que no esta eliminado
         $venta->total_importe = $request->total_importe;
         $venta->save();
