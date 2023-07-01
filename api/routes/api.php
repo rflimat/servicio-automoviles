@@ -1,16 +1,16 @@
 <?php
 
 use App\Http\Controllers\api\AutenticacionController;
-use App\Http\Controllers\Api\ClienteController;
-use App\Http\Controllers\Api\ComprasController;
+use App\Http\Controllers\api\ClienteController;
+use App\Http\Controllers\api\ComprasController;
 use App\Http\Controllers\api\ComprobanteController;
 use App\Http\Controllers\api\ProductoController;
 use App\Http\Controllers\api\ProveedoresController;
 use App\Http\Controllers\api\ReportController;
-use App\Http\Controllers\Api\TrabajadorController;
+use App\Http\Controllers\api\TrabajadorController;
 use App\Http\Controllers\api\TrabajoController;
 use App\Http\Controllers\api\UsuarioController;
-use App\Http\Controllers\Api\VehiculosController;
+use App\Http\Controllers\api\VehiculosController;
 use App\Http\Controllers\api\VentaController;
 
 use Illuminate\Http\Request;
