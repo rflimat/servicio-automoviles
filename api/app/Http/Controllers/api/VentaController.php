@@ -23,12 +23,12 @@ class VentaController extends Controller
         $ids = [];
         foreach($request->productosVenta as $clave) {
             if(in_array($clave['idProducto'],$ids)){ // si es que el id se encuentra
-                return response()->json(['message' => 'Error: Existen productos iguales']);
+                return response()->json(['message' => 'Error: Existen productos iguales'],404);
             }else{
                 $ids[] = $clave['idProducto'];
                 $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
                 if($ProductosExistentes->cantidad - $clave['cantidad'] <0){
-                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente']);
+                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
                 }
             }
         }
@@ -63,7 +63,6 @@ class VentaController extends Controller
             $detalleVenta->idVenta = $venta->id;
             $detalleVenta->idProducto = $productoVendido['idProducto'];
             $detalleVenta->cantidad = $productoVendido['cantidad'];
-            $detalleVenta->descripcion = $productoVendido['descripcion'];
             $detalleVenta->importe = $productoVendido['importe'];
             $detalleVenta->save();
         }
@@ -92,7 +91,7 @@ class VentaController extends Controller
             ->join('comprobantes', 'ventas.idComprobante', '=', 'comprobantes.id')
             ->where('ventas.id', $id)
             ->first();
-        $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe','detalle_ventas.descripcion')
+        $venta->productosVenta = DetalleVenta::select('detalle_ventas.id', 'idProducto', 'productos.nombre as producto', 'productos.cantidad as CantidadDisp', 'detalle_ventas.cantidad as CantidadVenta', 'importe')
             ->selectRaw('FORMAT(productos.precio_venta, 2) as precio_venta')
             ->join('productos', 'detalle_ventas.idProducto', '=', 'productos.id')
             ->where('idVenta', $id)->get();
@@ -108,7 +107,7 @@ class VentaController extends Controller
             ->where('idProducto', $clave['idProducto'])
             ->first();
             if(($ProductosExistentes->cantidad - $clave['CantidadVenta'] +$detalleActual->cantidad) <0){
-                return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente']);
+                return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
             }
         }
         $venta = Venta::findOrFail($id);
@@ -124,7 +123,6 @@ class VentaController extends Controller
             if ($detalleVenta) {
                 $detalleVenta->idProducto = $productoVendido['idProducto'];
                 $detalleVenta->cantidad = $productoVendido['CantidadVenta'];
-                $detalleVenta->descripcion = $productoVendido['descripcion'];
                 $detalleVenta->importe = $productoVendido['importe'];
                 $detalleVenta->save();
             }
@@ -134,7 +132,8 @@ class VentaController extends Controller
     }
     public function eliminar(string $id)
     {
-        return Venta::where('id', $id)
-            ->update(['estado' => 0]);
+        $venta = Venta::findOrFail($id);
+        $venta->estado = 0;
+        $venta->save();
     }
 }

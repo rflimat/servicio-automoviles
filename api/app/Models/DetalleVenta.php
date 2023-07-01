@@ -12,7 +12,6 @@ class DetalleVenta extends Model
         'idVenta',
         'idProducto',
         'cantidad',
-        'descripcion',
         'importe'
     ];
 }

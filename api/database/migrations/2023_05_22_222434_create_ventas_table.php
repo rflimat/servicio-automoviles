@@ -31,7 +31,6 @@ return new class extends Migration
             $table->unsignedInteger('idVenta');
             $table->unsignedInteger('idProducto');
             $table->integer('cantidad')->default(0);
-            $table->string('descripcion')->nullable();
             $table->decimal('importe')->default(0);
             $table->timestamps();
 
