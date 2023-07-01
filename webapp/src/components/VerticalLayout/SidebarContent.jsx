@@ -144,13 +144,13 @@ const SidebarContent = (props) => {
       <SimpleBar className="h-100" ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            {/*<li className="menu-title">Menu </li>
+            <li className="menu-title">Menu </li>
             <li>
               <Link to="/dashboard">
                 <i className="bx bx-home-circle"></i>
                 <span>Dashboard</span>
               </Link>
-            </li>*/}
+            </li>
 
             <li className="menu-title">Modulos</li>
 
@@ -207,6 +207,12 @@ const SidebarContent = (props) => {
               <Link to="/trabajadores">
               <i className='fa fa-users'></i>
                 <span>Trabajadores</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/comprobantes">
+                <i className='bx bx-receipt' ></i>
+                <span>Comprobantes</span>
               </Link>
             </li>
           </ul>

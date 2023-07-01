@@ -51,8 +51,7 @@ const Login = (props) => {
       });
       if (typeof response == "object") {
         localStorage.setItem("authUser", JSON.stringify(response));
-        //window.location.pathname = '/dashboard';
-        window.location.pathname = '/productos';
+        window.location.pathname = '/dashboard';
       } else {
         setError("Usuario o contraseñas incorrectas");
         console.error(response);

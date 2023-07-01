@@ -53,12 +53,14 @@ import TrabajadorAdd from "../pages/MyPages/Trabajador/Add";
 import TrabajadorEdit from "../pages/MyPages/Trabajador/Edit";
 
 import ComprobanteIndex from "../pages/MyPages/Comprobante/Index";
+import ComprobanteGenerate from "../pages/MyPages/Comprobante/Generate";
+import ComprobanteView from "../pages/MyPages/Comprobante/View";
 
 const objUser = JSON.parse(localStorage.getItem("authUser"));
 
 const authProtectedRoutes = [
   // Dashboard
-  { path: "/", component: (<></>) },
+  { path: "/dashboard", component: (<Dashboard />) },
 
   // Profile
   { path: "/profile", component: <UserProfile /> },
@@ -114,7 +116,9 @@ const authProtectedRoutes = [
    { path: "/trabajadores/edit/:id", component: <TrabajadorEdit /> },
 
   // Comprobante
-  { path: "/comprobante/generate", component: <ComprobanteIndex /> },
+  { path: "/comprobantes", component: <ComprobanteIndex /> },
+  { path: "/comprobantes/generate", component: <ComprobanteGenerate /> },
+  { path: "/comprobantes/view", component: <ComprobanteView /> },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
