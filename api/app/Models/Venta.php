@@ -17,4 +17,14 @@ class Venta extends Model
         'total_importe'
     ];
 
+    public function detallesVenta()
+    {
+        return $this->hasMany(DetalleVenta::class, 'idVenta', 'idVenta');
+    }
+
+    public function calcularTotal()
+    {
+        return $this->detallesVenta->sum('importe');
+    }
+
 }

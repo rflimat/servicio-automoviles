@@ -34,6 +34,7 @@ class ComprobanteController extends Controller
             ->where('id',
                 Comprobante::select(comprobante.id)->where(nro_comprobante,$request->nro_comprobante))
         */
+        return response()->json($comprobante, 201);
     }
 
     public function listar()
@@ -164,7 +165,7 @@ class ComprobanteController extends Controller
         $comprobante->eliminado = 0;
         $comprobante->save();
 
-        return $comprobante;
+        return response()->json($comprobante, 201);
     }
 
     public function eliminar(string $id)
@@ -172,5 +173,7 @@ class ComprobanteController extends Controller
         $comprobante = Comprobante::findOrFail($id);
         $comprobante->eliminado = 1;
         $comprobante->save();
+
+        return response()->json($comprobante, 204);
     }
 }

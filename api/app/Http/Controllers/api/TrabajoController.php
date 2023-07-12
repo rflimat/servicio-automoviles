@@ -86,7 +86,7 @@ class TrabajoController extends Controller
             $detalleTrabajo->save();
         }
 
-        return response()->json(['id' =>$trabajo->id, 'idComprobante' => $comprobante->id]);
+        return response()->json(['id' =>$trabajo->id, 'idComprobante' => $comprobante->id], 201);
     }
 
     public function listar()
@@ -166,7 +166,7 @@ class TrabajoController extends Controller
 
         $comprobante = Comprobante::where('idTrabajo','=',$trabajo->id)->first();
 
-        return response()->json(['id' =>$trabajo->id, 'idComprobante' => $comprobante->id, 'nroComprobante' => $comprobante->nro_comprobante]); 
+        return response()->json(['id' =>$trabajo->id, 'idComprobante' => $comprobante->id, 'nroComprobante' => $comprobante->nro_comprobante], 201); 
     }
 
     public function eliminar(string $id)
@@ -175,6 +175,8 @@ class TrabajoController extends Controller
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->eliminado = 1;
         $trabajo->save();
+        
+        return response()->json($trabajo, 204);
     }
 
     public function upload(Request $request, string $id)

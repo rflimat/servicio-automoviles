@@ -16,4 +16,14 @@ class Compra extends Model
         'fecha_compra',
         'proveedor_id'
     ];
+
+    public function detallesCompra()
+    {
+        return $this->hasMany(DetalleCompra::class);
+    }
+
+    public function calcularTotal()
+    {
+        return $this->detallesCompra->sum('importe');
+    }
 }

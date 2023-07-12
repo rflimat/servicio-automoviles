@@ -26,6 +26,8 @@ class ClienteController extends Controller
         $cliente->correo = $request->correo;
 
         $cliente->save();
+
+        return response()->json($cliente, 201);
     }
 
     public function show(string $id)
@@ -45,11 +47,12 @@ class ClienteController extends Controller
         $cliente->correo = $request->correo;
 
         $cliente->save();
+        return response()->json($cliente, 201);
     }
 
     public function destroy(string $id)
     {
         $cliente = Cliente::destroy($id);
-        return $cliente;
+        return response()->json($cliente, 204);
     }
 }

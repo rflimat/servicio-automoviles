@@ -23,6 +23,8 @@ class TrabajadorController extends Controller
         $trabajador->celular = $request->celular;
 
         $trabajador->save();
+
+        return response()->json($trabajador, 201);
     }
     public function show(string $id)
     {
@@ -38,10 +40,11 @@ class TrabajadorController extends Controller
         $trabajador->celular = $request->celular;
 
         $trabajador->save();
+        return response()->json($trabajador, 201);
     }
     public function destroy(string $id)
     {
         $trabajador = Trabajador::destroy($id);
-        return $trabajador;
+        return response()->json($trabajador, 204);
     }
 }

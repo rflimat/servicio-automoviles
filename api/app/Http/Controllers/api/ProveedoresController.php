@@ -22,6 +22,7 @@ class ProveedoresController extends Controller
         $proveedor->celular = $request->celular;
         
         $proveedor->save();
+        return response()->json($proveedor, 201);
     }
     public function show(string $id)
     {
@@ -37,10 +38,11 @@ class ProveedoresController extends Controller
         $proveedor->celular = $request->celular;
 
         $proveedor->save();
+        return response()->json($proveedor, 201);
     }
     public function destroy(string $id)
     {
         $proveedor = Proveedor::destroy($id);
-        return $proveedor;
+        return response()->json($proveedor, 204);
     }
 }

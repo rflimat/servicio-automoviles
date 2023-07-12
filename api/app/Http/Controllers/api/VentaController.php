@@ -27,7 +27,7 @@ class VentaController extends Controller
             }else{
                 $ids[] = $clave['idProducto'];
                 $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
-                if($ProductosExistentes->cantidad - $clave['cantidad'] <0 or $ProductosExistentes->cantidad == 0){
+                if($ProductosExistentes->cantidad - $clave['cantidadAct'] <0 or $ProductosExistentes->cantidad == 0){
                     return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente STOCK ACTUAL: '. $ProductosExistentes->cantidad ],404);
                 }
             }
@@ -90,8 +90,7 @@ class VentaController extends Controller
             $detalleVenta->save();
         }
         
-        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id]);
-        //return response()->json($venta->id);
+        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id], 201);
     }
 
 
@@ -124,13 +123,15 @@ class VentaController extends Controller
     public function actualizar(Request $request, string $id)
     { // cambiar
         // evita que existan los productos en cantidades negativas
-        foreach($request->productosVenta as $clave) {
-            $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
-            $detalleActual = DetalleVenta::where('idVenta', $id)
-            ->where('idProducto', $clave['idProducto'])
-            ->first();
-            if(($ProductosExistentes->cantidad - $clave['CantidadVenta'] +$detalleActual->cantidad) <0){
-                return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
+        if ($request->productosVenta) {
+            foreach($request->productosVenta as $clave) {
+                $ProductosExistentes = Producto::findOrFail($clave['idProducto']);
+                $detalleActual = DetalleVenta::where('idVenta', $id)
+                ->where('idProducto', $clave['idProducto'])
+                ->first();
+                if(($ProductosExistentes->cantidad - $clave['CantidadVenta'] +$detalleActual->cantidad) <0){
+                    return response()->json(['message' => 'Error: Cantidad sobrepasa el stock existente'],404);
+                }
             }
         }
         $venta = Venta::findOrFail($id);
@@ -138,26 +139,29 @@ class VentaController extends Controller
         $venta->total_importe = $request->total_importe;
         $venta->save();
 
-        foreach($request->productosVenta as $productoVendido) {
-            $detalleVenta = DetalleVenta::where('idVenta', $id)
-            ->where('idProducto', $productoVendido['idProducto'])
-            ->first();
-            if ($detalleVenta) {
-                $detalleVenta->idProducto = $productoVendido['idProducto'];
-                $detalleVenta->cantidad = $productoVendido['CantidadVenta'];
-                $detalleVenta->importe = $productoVendido['importe'];
-                $detalleVenta->save();
+        if ($request->productosVenta) {
+            foreach($request->productosVenta as $productoVendido) {
+                $detalleVenta = DetalleVenta::where('idVenta', $id)
+                ->where('idProducto', $productoVendido['idProducto'])
+                ->first();
+                if ($detalleVenta) {
+                    $detalleVenta->idProducto = $productoVendido['idProducto'];
+                    $detalleVenta->cantidad = $productoVendido['CantidadVenta'];
+                    $detalleVenta->importe = $productoVendido['importe'];
+                    $detalleVenta->save();
+                }
             }
         }
 
         $comprobante = Comprobante::where('idVenta','=',$venta->id)->first();
 
-        return response()->json(['id' =>$venta->id, 'idComprobante' => $comprobante->id, 'nroComprobante' => $comprobante->nro_comprobante]);
+        return response()->json(['id' => $venta->id, 'idComprobante' => $comprobante->id, 'nroComprobante' => $comprobante->nro_comprobante], 201);
     }
     public function eliminar(string $id)
     {
         $venta = Venta::findOrFail($id);
         $venta->estado = 0;
         $venta->save();
+        return response()->json($venta, 204);
     }
 }

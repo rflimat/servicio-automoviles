@@ -35,6 +35,8 @@ class ProductoController extends Controller
         $producto->descripcion = $request->descripcion;
         $producto->estado = 1;
         $producto->save();
+
+        return response()->json($producto, 201);
     }
 
     /**
@@ -60,6 +62,8 @@ class ProductoController extends Controller
         $producto->marca = $request->marca;
         $producto->descripcion = $request->descripcion;
         $producto->save();
+
+        return response()->json($producto, 201);
     }
 
     /**
@@ -70,6 +74,6 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($idProducto);
         $producto->estado = 0;
         $producto->save();
-        //Producto::destroy($idProducto);
+        return response()->json($producto, 204);
     }
 }

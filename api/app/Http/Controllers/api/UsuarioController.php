@@ -21,7 +21,7 @@ class UsuarioController extends Controller
         $usuario->telefono = $request->telefono;
         $usuario->password = Hash::make($request->password);
         $usuario->save(); // guarda en la bd
-        return $usuario; // para prueba
+        return response()->json($usuario, 201); // para prueba
     }
 
     public function listar(){
@@ -44,10 +44,11 @@ class UsuarioController extends Controller
         }
 
         $usuario->save();
-        return $usuario;
+        return response()->json($usuario, 201);
     }
 
     public function eliminar(string $id){
-        User::destroy($id);
+        $usuario = User::destroy($id);
+        return response()->json($usuario, 204);
     }
 }

@@ -29,6 +29,7 @@ class VehiculosController extends Controller
         $vehiculo->cliente_id = $request->cliente_id;
 
         $vehiculo->save();
+        return response()->json($vehiculo, 201);
     }
 
     public function show(string $id)
@@ -48,11 +49,12 @@ class VehiculosController extends Controller
         $vehiculo->cliente_id = $request->cliente_id;
 
         $vehiculo->save();
+        return response()->json($vehiculo, 201);
     }
 
     public function destroy(string $id)
     {
         $vehiculo = Vehiculo::destroy($id);
-        return $vehiculo;
+        return response()->json($vehiculo, 204);
     }
 }

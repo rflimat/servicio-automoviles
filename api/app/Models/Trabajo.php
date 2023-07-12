@@ -17,4 +17,14 @@ class Trabajo extends Model
         'idComprobante',
         'estado'
     ];
+
+    public function detallesVenta()
+    {
+        return $this->hasMany(DetalleVenta::class, 'idTrabajo', 'idTrabajo');
+    }
+
+    public function calcularTotal()
+    {
+        return $this->detallesVenta->sum('costo');
+    }
 }
