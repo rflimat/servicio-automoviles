@@ -46,7 +46,7 @@ const Add = () => {
       password: Yup.string().min(8, "Debe tener como mínimo 8 caracteres").required("El valor es requerido"),
       password1: Yup.string().min(8, "Debe tener como mínimo 8 caracteres").when("password", {
         is: (val) => (val && val.length > 0 ? true : false),
-        then: Yup.string().oneOf(
+        then: () => Yup.string().oneOf(
           [Yup.ref("password")],
           "Las contraseñas deben ser similares"
         ),

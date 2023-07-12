@@ -22,10 +22,10 @@ const errorSwal = (err) =>
     buttonsStyling: false,
   }).fire({
     title: "Error!",
-    text: err.response.data.message ? err.response.data.message : err.message,
+    text: !err.response ? err.message : err.response.data.message,
     icon: "error",
     confirmButtonText: "Ok",
-  }).then(() => (err.response.status === 401));
+  }).then(() => (err.response ?. err.response.status === 401));
 
 const addSwal = (element) =>
   Swal.mixin({

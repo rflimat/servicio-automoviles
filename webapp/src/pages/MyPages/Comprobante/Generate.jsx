@@ -351,7 +351,7 @@ const Generate = () => {
                             {format(new Date(trabajo.fecha_hora), "dd/MM/yyyy HH:mm:ss")}
                           </td>
                           <td>
-                            S/.{trabajo.costo.toFixed(2)}
+                            S/.{trabajo.costo}
                           </td>
                         </tr>
                       ))}

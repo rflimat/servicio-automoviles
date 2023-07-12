@@ -435,10 +435,10 @@ const Edit = () => {
                 <thead className="table-success">
                   <tr>
                     <th>N°</th>
-                    <th className={`${!estadoAnt ? "col-5" : "col-6"}`}>Descripción</th>
+                    <th className={"col-6"/*`${!estadoAnt ? "col-5" : "col-6"}`*/}>Descripción</th>
                     <th className="col-3">Fecha y Hora</th>
                     <th className="col-2">Costo estimado</th>
-                    {!estadoAnt && (<th>Accion</th>)}
+                    {/*!estadoAnt && (<th>Accion</th>)*/}
                   </tr>
                 </thead>
                 <tbody>
@@ -471,7 +471,7 @@ const Edit = () => {
                           />
                         </div>
                       </td>
-                      {estadoAnt == 0 && (
+                      {/*estadoAnt == 0 && (
                         <td>
                           <button
                             type="button"
@@ -483,7 +483,7 @@ const Edit = () => {
                             <i className='bx bx-trash'></i>
                           </button>
                         </td>
-                      )}
+                      )*/}
                     </tr>
                   ))}
                   <tr>
