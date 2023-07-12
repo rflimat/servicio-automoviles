@@ -25,6 +25,7 @@ class ProductoController extends Controller
         $request->validate([
             'codigo' => 'unique:App\Models\Producto'
         ]);
+        
         $producto = new Producto();
         $producto->codigo = $request->codigo;
         $producto->nombre = $request->nombre;
@@ -73,6 +74,7 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($idProducto);
         $producto->estado = 0;
+        $producto->codigo = ""; // elimina el codigo que tenia un producto
         $producto->save();
         return response()->json($producto, 204);
     }
