@@ -39,7 +39,7 @@ class ProveedorTest extends TestCase
 
         $response = $this->post('/api/proveedores', $proveedor);
 
-        $response->assertStatus(200); // Verifica el código de estado de respuesta esperado
+        $response->assertStatus(201); // Verifica el código de estado de respuesta esperado
         $this->assertDatabaseHas('proveedores', ['nombre' => 'Autos SAC']); // Verifica que los datos se hayan almacenado en la base de datos
     }
 
@@ -63,7 +63,7 @@ class ProveedorTest extends TestCase
 
         $response = $this->put('/api/proveedores/' . $proveedor->id, $newProveedor);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $this->assertDatabaseHas('proveedores', ['id' => $proveedor->id, 'celular' => $celular]);
     }
 
@@ -74,7 +74,7 @@ class ProveedorTest extends TestCase
 
         $response = $this->delete('/api/proveedores/' . $proveedor->id);
 
-        $response->assertStatus(200); // Verifica que la eliminación se haya realizado con éxito
+        $response->assertStatus(204); // Verifica que la eliminación se haya realizado con éxito
         $this->assertDatabaseMissing('proveedores', ['id' => $proveedor->id]); // Verifica que los datos se hayan eliminado de la base de datos
     }
 }
