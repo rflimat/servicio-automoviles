@@ -19,13 +19,21 @@ class ClienteFactory extends Factory
         $tipoDocumento = $this->faker->randomElement(["DNI", "RUC"]);
         $numeroDocumento = ($tipoDocumento === "DNI") ? $this->faker->dni() : $this->faker->ruc();
 
-        return  [
+        $createdAt = $this->faker->dateTimeThisYear('-5 months');
+        $updatedAt = $this->faker->dateTimeThisYear('-5 months');
+        while ($createdAt > $updatedAt) {
+            $updatedAt = $this->faker->dateTimeThisYear('-5 months');
+        }
+
+        return [
             'Nombres' => $this->faker->name(),
             'Apellidos' => $this->faker->lastName(),
             'tipo_Documento' => $tipoDocumento,
             'Nro_documento' => $numeroDocumento,
             'celular' => strval($this->faker->numberBetween(900000000, 999999999)),
-            'correo' => $this->faker->email()
+            'correo' => $this->faker->email(),
+            'created_at' => $createdAt,
+            'updated_at' => $updatedAt
         ];
     }
 }

@@ -18,12 +18,20 @@ class VehiculoFactory extends Factory
     {
         $this->faker->addProvider(new Fakecar($this->faker));
 
+        $createdAt = $this->faker->dateTimeThisYear('-5 months');
+        $updatedAt = $this->faker->dateTimeThisYear('-5 months');
+        while ($createdAt > $updatedAt) {
+            $updatedAt = $this->faker->dateTimeThisYear('-5 months');
+        }
+
         return [
             'placa' => $this->faker->vehicleRegistration,
             'tipo_vehiculo' => $this->faker->vehicleType,
             'modelo' => $this->faker->vehicleModel,
             'marca' => $this->faker->vehicleBrand,
             'anio' => $this->faker->biasedNumberBetween(1987, date('Y')),
+            'created_at' => $createdAt,
+            'updated_at' => $updatedAt
         ];
     }
 }
